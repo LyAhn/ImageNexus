@@ -179,6 +179,9 @@ class ImageNexus(ttk.Window):
         with open(info_file_path, 'w') as f:
             f.write("Frame Information:\n")
             f.write("------------------\n")
+            total_time = frame_info[-1][2] # Get the total duration from the last frame
+            fps = len(frame_info) / total_time
+            f.write(f"FPS: {fps:.2f}\n\n")
             for frame, duration, total_time in frame_info:
                 f.write(f"Frame {frame:03d}: Duration = {duration:.3f}s, Total Time = {total_time:.3f}s\n")
 
