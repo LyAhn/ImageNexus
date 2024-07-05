@@ -6,10 +6,10 @@ from tkinter import filedialog, messagebox
 
 version = "0.2.0-DEV"
 
-class GifToolsApp(ttk.Window):
+class ImageNexus(ttk.Window):
     def __init__(self):
         super().__init__(themename="darkly")
-        self.title("extractFrames v{}".format(version))
+        self.title("ImageNexus v{}".format(version))
         self.geometry("650x400")
         self.resizable(False, False)
         # set window icon
@@ -212,5 +212,5 @@ class GifToolsApp(ttk.Window):
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
 
 if __name__ == "__main__":
-    app = GifToolsApp()
+    app = ImageNexus()
     app.mainloop()
