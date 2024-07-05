@@ -4,7 +4,7 @@ from PIL import Image
 import os
 from tkinter import filedialog, messagebox
 
-version = "0.2.0-DEV"
+version = "0.2.0"
 
 class ImageNexus(ttk.Window):
     def __init__(self):
