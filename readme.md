@@ -1,11 +1,11 @@
-# GIF Frame Extractor
+# extractFrames
 
-GIF Frame Extractor is a Python application that allows you to extract individual frames from a GIF file and save them as PNG images.
+extractFrames is a Python application that allows you to extract individual frames from a GIF file and save them as PNG images.
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/username/gif-frame-extractor.git`
-2. Navigate to the project directory: `cd gif-frame-extractor`
+1. Clone the repository: `git clone https://github.com/lyahn/extractFrames`
+2. Navigate to the project directory: `cd extractFrames`
 3. Install dependencies: `pip install -r requirements.txt`
 
 ## Usage
