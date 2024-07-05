@@ -134,6 +134,14 @@ class ImageNexus(ttk.Window):
             messagebox.showerror("Error", "Please select both GIF file and output folder.")
             return
 
+        # Check if output folder contains already processed files
+        existing_files = [f for f in os.listdir(output_folder) if f.startswith('frame_') and f.endswith(f'.{file_type}')]
+        filecount = len(existing_files)
+        if filecount > 0:
+            overwrite = messagebox.askyesno("Overwrite Existing Files", f"The output folder already contains {filecount} existing files with the same name.\n\nDo you want to overwrite these files?")
+            if not overwrite:
+                return
+
         try:
             with Image.open(gif_path) as img:
                 self.progress['maximum'] = img.n_frames
@@ -194,6 +202,17 @@ class ImageNexus(ttk.Window):
         if not input_path or not output_folder:
             messagebox.showerror("Error", "Please select both input file and output folder.")
             return
+
+        # generate output filename
+        input_filename = os.path.basename(input_path)
+        output_filename = os.path.splitext(input_filename)[0] + f".{output_format}"
+        output_path = os.path.join(output_folder, output_filename)
+
+        # Check if output file already exists
+        if os.path.isfile(output_path):
+            overwrite = messagebox.askyesno("Overwrite Existing File", f"An existing file with the same name already exists.\n\nDo you want to overwrite it?")
+            if not overwrite:
+                return
 
         try:
             with Image.open(input_path) as img:
