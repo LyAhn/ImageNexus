@@ -17,7 +17,6 @@ class ImageNexus(ttk.Window):
         #self.resizable(False, False) # disable resizing
         self.iconbitmap("resources/icon.ico")
 
-
         self.create_widgets()
 
     def create_widgets(self):
@@ -366,8 +365,6 @@ class ImageNexus(ttk.Window):
         except Exception as e:
             self.converter_status_label['text'] = f"Error: {str(e)}"
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
-
-
 
 if __name__ == "__main__":
     app = ImageNexus()

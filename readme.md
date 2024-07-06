@@ -53,5 +53,3 @@ If you'd like to contribute to the project, please follow these steps:
 ## License
 
 This project is yet have a licence attached...
-
-
