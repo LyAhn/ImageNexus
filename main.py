@@ -27,7 +27,7 @@ class ImageNexus(ttk.Window):
         self.converter_tab = ttk.Frame(self.notebook)
 
         self.notebook.add(self.extractor_tab, text="Frame Extractor")
-        self.notebook.add(self.converter_tab, text="File Converter")
+        self.notebook.add(self.converter_tab, text="Image Converter")
 
         self.create_extractor_widgets()
         self.create_converter_widgets()
@@ -71,9 +71,8 @@ class ImageNexus(ttk.Window):
         # Output folder selection
         self.create_labeled_entry(main_frame, "Output Folder:", self.select_output_folder_converter, "output_folder_converter_entry")
 
-        # Input and Output format selection
+        # Output format selection
         formats = ["GIF", "PNG", "JPG", "BMP", "TIFF"]
-        self.create_format_selection(main_frame, "Input Format:", "input_format_var", formats)
         self.create_format_selection(main_frame, "Output Format:", "output_format_var", formats)
 
         # Convert button
@@ -105,7 +104,12 @@ class ImageNexus(ttk.Window):
         self.select_file(self.gif_path_entry, [("GIF files", "*.gif")])
 
     def select_input_file(self):
-        self.select_file(self.input_file_entry, [("Image files", "*.gif;*.png;*.jpg;*.jpeg;*.bmp;*.tiff")])
+        #self.select_file(self.input_file_entry, [("Image files", "*.gif;*.png;*.jpg;*.jpeg;*.bmp;*.tiff")])
+        file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.gif;*.png;*.jpg;*.jpeg;*.bmp;*.tiff")])
+        if file_path:
+            self.input_file_entry.delete(0, END)
+            self.input_file_entry.insert(0, file_path)
+            self.input_format = os.path.splitext(file_path)[1][1:].lower()
 
     def select_output_folder(self):
         folder_path = filedialog.askdirectory()
@@ -196,7 +200,7 @@ class ImageNexus(ttk.Window):
     def convert_file(self):
         input_path = self.input_file_entry.get()
         output_folder = self.output_folder_converter_entry.get()
-        input_format = self.input_format_var.get().lower()
+        input_format = self.input_format
         output_format = self.output_format_var.get().lower()
 
         if not input_path or not output_folder:
@@ -227,8 +231,8 @@ class ImageNexus(ttk.Window):
 
                 img.save(output_path, format=output_format)
 
-            self.converter_status_label['text'] = "File converted successfully!"
-            messagebox.showinfo("Success", "File converted successfully!")
+            self.converter_status_label['text'] = "Image converted successfully!"
+            messagebox.showinfo("Success", "Image converted successfully!")
         except Exception as e:
             self.converter_status_label['text'] = f"Error: {str(e)}"
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
