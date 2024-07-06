@@ -52,6 +52,11 @@ class ImageNexus(ttk.Window):
         self.file_type_var = ttk.StringVar(value="PNG")
         file_type_combo = ttk.Combobox(file_type_frame, textvariable=self.file_type_var, values=["PNG", "GIF"], width=10, state="readonly")
         file_type_combo.pack(side=LEFT, padx=(10, 0))
+        
+        # Generate frame info file checkbox
+        self.generate_frame_info_var = ttk.BooleanVar(value=True)
+        generate_frame_info_check = ttk.Checkbutton(main_frame, text="Generate frame info file", variable=self.generate_frame_info_var)
+        generate_frame_info_check.pack(pady=(10, 0))
 
         # Extract button
         ttk.Button(main_frame, text="Extract Frames", command=self.extract_frames, style='success.TButton').pack(pady=20)
@@ -104,7 +109,7 @@ class ImageNexus(ttk.Window):
         self.create_labeled_entry(main_frame, "Output Folder:", self.select_output_folder_batch, "output_folder_batch_entry")
 
     # Output format selection
-        formats = ["GIF", "PNG", "BMP", "TIFF"]
+        formats = ["GIF", "PNG", "JPEG", "BMP", "TIFF"]
         self.create_format_selection(main_frame, "Output Format:", "output_format_var_batch", formats)
 
     # Convert button
@@ -165,6 +170,7 @@ class ImageNexus(ttk.Window):
         gif_path = self.gif_path_entry.get()
         output_folder = self.output_folder_entry.get()
         file_type = self.file_type_var.get().lower()
+        generate_frame_info = self.generate_frame_info_var.get()
 
         if not gif_path or not output_folder:
             messagebox.showerror("Error", "Please select both GIF file and output folder.")
@@ -208,7 +214,8 @@ class ImageNexus(ttk.Window):
                     self.update_idletasks()
 
                 # Generate frame info text file
-                self.generate_frame_info_file(output_folder, frame_info)
+                if generate_frame_info:
+                    self.generate_frame_info_file(output_folder, frame_info)
 
             self.status_label['text'] = "Frames extracted successfully!"
             messagebox.showinfo("Success", "Frames extracted successfully!")
@@ -262,9 +269,18 @@ class ImageNexus(ttk.Window):
         elif conversion_type == "Folder":
             self.convert_batch_folder(input_paths, output_folder, output_format)
 
+    def convert_jpeg_mode(self, img):
+        if img.mode == 'RGB':
+            img = img.convert('RGB')
+        elif img.mode == 'RGBA':
+            img = img.convert('RGB')
+        elif img.mode == 'LA':
+            img = img.convert('L')
+        return img
+
     def convert_batch_folder(self, folder_path, output_folder, output_format):
-        image_extensions = ['.gif', '.png', '.bmp', '.tiff']
-        supported_formats = ['GIF', 'PNG', 'BMP', 'TIFF']
+        image_extensions = ['.gif', '.png', '.jpg', '.jpeg', '.bmp', '.tiff']
+        supported_formats = ['GIF', 'PNG', 'JPEG', 'BMP', 'TIFF']
 
         for root, dirs, files in os.walk(folder_path):
             for file in files:
@@ -279,8 +295,10 @@ class ImageNexus(ttk.Window):
                                 if input_format == 'GIF' and output_format != 'GIF':
                                     img.seek(0)
 
-                            # Convert image mode if necessary
-                                if output_format == 'BMP':
+                                # Convert image mode if necessary
+                                if output_format == 'jpeg':
+                                    img = self.convert_jpeg_mode(img)
+                                elif output_format == 'BMP':
                                     if img.mode != 'RGB':
                                         img = img.convert('RGB')
 
@@ -293,14 +311,10 @@ class ImageNexus(ttk.Window):
                         except UnidentifiedImageError:
                             self.batch_converter_status_label['text'] = f"Skipping invalid image file: {input_path}"
                         except Exception as e:
-                            if output_format == 'JPEG' and str(e).startswith("cannot write mode"):
-                            # Skip the file if it's a non-image file and we're converting to JPEG
-                                self.batch_converter_status_label['text'] = f"Skipping unsupported file: {input_path}"
-                            else:
-                                self.batch_converter_status_label['text'] = f"Error converting {input_path}: {str(e)}"
+                            self.batch_converter_status_label['text'] = f"Error converting {input_path}: {str(e)}"
                     else:
                         self.batch_converter_status_label['text'] = f"Skipping unsupported file: {input_path}"
-                elif extension.lower() not in ['.exe', '.dll', '.sys', '.bat', '.cmd', '.txt']:
+                elif extension.lower() not in ['.exe', '.dll', '.sys', '.bat', '.cmd']:
                     self.batch_converter_status_label['text'] = f"Skipping unsupported file: {input_path}"
                 else:
                 # Ignore system files and executables
@@ -334,10 +348,10 @@ class ImageNexus(ttk.Window):
                 if input_format == 'gif' and output_format != 'gif':
                     # If converting from GIF to non-GIF, use only the first frame
                     img.seek(0)
-                    
+
                     # Convert to RGB if necessary
                     if output_format == 'jpeg':
-                        if img.mode == 'P':
+                        if img.mode == 'RGBA':
                             img = img.convert('RGB')
                     elif output_format == 'bmp':
                         if img.mode != 'RGB':
