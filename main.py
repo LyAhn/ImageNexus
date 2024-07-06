@@ -9,11 +9,14 @@ version = "0.2.0-DEV"
 class ImageNexus(ttk.Window):
     def __init__(self):
         super().__init__(themename="darkly")
+        self.position_center()
         self.title("ImageNexus v{}".format(version))
         self.geometry("650x475")
-        self.resizable(False, False)
-        # set window icon
-        #self.iconbitmap("icon.ico")
+        # set minimum window size
+        self.minsize(650, 475)
+        #self.resizable(False, False) # disable resizing
+        self.iconbitmap("resources/icon.ico")
+
 
         self.create_widgets()
 
@@ -369,4 +372,3 @@ class ImageNexus(ttk.Window):
 if __name__ == "__main__":
     app = ImageNexus()
     app.mainloop()
-    print(f"The Applications __name__ was {__name__}")
