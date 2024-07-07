@@ -9,14 +9,14 @@ version = "0.3.0"
 class ImageNexus(ttk.Window):
     def __init__(self):
         super().__init__(themename="darkly")
-        self.position_center()
+        
         self.title("ImageNexus v{}".format(version))
         self.geometry("650x475")
         # set minimum window size
         self.minsize(650, 475)
         #self.resizable(False, False) # disable resizing
         self.iconbitmap("resources/icon.ico")
-
+        #self.position_center()
         self.create_widgets()
 
     def create_widgets(self):
@@ -177,6 +177,14 @@ class ImageNexus(ttk.Window):
         if not gif_path or not output_folder:
             messagebox.showerror("Error", "Please select both GIF file and output folder.")
             return
+
+        # Check if output folder exists and create it if it doesn't
+        if not os.path.exists(output_folder):
+            try:
+                os.makedirs(output_folder)
+            except OSError as e:
+                messagebox.showerror("Error", f"Failed to create output folder: {e}")
+                return
 
         # Check if output folder contains already processed files
         existing_files = [f for f in os.listdir(output_folder) if f.startswith('frame_') and f.endswith(f'.{file_type}')]
