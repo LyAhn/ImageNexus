@@ -131,3 +131,7 @@ dmypy.json
 
 # vscode
 .vscode/
+
+# user
+splash.png
+qt/
