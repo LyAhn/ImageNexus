@@ -110,6 +110,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.qtcreator/
 
 # Spyder project settings
 .spyderproject
@@ -131,3 +132,6 @@ dmypy.json
 
 # vscode
 .vscode/
+
+# qt
+*.user
