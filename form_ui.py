@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.2
+## Created by: Qt User Interface Compiler version 6.7.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QGridLayout,
     QLabel, QLineEdit, QMainWindow, QMenu,
     QMenuBar, QProgressBar, QPushButton, QSizePolicy,
     QStatusBar, QTabWidget, QToolButton, QWidget)
-import rc_resources
+import resources_rc
 
 class Ui_ImageNexus(object):
     def setupUi(self, ImageNexus):
@@ -29,7 +29,7 @@ class Ui_ImageNexus(object):
         ImageNexus.resize(741, 499)
         ImageNexus.setMinimumSize(QSize(650, 475))
         icon = QIcon()
-        icon.addFile(u":/images/resources/icon.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addFile(u":/images/resources/icon.ico", QSize(), QIcon.Normal, QIcon.Off)
         ImageNexus.setWindowIcon(icon)
         self.actionHelp = QAction(ImageNexus)
         self.actionHelp.setObjectName(u"actionHelp")

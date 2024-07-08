@@ -228,7 +228,7 @@
              </item>
             </widget>
            </item>
-           <item row="4" column="4">
+           <item row="4" column="5">
             <widget class="QPushButton" name="converter_button">
              <property name="text">
               <string>Convert</string>
@@ -248,10 +248,10 @@
         <item row="0" column="0">
          <widget class="QWidget" name="widget_3" native="true">
           <layout class="QGridLayout" name="gridLayout_5">
-           <item row="3" column="0">
-            <widget class="QLabel" name="outputFormatLabel">
+           <item row="1" column="3">
+            <widget class="QToolButton" name="inputBrowse3">
              <property name="text">
-              <string>Output Format:</string>
+              <string>Browse</string>
              </property>
             </widget>
            </item>
@@ -284,37 +284,6 @@
              </item>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="selectGifLabel_3">
-             <property name="text">
-              <string>Select Input File:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QLineEdit" name="fileInput3"/>
-           </item>
-           <item row="2" column="4">
-            <widget class="QToolButton" name="outputBrowse3">
-             <property name="text">
-              <string>Browse</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="selectGifLabel_4">
-             <property name="text">
-              <string>Conversion Type:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="outputFolderLabel_3">
-             <property name="text">
-              <string>Output Folder:</string>
-             </property>
-            </widget>
-           </item>
            <item row="0" column="1">
             <widget class="QComboBox" name="conversionType">
              <item>
@@ -329,20 +298,51 @@
              </item>
             </widget>
            </item>
-           <item row="2" column="2">
-            <widget class="QLineEdit" name="outputFolder3"/>
-           </item>
-           <item row="1" column="4">
-            <widget class="QToolButton" name="inputBrowse3">
+           <item row="2" column="0">
+            <widget class="QLabel" name="outputFolderLabel_3">
              <property name="text">
-              <string>Browse</string>
+              <string>Output Folder:</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="3">
+           <item row="3" column="0">
+            <widget class="QLabel" name="outputFormatLabel">
+             <property name="text">
+              <string>Output Format:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="3">
             <widget class="QPushButton" name="converter_button2">
              <property name="text">
               <string>Convert Files</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLineEdit" name="outputFolder3"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="selectGifLabel_4">
+             <property name="text">
+              <string>Conversion Type:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="selectGifLabel_3">
+             <property name="text">
+              <string>Select Input File:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLineEdit" name="fileInput3"/>
+           </item>
+           <item row="2" column="3">
+            <widget class="QToolButton" name="outputBrowse3">
+             <property name="text">
+              <string>Browse</string>
              </property>
             </widget>
            </item>

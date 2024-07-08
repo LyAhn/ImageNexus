@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBo
 from PySide6.QtCore import Qt, QTimer
 from ui_form import Ui_ImageNexus
 
-version = "0.4.0-alpha"
+version = "0.4.1-alpha"
 
 class ImageNexus(QMainWindow):
     def __init__(self, parent=None):
@@ -50,7 +50,7 @@ class ImageNexus(QMainWindow):
     def select_input_file(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Select Input File", "", "Image files (*.gif *.png *.jpg *.jpeg *.bmp *.tiff)")
         if file_path:
-            self.ui.fileInput1.setText(file_path)
+            self.ui.fileInput2.setText(file_path)
             self.input_format = os.path.splitext(file_path)[1][1:].lower()
 
     def select_output_folder_converter(self):
@@ -159,6 +159,13 @@ class ImageNexus(QMainWindow):
         input_filename = os.path.basename(input_path)
         output_filename = os.path.splitext(input_filename)[0] + f".{output_format}"
         output_path = os.path.join(output_folder, output_filename)
+        
+        if not os.path.exists(output_folder):
+            try:
+                os.makedirs(output_folder)
+            except OSError as e:
+                QMessageBox.critical(self, "Error", f"Failed to create output folder: {e}")
+                return
 
         if os.path.isfile(output_path):
             overwrite = QMessageBox.question(self, "Overwrite Existing File", 
@@ -194,7 +201,8 @@ class ImageNexus(QMainWindow):
             QMessageBox.critical(self, "Error", "Please select input files/folder and output folder.")
             return
 
-        conversion_type = self.ui.formatOptions.currentText()
+        conversion_type = self.ui.conversionType.currentText()
+
         if conversion_type == "Files":
             input_paths = input_paths.split(", ")
             self.convert_batch_files(input_paths, output_folder, output_format)
@@ -257,6 +265,13 @@ class ImageNexus(QMainWindow):
                     input_format = img.format.lower()
                     if input_format == 'gif' and output_format != 'gif':
                         img.seek(0)
+                        
+                    if not os.path.exists(output_folder):
+                        try:
+                            os.makedirs(output_folder)
+                        except OSError as e:
+                            QMessageBox.critical(self, "Error", f"Failed to create output folder: {e}")
+                        return
 
                     if output_format == 'jpeg':
                         img = self.convert_jpeg_mode(img)
