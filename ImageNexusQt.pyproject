@@ -1,0 +1,7 @@
+{
+    "files": [
+        "imagenexus.py",
+        "form.ui",
+        "resources.qrc"
+    ]
+}
