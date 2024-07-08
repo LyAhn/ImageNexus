@@ -347,7 +347,7 @@ class Ui_ImageNexus(object):
         self.retranslateUi(ImageNexus)
         self.actionExit.triggered.connect(ImageNexus.close)
 
-        self.tabWidget.setCurrentIndex(3)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(ImageNexus)
