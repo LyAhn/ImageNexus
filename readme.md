@@ -5,18 +5,25 @@ ImageNexus is a powerful and user-friendly application originally designed to ex
 
 ## Updates Regarding This Branch
 
-ImageNexus was originally coded using ```ttkbootstrap``` (Tkinter) but was quickly becoming a bottleneck in terms of future expansion, the decision to port to ```Qt``` was made so development of future tools and expansions could be easier and more efficient. The Tkinter branch will be deprecated in the future and become legacy.
+ImageNexus was originally coded using `ttkbootstrap` (Tkinter) but was quickly becoming a bottleneck in terms of future expansion, the decision to port to `Qt` was made so development of future tools and expansions could be easier and more efficient. The Tkinter branch will be deprecated in the future and become legacy.
 
 ## Installation
-
+### If running from source:
 1. Clone the repository: `git clone https://github.com/lyahn/ImageNexus`
 2. Navigate to the project directory: `cd ImageNexus`
-3. Install dependencies: `pip install -r requirements.txt`
+3. Create a virtual environment: `python -m venv venv`
+4. Activate the virtual environment: `source venv/bin/activate`
+5. Install dependencies: `pip install -r requirements.txt`
+
+### Running on Windows:
+1. Go to the [Releases] tab and download the latest version of ImageNexus.
+2. Run `ImageNexus-x.y.z-setup.exe` & install the application.
+3. Open ImageNexus from Desktop or Start Menu.
 
 ## Usage
 
-1. Run the application: `python imagenexus.py` or download the executable from the [Releases](https://github.com/lyahn/ImageNexus/releases) tab.
-2. Select the desired tab: "Frame Extractor", "Image Converter", or "Batch Converter".
+1. Run the application.
+2. Select the tab you want to use:
 
 ### Frame Extractor
 1. Select the GIF file you want to extract frames from by clicking the "Browse" button next to the "Select GIF" field.
@@ -43,6 +50,21 @@ ImageNexus was originally coded using ```ttkbootstrap``` (Tkinter) but was quick
 6. Click the "Convert Files" button to start the batch conversion process.
 7. The application will display status updates as the files are being converted.
 8. Once the conversion is complete, a success message will be displayed.
+
+## QR Code Generator
+1. Enter the data you want to encode in the QR code in the `QR Data` field.
+2. Adjust the QR code size using the `QR Size` spin box.
+3. Select the error correction level from the dropdown menu (Low, Medium, Quartile, or High).
+4. Set the border size using the `Border Size` spin box.
+5. Choose background color by clicking the `...` button and selecting a color.
+6. Choose code color by clicking the `...` button and selecting a color.
+7. Optionally, add a logo image by clicking the "Browse" button next to the `Logo Image` field.
+8. Click the `Generate QR` button to generate and preview the QR code.
+9. Select the output format (PNG or SVG) from the `Save As` dropdown menu.
+10. Choose the output folder by clicking the "Browse" button next to the "Output Folder" field or typing in a directory path.
+11. Click the "Save QR Code" button to save the generated QR code to the specified folder. If the folder does not exist, it will be created if permission is granted.
+12. The application will display a success message with the saved file path.
+
 
 ## Contributing
 

@@ -425,7 +425,7 @@
              </property>
              <property name="maximumSize">
               <size>
-               <width>60</width>
+               <width>80</width>
                <height>16777215</height>
               </size>
              </property>
@@ -473,6 +473,12 @@
            </item>
            <item row="0" column="1" colspan="5">
             <widget class="QTextEdit" name="qrTextInput">
+             <property name="frameShape">
+              <enum>QFrame::Panel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Sunken</enum>
+             </property>
              <property name="placeholderText">
               <string>Please enter some text to generate a QR code...</string>
              </property>
@@ -547,7 +553,7 @@
              </property>
              <property name="maximumSize">
               <size>
-               <width>60</width>
+               <width>80</width>
                <height>16777215</height>
               </size>
              </property>
@@ -588,6 +594,9 @@
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="statusTip">
+              <string>Disabled</string>
+             </property>
              <property name="title">
               <string>QR Code Colour</string>
              </property>
@@ -613,6 +622,9 @@
             <widget class="QGroupBox" name="bgColourGroup">
              <property name="enabled">
               <bool>false</bool>
+             </property>
+             <property name="statusTip">
+              <string>Disabled</string>
              </property>
              <property name="title">
               <string>Background Colour</string>

@@ -16,11 +16,12 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QGraphicsView,
-    QGridLayout, QGroupBox, QLabel, QLineEdit,
-    QMainWindow, QMenu, QMenuBar, QProgressBar,
-    QPushButton, QSizePolicy, QSpinBox, QStatusBar,
-    QTabWidget, QTextEdit, QToolButton, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
+    QGraphicsView, QGridLayout, QGroupBox, QLabel,
+    QLineEdit, QMainWindow, QMenu, QMenuBar,
+    QProgressBar, QPushButton, QSizePolicy, QSpinBox,
+    QStatusBar, QTabWidget, QTextEdit, QToolButton,
+    QWidget)
 import resources_rc
 
 class Ui_ImageNexus(object):
@@ -304,7 +305,7 @@ class Ui_ImageNexus(object):
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.qrSizeSpinBox.sizePolicy().hasHeightForWidth())
         self.qrSizeSpinBox.setSizePolicy(sizePolicy1)
-        self.qrSizeSpinBox.setMaximumSize(QSize(60, 16777215))
+        self.qrSizeSpinBox.setMaximumSize(QSize(80, 16777215))
         self.qrSizeSpinBox.setMinimum(1)
         self.qrSizeSpinBox.setMaximum(40)
 
@@ -326,6 +327,8 @@ class Ui_ImageNexus(object):
 
         self.qrTextInput = QTextEdit(self.widget_4)
         self.qrTextInput.setObjectName(u"qrTextInput")
+        self.qrTextInput.setFrameShape(QFrame.Panel)
+        self.qrTextInput.setFrameShadow(QFrame.Sunken)
 
         self.gridLayout_7.addWidget(self.qrTextInput, 0, 1, 1, 5)
 
@@ -373,7 +376,7 @@ class Ui_ImageNexus(object):
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.borderSpinBox.sizePolicy().hasHeightForWidth())
         self.borderSpinBox.setSizePolicy(sizePolicy2)
-        self.borderSpinBox.setMaximumSize(QSize(60, 16777215))
+        self.borderSpinBox.setMaximumSize(QSize(80, 16777215))
         self.borderSpinBox.setMaximum(10)
 
         self.gridLayout_7.addWidget(self.borderSpinBox, 3, 5, 1, 4)
@@ -559,9 +562,15 @@ class Ui_ImageNexus(object):
         self.outputFolderLabel_4.setText(QCoreApplication.translate("ImageNexus", u"Output Folder:", None))
         self.browseFolderButton.setText(QCoreApplication.translate("ImageNexus", u"Browse", None))
         self.saveQRButton.setText(QCoreApplication.translate("ImageNexus", u"Save QR Code", None))
+#if QT_CONFIG(statustip)
+        self.codeColourGroup.setStatusTip(QCoreApplication.translate("ImageNexus", u"Disabled", None))
+#endif // QT_CONFIG(statustip)
         self.codeColourGroup.setTitle(QCoreApplication.translate("ImageNexus", u"QR Code Colour", None))
         self.codeColourInput.setText(QCoreApplication.translate("ImageNexus", u"0,0,0", None))
         self.codeColourButton.setText(QCoreApplication.translate("ImageNexus", u"...", None))
+#if QT_CONFIG(statustip)
+        self.bgColourGroup.setStatusTip(QCoreApplication.translate("ImageNexus", u"Disabled", None))
+#endif // QT_CONFIG(statustip)
         self.bgColourGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Background Colour", None))
         self.bgColourInput.setText(QCoreApplication.translate("ImageNexus", u"255, 0, 0", None))
         self.bgColourButton.setText(QCoreApplication.translate("ImageNexus", u"...", None))
