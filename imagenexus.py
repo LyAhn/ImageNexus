@@ -1,9 +1,16 @@
 # This Python file uses the following encoding: utf-8
 import sys, os, time
-from PIL import Image, UnidentifiedImageError
-from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
+from PIL import Image, UnidentifiedImageError, ImageOps
+from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QColorDialog, QGraphicsScene
 from PySide6.QtCore import Qt, QTimer
+from PySide6.QtGui import QPixmap, QImage, QColor
 from ui_form import Ui_ImageNexus
+import qrcode
+from qrcode.image.styledpil import StyledPilImage
+from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
+from qrcode.image.styles.colormasks import RadialGradiantColorMask
+import io
+
 
 version = "0.4.1-alpha"
 
@@ -14,6 +21,8 @@ class ImageNexus(QMainWindow):
         self.ui.setupUi(self)
         self.setup_connections()
         self.setWindowTitle(f"ImageNexus v{version}")
+        
+
 
     def setup_connections(self):
         # Frame Extractor tab
@@ -30,11 +39,14 @@ class ImageNexus(QMainWindow):
         self.ui.inputBrowse3.clicked.connect(self.select_batch_input)
         self.ui.outputBrowse3.clicked.connect(self.select_output_folder_batch)
         self.ui.converter_button2.clicked.connect(self.convert_batch)
-        
-        # GIF Optimizer tab
-        #self.ui.browseInput4.clicked.connect(self.select_input_gif_optimizer)
-        #self.ui.outputBrowse4.clicked.connect(self.select_output_folder_gif_optimizer)
-        #self.ui.optimizer_button.clicked.connect(self.optimize_gif)
+
+        # QR Code Generator tab
+        self.ui.qrGenButton.clicked.connect(self.preview_qr_code)
+        self.ui.saveQRButton.clicked.connect(self.save_qr_code)
+        self.ui.browseFolderButton.clicked.connect(self.browse_output_folder)
+        self.ui.logoBrowseButton.clicked.connect(self.browse_logo)
+        self.ui.bgColourButton.clicked.connect(lambda: self.choose_color('bg'))
+        self.ui.codeColourButton.clicked.connect(lambda: self.choose_color('code'))
 
 
     def select_gif(self):
@@ -159,7 +171,7 @@ class ImageNexus(QMainWindow):
         input_filename = os.path.basename(input_path)
         output_filename = os.path.splitext(input_filename)[0] + f".{output_format}"
         output_path = os.path.join(output_folder, output_filename)
-        
+
         if not os.path.exists(output_folder):
             try:
                 os.makedirs(output_folder)
@@ -265,7 +277,7 @@ class ImageNexus(QMainWindow):
                     input_format = img.format.lower()
                     if input_format == 'gif' and output_format != 'gif':
                         img.seek(0)
-                        
+
                     if not os.path.exists(output_folder):
                         try:
                             os.makedirs(output_folder)
@@ -289,7 +301,138 @@ class ImageNexus(QMainWindow):
                 self.ui.statusbar.showMessage(f"Error converting {input_path}: {str(e)}")
 
         QMessageBox.information(self, "Success", "Batch conversion completed!")
+### QR Code Generator Start ###
+    def preview_qr_code(self):
+        qr_image = self.generate_qr_code()
+        if qr_image:
+            self.display_qr_code(qr_image)
 
+    def generate_qr_code(self):
+        qr_data = self.ui.qrTextInput.toPlainText()
+        if not qr_data:
+            QMessageBox.warning(self, "Warning", "Please enter some data for the QR code.")
+            return None
+
+        qr = qrcode.QRCode(
+            version=self.ui.qrSizeSpinBox.value(),
+            error_correction=self.get_error_correction(),
+            box_size=40,  # increased from 10 to 40
+            border=self.ui.borderSpinBox.value(),
+        )
+        qr.add_data(qr_data)
+        qr.make(fit=True)
+
+        bg_color = tuple(map(int, self.ui.bgColourInput.text().split(',')))
+        fill_color = tuple(map(int, self.ui.codeColourInput.text().split(',')))
+
+        logo_path = self.ui.logoImageInput.text()
+        if logo_path and os.path.isfile(logo_path):
+            logo = Image.open(logo_path)
+            qr_image = qr.make_image(
+                fill_color=fill_color,
+                back_color=bg_color,
+                image_factory=StyledPilImage,
+                module_drawer=RoundedModuleDrawer(),
+                embeded_image=logo
+            )
+        else:
+            qr_image = qr.make_image(
+                fill_color=fill_color,
+                back_color=bg_color,
+                image_factory=StyledPilImage,
+                module_drawer=RoundedModuleDrawer()
+            )
+
+        if qr_image.mode != 'RGB':
+            qr_image = qr_image.convert('RGB')
+
+        return qr_image
+
+
+
+
+    def get_error_correction(self):
+        error_correction = self.ui.errorCorrectionCombo.currentText()
+        if error_correction == "Low":
+            return qrcode.constants.ERROR_CORRECT_L
+        elif error_correction == "Medium":
+            return qrcode.constants.ERROR_CORRECT_M
+        elif error_correction == "Quartile":
+            return qrcode.constants.ERROR_CORRECT_Q
+        else:
+            return qrcode.constants.ERROR_CORRECT_H
+
+    def display_qr_code(self, qr_image):
+        buffer = io.BytesIO()
+        qr_image.save(buffer, format="PNG")
+        qimage = QImage()
+        qimage.loadFromData(buffer.getvalue())
+        pixmap = QPixmap.fromImage(qimage)
+
+        scene = self.ui.qrOutputView.scene()
+        if scene is None:
+            scene = QGraphicsScene()
+            self.ui.qrOutputView.setScene(scene)
+
+        scene.clear()
+        scene_item = scene.addPixmap(pixmap)
+        scene.setSceneRect(scene_item.boundingRect())
+
+        self.ui.qrOutputView.setSceneRect(scene.sceneRect())
+        self.ui.qrOutputView.fitInView(scene.sceneRect(), Qt.KeepAspectRatio)
+
+
+
+
+    def save_qr_code(self):
+        output_folder = self.ui.outputFolderText.text()
+        if not output_folder:
+            QMessageBox.warning(self, "Warning", "Please select an output folder.")
+            return
+        # Check if output folder exists, if not create it
+        if not os.path.exists(output_folder):
+            try:
+                os.makedirs(output_folder)
+            except OSError as e:
+                QMessageBox.critical(self, "Error", f"Failed to create output folder: {e}")
+                return
+
+        qr_image = self.generate_qr_code()
+        if qr_image:
+            save_format = self.ui.saveAsComboBox.currentText().lower()
+            file_name = f"qr_code.{save_format}"
+            file_path = os.path.join(output_folder, file_name)
+
+            qr_image.save(file_path)
+            QMessageBox.information(self, "Success", f"QR code saved as {file_path}")
+
+
+
+    def browse_output_folder(self):
+        folder_path = QFileDialog.getExistingDirectory(self, "Select Output Folder")
+        if folder_path:
+            self.ui.outputFolderText.setText(folder_path)
+
+    def browse_logo(self):
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select Logo Image", "", "Image Files (*.png *.jpg *.bmp)")
+        if file_path:
+            self.ui.logoImageInput.setText(file_path)
+
+    def choose_color(self, color_type):
+        color = QColorDialog.getColor()
+        if color.isValid():
+            rgb_values = f"{color.red()}, {color.green()}, {color.blue()}"
+            if color_type == 'bg':
+                self.ui.bgColourInput.setText(rgb_values)
+            else:
+                self.ui.codeColourInput.setText(rgb_values)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        if self.ui.qrOutputView.scene():
+            self.ui.qrOutputView.fitInView(self.ui.qrOutputView.scene().sceneRect(), Qt.KeepAspectRatio)
+
+### QR Code Generator End ###
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     widget = ImageNexus()
