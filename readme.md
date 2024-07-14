@@ -16,7 +16,7 @@ ImageNexus was originally coded using `ttkbootstrap` (Tkinter) but was quickly b
 5. Install dependencies: `pip install -r requirements.txt`
 
 ### Running on Windows:
-1. Go to the [Releases] tab and download the latest version of ImageNexus.
+1. Go to the [Releases](https://github.com/lyahn/ImageNexus/releases) tab and download the latest installer for ImageNexus.
 2. Run `ImageNexus-x.y.z-setup.exe` & install the application.
 3. Open ImageNexus from Desktop or Start Menu.
 
