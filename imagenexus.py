@@ -234,7 +234,7 @@ class ImageNexus(QMainWindow):
 
     def convert_batch_folder(self, folder_path, output_folder, output_format):
         image_extensions = ['.gif', '.png', '.jpg', '.jpeg', '.bmp', '.tiff']
-        supported_formats = ['GIF', 'PNG', 'JPEG', 'BMP', 'TIFF']
+        supported_formats = ['GIF', 'PNG', 'JPEG', 'JPG', 'BMP', 'TIFF']
 
         for root, dirs, files in os.walk(folder_path):
             for file in files:
