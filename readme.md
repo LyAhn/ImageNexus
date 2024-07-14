@@ -56,8 +56,8 @@ ImageNexus was originally coded using `ttkbootstrap` (Tkinter) but was quickly b
 2. Adjust the QR code size using the `QR Size` spin box.
 3. Select the error correction level from the dropdown menu (Low, Medium, Quartile, or High).
 4. Set the border size using the `Border Size` spin box.
-5. Choose background color by clicking the `...` button and selecting a color.
-6. Choose code color by clicking the `...` button and selecting a color.
+5. Choose background color by clicking the `...` button and selecting a color. (Not Working Currently)
+6. Choose code color by clicking the `...` button and selecting a color. (Not Working Currently)
 7. Optionally, add a logo image by clicking the "Browse" button next to the `Logo Image` field.
 8. Click the `Generate QR` button to generate and preview the QR code.
 9. Select the output format (PNG or SVG) from the `Save As` dropdown menu.
