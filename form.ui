@@ -377,7 +377,7 @@
       </widget>
       <widget class="QWidget" name="qrGenerator">
        <attribute name="title">
-        <string>QR Generator</string>
+        <string notr="true">QR Generator</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_10">
         <item row="0" column="0">
@@ -562,6 +562,9 @@
              </property>
              <property name="maximum">
               <number>10</number>
+             </property>
+             <property name="value">
+              <number>1</number>
              </property>
             </widget>
            </item>

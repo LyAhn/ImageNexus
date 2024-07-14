@@ -378,6 +378,7 @@ class Ui_ImageNexus(object):
         self.borderSpinBox.setSizePolicy(sizePolicy2)
         self.borderSpinBox.setMaximumSize(QSize(80, 16777215))
         self.borderSpinBox.setMaximum(10)
+        self.borderSpinBox.setValue(1)
 
         self.gridLayout_7.addWidget(self.borderSpinBox, 3, 5, 1, 4)
 
@@ -450,6 +451,7 @@ class Ui_ImageNexus(object):
         self.gridLayout_10.addWidget(self.widget_4, 0, 0, 1, 1)
 
         self.tabWidget.addTab(self.qrGenerator, "")
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.qrGenerator), u"QR Generator")
 
         self.gridLayout_12.addWidget(self.tabWidget, 0, 0, 1, 1)
 
@@ -475,7 +477,7 @@ class Ui_ImageNexus(object):
         self.retranslateUi(ImageNexus)
         self.actionExit.triggered.connect(ImageNexus.close)
 
-        self.tabWidget.setCurrentIndex(3)
+        self.tabWidget.setCurrentIndex(0)
         self.qrGenButton.setDefault(False)
 
 
@@ -575,7 +577,6 @@ class Ui_ImageNexus(object):
         self.bgColourInput.setText(QCoreApplication.translate("ImageNexus", u"255, 0, 0", None))
         self.bgColourButton.setText(QCoreApplication.translate("ImageNexus", u"...", None))
         self.qrGenButton.setText(QCoreApplication.translate("ImageNexus", u"Generate QR", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.qrGenerator), QCoreApplication.translate("ImageNexus", u"QR Generator", None))
         self.menuFile.setTitle(QCoreApplication.translate("ImageNexus", u"File", None))
         self.menuHelp.setTitle(QCoreApplication.translate("ImageNexus", u"Help", None))
     # retranslateUi
