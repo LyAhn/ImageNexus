@@ -47,10 +47,12 @@ class ImageNexus(QMainWindow):
         self.ui.logoBrowseButton.clicked.connect(self.browse_logo)
         self.ui.bgColourButton.clicked.connect(lambda: self.choose_color('bg'))
         self.ui.codeColourButton.clicked.connect(lambda: self.choose_color('code'))
+        self.ui.addBgCheckbox.stateChanged.connect(self.preview_qr_code)
+        self.ui.aspectRatioCheck.stateChanged.connect(self.preview_qr_code)
 
 
     def select_gif(self):
-        file_path, _ = QFileDialog.getOpenFileName(self, "Select GIF", "", "GIF files (*.gif)")
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select GIF", "", "Image files (*.gif *.webp)")
         if file_path:
             self.ui.fileInput1.setText(file_path)
 
@@ -316,7 +318,7 @@ class ImageNexus(QMainWindow):
         qr = qrcode.QRCode(
             version=self.ui.qrSizeSpinBox.value(),
             error_correction=self.get_error_correction(),
-            box_size=40,  # increased from 10 to 40
+            box_size=40,
             border=self.ui.borderSpinBox.value(),
         )
         qr.add_data(qr_data)
@@ -325,9 +327,42 @@ class ImageNexus(QMainWindow):
         bg_color = tuple(map(int, self.ui.bgColourInput.text().split(',')))
         fill_color = tuple(map(int, self.ui.codeColourInput.text().split(',')))
 
+        qr_image = qr.make_image(
+            fill_color=fill_color,
+            back_color=bg_color,
+            image_factory=StyledPilImage,
+            module_drawer=RoundedModuleDrawer()
+        )
+
         logo_path = self.ui.logoImageInput.text()
         if logo_path and os.path.isfile(logo_path):
-            logo = Image.open(logo_path)
+            logo = Image.open(logo_path).convert('RGBA')
+            
+            qr_size = qr_image.size[0]
+            max_size = qr_size // 3
+
+            # Preserve aspect ratio
+            if self.ui.aspectRatioCheck.isChecked():
+                ratio = min(max_size / logo.width, max_size / logo.height)
+                new_size = (int(logo.width * ratio), int(logo.height * ratio))
+            else:
+                new_size = (max_size, max_size)
+
+            logo = logo.resize(new_size, Image.LANCZOS)
+
+            # Create a new image with the background if checkbox is checked
+            if self.ui.addBgCheckbox.isChecked():
+                bg = Image.new('RGBA', (max_size, max_size), (255, 255, 255, 255))
+                offset = ((max_size - logo.width) // 2, (max_size - logo.height) // 2)
+                bg.paste(logo, offset, logo)
+                logo = bg
+            else:
+                # If no background, create a transparent image of max_size
+                bg = Image.new('RGBA', (max_size, max_size), (0, 0, 0, 0))
+                offset = ((max_size - logo.width) // 2, (max_size - logo.height) // 2)
+                bg.paste(logo, offset, logo)
+                logo = bg
+
             qr_image = qr.make_image(
                 fill_color=fill_color,
                 back_color=bg_color,
@@ -335,18 +370,15 @@ class ImageNexus(QMainWindow):
                 module_drawer=RoundedModuleDrawer(),
                 embeded_image=logo
             )
-        else:
-            qr_image = qr.make_image(
-                fill_color=fill_color,
-                back_color=bg_color,
-                image_factory=StyledPilImage,
-                module_drawer=RoundedModuleDrawer()
-            )
+
+
+
 
         if qr_image.mode != 'RGB':
             qr_image = qr_image.convert('RGB')
 
         return qr_image
+
 
 
 
@@ -433,6 +465,8 @@ class ImageNexus(QMainWindow):
             self.ui.qrOutputView.fitInView(self.ui.qrOutputView.scene().sceneRect(), Qt.KeepAspectRatio)
 
 ### QR Code Generator End ###
+
+#TODO: Add built-in templates for these QR formats, making it easier to create specialized QR codes.
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     widget = ImageNexus()
