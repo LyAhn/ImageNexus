@@ -78,4 +78,4 @@ If you'd like to contribute to the project, please follow these steps:
 
 ## License
 
-This project is yet have a licence attached...
+This project is licensed under the GNU GPL v3 license.
