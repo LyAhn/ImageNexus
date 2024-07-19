@@ -488,17 +488,14 @@
               <enum>QFrame::Sunken</enum>
              </property>
              <property name="placeholderText">
-              <string>Please enter some text to generate a QR code...                                   See the QR Guidelines in the resources folder on QR Formats.</string>
+              <string>Please enter some text to generate a QR code... See the QR Guidelines in the resources folder on QR Formats.</string>
              </property>
             </widget>
            </item>
            <item row="4" column="3" colspan="4">
             <widget class="QGroupBox" name="codeColourGroup">
              <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="statusTip">
-              <string>Disabled</string>
+              <bool>true</bool>
              </property>
              <property name="title">
               <string>QR Code Colour</string>
@@ -507,7 +504,10 @@
               <item row="0" column="0">
                <widget class="QLineEdit" name="codeColourInput">
                 <property name="text">
-                 <string>0,0,0</string>
+                 <string/>
+                </property>
+                <property name="placeholderText">
+                 <string>0, 0, 0</string>
                 </property>
                </widget>
               </item>
@@ -565,10 +565,7 @@
            <item row="4" column="0" colspan="3">
             <widget class="QGroupBox" name="bgColourGroup">
              <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="statusTip">
-              <string>Disabled</string>
+              <bool>true</bool>
              </property>
              <property name="title">
               <string>Background Colour</string>
@@ -577,7 +574,10 @@
               <item row="0" column="0">
                <widget class="QLineEdit" name="bgColourInput">
                 <property name="text">
-                 <string>255, 0, 0</string>
+                 <string/>
+                </property>
+                <property name="placeholderText">
+                 <string>255, 255, 255</string>
                 </property>
                </widget>
               </item>

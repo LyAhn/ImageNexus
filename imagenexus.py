@@ -8,7 +8,7 @@ from ui_form import Ui_ImageNexus
 import qrcode
 from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
-from qrcode.image.styles.colormasks import RadialGradiantColorMask
+from qrcode.image.styles.colormasks import SolidFillColorMask
 import io
 
 
@@ -324,14 +324,24 @@ class ImageNexus(QMainWindow):
         qr.add_data(qr_data)
         qr.make(fit=True)
 
-        bg_color = tuple(map(int, self.ui.bgColourInput.text().split(',')))
-        fill_color = tuple(map(int, self.ui.codeColourInput.text().split(',')))
+        # Convert color strings to tuples
+        def color_string_to_tuple(color_string):
+            return tuple(map(int, color_string.split(',')))
+        
+        def get_color(color_input, default):
+            color_text = color_input.text().strip()
+            return color_string_to_tuple(color_text) if color_text else default
 
+        #bg_color = color_string_to_tuple(self.ui.bgColourInput.text())
+        #fill_color = color_string_to_tuple(self.ui.codeColourInput.text())
+        bg_color = get_color(self.ui.bgColourInput, (255, 255, 255))
+        fill_color = get_color(self.ui.codeColourInput, (0, 0, 0))
+
+        # Create the QR code image
         qr_image = qr.make_image(
             fill_color=fill_color,
             back_color=bg_color,
-            image_factory=StyledPilImage,
-            module_drawer=RoundedModuleDrawer()
+
         )
 
         logo_path = self.ui.logoImageInput.text()
@@ -363,19 +373,16 @@ class ImageNexus(QMainWindow):
                 bg.paste(logo, offset, logo)
                 logo = bg
 
-            qr_image = qr.make_image(
-                fill_color=fill_color,
-                back_color=bg_color,
-                image_factory=StyledPilImage,
-                module_drawer=RoundedModuleDrawer(),
-                embeded_image=logo
-            )
+            # Calculate the position to paste the logo
+            box = ((qr_image.size[0] - logo.size[0]) // 2,
+                (qr_image.size[1] - logo.size[1]) // 2)
 
+            # Convert QR image to RGBA if it's not already
+            if qr_image.mode != 'RGBA':
+                qr_image = qr_image.convert('RGBA')
 
-
-
-        if qr_image.mode != 'RGB':
-            qr_image = qr_image.convert('RGB')
+            # Paste the logo onto the QR code
+            qr_image.paste(logo, box, logo)
 
         return qr_image
 
