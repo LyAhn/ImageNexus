@@ -12,7 +12,7 @@ from qrcode.image.styles.colormasks import SolidFillColorMask
 import io
 
 
-version = "0.4.1-alpha"
+version = "0.4.2"
 
 class ImageNexus(QMainWindow):
     def __init__(self, parent=None):
