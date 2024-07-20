@@ -3,12 +3,10 @@
 
 ImageNexus is a powerful and user-friendly application originally designed to extract frames from GIF files but has expanded into a suite of image tools with plans for expansion in the future. It allows you to easily convert your favorite animated GIFs into a series of individual image frames. ImageNexus provides a seamless experience for working with GIF animations as well as converting images to other formats. There are plans to continue adding to this project to make it into a whole suite of image tools.
 
-## Updates Regarding This Branch
-
-ImageNexus was originally coded using `ttkbootstrap` (Tkinter) but was quickly becoming a bottleneck in terms of future expansion, the decision to port to `Qt` was made so development of future tools and expansions could be easier and more efficient. The Tkinter branch will be deprecated in the future and become legacy.
 
 ## Installation
 ### If running from source:
+Prerequisites: Python 3.6 or higher
 1. Clone the repository: `git clone https://github.com/lyahn/ImageNexus`
 2. Navigate to the project directory: `cd ImageNexus`
 3. Create a virtual environment: `python -m venv venv`
@@ -56,8 +54,8 @@ ImageNexus was originally coded using `ttkbootstrap` (Tkinter) but was quickly b
 2. Adjust the QR code size using the `QR Size` spin box.
 3. Select the error correction level from the dropdown menu (Low, Medium, Quartile, or High).
 4. Set the border size using the `Border Size` spin box.
-5. Choose background color by clicking the `...` button and selecting a color. (Not Working Currently)
-6. Choose code color by clicking the `...` button and selecting a color. (Not Working Currently)
+5. Choose background colour by clicking the `...` button and selecting a colour.
+6. Choose code colour by clicking the `...` button and selecting a colour.
 7. Optionally, add a logo image by clicking the "Browse" button next to the `Logo Image` field.
 8. Click the `Generate QR` button to generate and preview the QR code.
 9. Select the output format (PNG or SVG) from the `Save As` dropdown menu.

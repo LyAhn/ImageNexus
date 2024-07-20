@@ -1,18 +1,18 @@
 # This Python file uses the following encoding: utf-8
-import sys, os, time
-from PIL import Image, UnidentifiedImageError, ImageOps
+import sys, os, io
+from PIL import Image, UnidentifiedImageError
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QColorDialog, QGraphicsScene
-from PySide6.QtCore import Qt, QTimer
-from PySide6.QtGui import QPixmap, QImage, QColor
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QPixmap, QImage
 from ui_form import Ui_ImageNexus
 import qrcode
 from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
-from qrcode.image.styles.colormasks import RadialGradiantColorMask
-import io
+from qrcode.image.styles.colormasks import SolidFillColorMask
+from aboutDialog import aboutDialog
 
 
-version = "0.4.1-alpha"
+version = "0.4.2"
 
 class ImageNexus(QMainWindow):
     def __init__(self, parent=None):
@@ -49,6 +49,15 @@ class ImageNexus(QMainWindow):
         self.ui.codeColourButton.clicked.connect(lambda: self.choose_color('code'))
         self.ui.addBgCheckbox.stateChanged.connect(self.preview_qr_code)
         self.ui.aspectRatioCheck.stateChanged.connect(self.preview_qr_code)
+        
+        # Help Menu
+        self.ui.actionAboutg.triggered.connect(self.show_about)
+        
+    def show_about(self):
+        self.about_dialog = aboutDialog(self)
+        self.about_dialog.setAttribute(Qt.WA_DeleteOnClose)
+        self.about_dialog.show()
+
 
 
     def select_gif(self):
@@ -324,14 +333,24 @@ class ImageNexus(QMainWindow):
         qr.add_data(qr_data)
         qr.make(fit=True)
 
-        bg_color = tuple(map(int, self.ui.bgColourInput.text().split(',')))
-        fill_color = tuple(map(int, self.ui.codeColourInput.text().split(',')))
+        # Convert color strings to tuples
+        def color_string_to_tuple(color_string):
+            return tuple(map(int, color_string.split(',')))
+        
+        def get_color(color_input, default):
+            color_text = color_input.text().strip()
+            return color_string_to_tuple(color_text) if color_text else default
 
+        #bg_color = color_string_to_tuple(self.ui.bgColourInput.text())
+        #fill_color = color_string_to_tuple(self.ui.codeColourInput.text())
+        bg_color = get_color(self.ui.bgColourInput, (255, 255, 255))
+        fill_color = get_color(self.ui.codeColourInput, (0, 0, 0))
+
+        # Create the QR code image
         qr_image = qr.make_image(
             fill_color=fill_color,
             back_color=bg_color,
-            image_factory=StyledPilImage,
-            module_drawer=RoundedModuleDrawer()
+
         )
 
         logo_path = self.ui.logoImageInput.text()
@@ -363,19 +382,16 @@ class ImageNexus(QMainWindow):
                 bg.paste(logo, offset, logo)
                 logo = bg
 
-            qr_image = qr.make_image(
-                fill_color=fill_color,
-                back_color=bg_color,
-                image_factory=StyledPilImage,
-                module_drawer=RoundedModuleDrawer(),
-                embeded_image=logo
-            )
+            # Calculate the position to paste the logo
+            box = ((qr_image.size[0] - logo.size[0]) // 2,
+                (qr_image.size[1] - logo.size[1]) // 2)
 
+            # Convert QR image to RGBA if it's not already
+            if qr_image.mode != 'RGBA':
+                qr_image = qr_image.convert('RGBA')
 
-
-
-        if qr_image.mode != 'RGB':
-            qr_image = qr_image.convert('RGB')
+            # Paste the logo onto the QR code
+            qr_image.paste(logo, box, logo)
 
         return qr_image
 
