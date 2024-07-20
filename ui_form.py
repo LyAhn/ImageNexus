@@ -38,7 +38,7 @@ class Ui_ImageNexus(object):
         self.actionHelp.setEnabled(False)
         self.actionAboutg = QAction(ImageNexus)
         self.actionAboutg.setObjectName(u"actionAboutg")
-        self.actionAboutg.setEnabled(False)
+        self.actionAboutg.setEnabled(True)
         self.actionExit = QAction(ImageNexus)
         self.actionExit.setObjectName(u"actionExit")
         self.centralwidget = QWidget(ImageNexus)

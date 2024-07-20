@@ -1,15 +1,15 @@
 # This Python file uses the following encoding: utf-8
-import sys, os, time
-from PIL import Image, UnidentifiedImageError, ImageOps
+import sys, os, io
+from PIL import Image, UnidentifiedImageError
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QColorDialog, QGraphicsScene
-from PySide6.QtCore import Qt, QTimer
-from PySide6.QtGui import QPixmap, QImage, QColor
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QPixmap, QImage
 from ui_form import Ui_ImageNexus
 import qrcode
 from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
 from qrcode.image.styles.colormasks import SolidFillColorMask
-import io
+from aboutDialog import aboutDialog
 
 
 version = "0.4.2"
@@ -49,6 +49,15 @@ class ImageNexus(QMainWindow):
         self.ui.codeColourButton.clicked.connect(lambda: self.choose_color('code'))
         self.ui.addBgCheckbox.stateChanged.connect(self.preview_qr_code)
         self.ui.aspectRatioCheck.stateChanged.connect(self.preview_qr_code)
+        
+        # Help Menu
+        self.ui.actionAboutg.triggered.connect(self.show_about)
+        
+    def show_about(self):
+        self.about_dialog = aboutDialog(self)
+        self.about_dialog.setAttribute(Qt.WA_DeleteOnClose)
+        self.about_dialog.show()
+
 
 
     def select_gif(self):
