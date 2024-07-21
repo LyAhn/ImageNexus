@@ -21,7 +21,7 @@ class ImageNexus(QMainWindow):
         self.ui.setupUi(self)
         self.setup_connections()
         self.setWindowTitle(f"ImageNexus v{version}")
-        
+
 
 
     def setup_connections(self):
@@ -49,10 +49,10 @@ class ImageNexus(QMainWindow):
         self.ui.codeColourButton.clicked.connect(lambda: self.choose_color('code'))
         self.ui.addBgCheckbox.stateChanged.connect(self.preview_qr_code)
         self.ui.aspectRatioCheck.stateChanged.connect(self.preview_qr_code)
-        
+
         # Help Menu
-        self.ui.actionAboutg.triggered.connect(self.show_about)
-        
+        self.ui.actionAbout.triggered.connect(self.show_about)
+
     def show_about(self):
         self.about_dialog = aboutDialog(self)
         self.about_dialog.setAttribute(Qt.WA_DeleteOnClose)

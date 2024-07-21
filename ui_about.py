@@ -23,15 +23,16 @@ class Ui_aboutWindow(object):
     def setupUi(self, aboutWindow):
         if not aboutWindow.objectName():
             aboutWindow.setObjectName(u"aboutWindow")
-        aboutWindow.resize(472, 591)
-        aboutWindow.setMinimumSize(QSize(472, 591))
-        aboutWindow.setMaximumSize(QSize(472, 591))
+        aboutWindow.setWindowModality(Qt.ApplicationModal)
+        aboutWindow.resize(472, 516)
+        aboutWindow.setMinimumSize(QSize(472, 516))
+        aboutWindow.setMaximumSize(QSize(472, 516))
         icon = QIcon()
         icon.addFile(u":/images/resources/icon.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         aboutWindow.setWindowIcon(icon)
         self.appTextLabel = QLabel(aboutWindow)
         self.appTextLabel.setObjectName(u"appTextLabel")
-        self.appTextLabel.setGeometry(QRect(100, 30, 161, 41))
+        self.appTextLabel.setGeometry(QRect(100, 30, 181, 41))
         font = QFont()
         font.setFamilies([u"Roboto"])
         font.setPointSize(20)
@@ -54,20 +55,20 @@ class Ui_aboutWindow(object):
         self.logoView.setGeometry(QRect(20, 10, 75, 75))
         self.copyrightLbl = QLabel(aboutWindow)
         self.copyrightLbl.setObjectName(u"copyrightLbl")
-        self.copyrightLbl.setGeometry(QRect(60, 150, 171, 16))
+        self.copyrightLbl.setGeometry(QRect(40, 460, 201, 16))
         self.devLabel = QLabel(aboutWindow)
         self.devLabel.setObjectName(u"devLabel")
-        self.devLabel.setGeometry(QRect(60, 130, 121, 16))
-        self.textEdit = QTextEdit(aboutWindow)
-        self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setGeometry(QRect(40, 210, 391, 321))
+        self.devLabel.setGeometry(QRect(40, 440, 191, 16))
+        self.aboutText = QTextEdit(aboutWindow)
+        self.aboutText.setObjectName(u"aboutText")
+        self.aboutText.setGeometry(QRect(30, 110, 411, 321))
         font1 = QFont()
         font1.setFamilies([u"Roboto"])
-        self.textEdit.setFont(font1)
-        self.textEdit.setMouseTracking(False)
-        self.textEdit.setFocusPolicy(Qt.NoFocus)
-        self.textEdit.setAutoFormatting(QTextEdit.AutoAll)
-        self.textEdit.setTextInteractionFlags(Qt.LinksAccessibleByMouse)
+        self.aboutText.setFont(font1)
+        self.aboutText.setMouseTracking(False)
+        self.aboutText.setFocusPolicy(Qt.NoFocus)
+        self.aboutText.setAutoFormatting(QTextEdit.AutoAll)
+        self.aboutText.setTextInteractionFlags(Qt.LinksAccessibleByMouse)
 
         self.retranslateUi(aboutWindow)
 
@@ -80,7 +81,7 @@ class Ui_aboutWindow(object):
         self.versionLabel.setText(QCoreApplication.translate("aboutWindow", u"v", None))
         self.copyrightLbl.setText(QCoreApplication.translate("aboutWindow", u"Copyright \u00a9 2024 LyAhn", None))
         self.devLabel.setText(QCoreApplication.translate("aboutWindow", u"Developed by: LyAhn", None))
-        self.textEdit.setHtml(QCoreApplication.translate("aboutWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.aboutText.setHtml(QCoreApplication.translate("aboutWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"

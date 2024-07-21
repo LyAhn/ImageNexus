@@ -2,24 +2,27 @@
 <ui version="4.0">
  <class>aboutWindow</class>
  <widget class="QWidget" name="aboutWindow">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>472</width>
-    <height>591</height>
+    <height>516</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>472</width>
-    <height>591</height>
+    <height>516</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>472</width>
-    <height>591</height>
+    <height>516</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -34,7 +37,7 @@
     <rect>
      <x>100</x>
      <y>30</y>
-     <width>161</width>
+     <width>181</width>
      <height>41</height>
     </rect>
    </property>
@@ -93,9 +96,9 @@
   <widget class="QLabel" name="copyrightLbl">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>150</y>
-     <width>171</width>
+     <x>40</x>
+     <y>460</y>
+     <width>201</width>
      <height>16</height>
     </rect>
    </property>
@@ -106,9 +109,9 @@
   <widget class="QLabel" name="devLabel">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>130</y>
-     <width>121</width>
+     <x>40</x>
+     <y>440</y>
+     <width>191</width>
      <height>16</height>
     </rect>
    </property>
@@ -116,12 +119,12 @@
     <string>Developed by: LyAhn</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="textEdit">
+  <widget class="QTextEdit" name="aboutText">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>210</y>
-     <width>391</width>
+     <x>30</x>
+     <y>110</y>
+     <width>411</width>
      <height>321</height>
     </rect>
    </property>
