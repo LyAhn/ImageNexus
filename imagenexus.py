@@ -12,7 +12,7 @@ from qrcode.image.styles.colormasks import SolidFillColorMask
 from aboutDialog import aboutDialog
 
 
-version = "0.4.2"
+version = "0.4.3"
 
 class ImageNexus(QMainWindow):
     def __init__(self, parent=None):

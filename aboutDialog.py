@@ -6,7 +6,7 @@ from ui_about import Ui_aboutWindow
 
 class aboutDialog(QMainWindow):
 
-    version = "0.4.2"
+    version = "0.4.3"
 
     def __init__(self, parent=None):
         super().__init__(parent)
