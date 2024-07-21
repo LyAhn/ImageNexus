@@ -12,7 +12,7 @@ from qrcode.image.styles.colormasks import SolidFillColorMask
 from aboutDialog import aboutDialog
 
 
-version = "0.4.2"
+version = "0.4.3"
 
 class ImageNexus(QMainWindow):
     def __init__(self, parent=None):
@@ -21,7 +21,7 @@ class ImageNexus(QMainWindow):
         self.ui.setupUi(self)
         self.setup_connections()
         self.setWindowTitle(f"ImageNexus v{version}")
-        
+
 
 
     def setup_connections(self):
@@ -49,10 +49,10 @@ class ImageNexus(QMainWindow):
         self.ui.codeColourButton.clicked.connect(lambda: self.choose_color('code'))
         self.ui.addBgCheckbox.stateChanged.connect(self.preview_qr_code)
         self.ui.aspectRatioCheck.stateChanged.connect(self.preview_qr_code)
-        
+
         # Help Menu
-        self.ui.actionAboutg.triggered.connect(self.show_about)
-        
+        self.ui.actionAbout.triggered.connect(self.show_about)
+
     def show_about(self):
         self.about_dialog = aboutDialog(self)
         self.about_dialog.setAttribute(Qt.WA_DeleteOnClose)
@@ -392,6 +392,9 @@ class ImageNexus(QMainWindow):
 
             # Paste the logo onto the QR code
             qr_image.paste(logo, box, logo)
+            
+            # After generating QR, resize to 1024
+            qr_image = qr_image.resize((1024, 1024), Image.LANCZOS)
 
         return qr_image
 
@@ -447,6 +450,9 @@ class ImageNexus(QMainWindow):
 
         qr_image = self.generate_qr_code()
         if qr_image:
+            # ensure the image is 1024x1024
+            qr_image= qr_image.resize((1024, 1024), Image.LANCZOS)
+            
             save_format = self.ui.saveAsComboBox.currentText().lower()
             file_name = f"qr_code.{save_format}"
             file_path = os.path.join(output_folder, file_name)
