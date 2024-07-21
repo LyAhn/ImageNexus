@@ -432,12 +432,27 @@
             <widget class="QComboBox" name="saveAsComboBox">
              <item>
               <property name="text">
+               <string>BMP</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>JPG</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>PNG</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>SVG</string>
+               <string>TIFF</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WEBP</string>
               </property>
              </item>
             </widget>

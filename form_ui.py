@@ -306,6 +306,9 @@ class Ui_ImageNexus(object):
         self.saveAsComboBox = QComboBox(self.widget_4)
         self.saveAsComboBox.addItem("")
         self.saveAsComboBox.addItem("")
+        self.saveAsComboBox.addItem("")
+        self.saveAsComboBox.addItem("")
+        self.saveAsComboBox.addItem("")
         self.saveAsComboBox.setObjectName(u"saveAsComboBox")
 
         self.gridLayout_7.addWidget(self.saveAsComboBox, 7, 2, 1, 1)
@@ -551,8 +554,11 @@ class Ui_ImageNexus(object):
 #if QT_CONFIG(statustip)
         self.qrSizeSpinBox.setStatusTip(QCoreApplication.translate("ImageNexus", u"Value between 1-40", None))
 #endif // QT_CONFIG(statustip)
-        self.saveAsComboBox.setItemText(0, QCoreApplication.translate("ImageNexus", u"PNG", None))
-        self.saveAsComboBox.setItemText(1, QCoreApplication.translate("ImageNexus", u"SVG", None))
+        self.saveAsComboBox.setItemText(0, QCoreApplication.translate("ImageNexus", u"BMP", None))
+        self.saveAsComboBox.setItemText(1, QCoreApplication.translate("ImageNexus", u"JPG", None))
+        self.saveAsComboBox.setItemText(2, QCoreApplication.translate("ImageNexus", u"PNG", None))
+        self.saveAsComboBox.setItemText(3, QCoreApplication.translate("ImageNexus", u"TIFF", None))
+        self.saveAsComboBox.setItemText(4, QCoreApplication.translate("ImageNexus", u"WEBP", None))
 
         self.logoImageLabel.setText(QCoreApplication.translate("ImageNexus", u"Logo Image:", None))
         self.outputFolderLabel_4.setText(QCoreApplication.translate("ImageNexus", u"Output Folder:", None))

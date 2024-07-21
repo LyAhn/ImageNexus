@@ -69,6 +69,9 @@ class Ui_aboutWindow(object):
         self.aboutText.setFocusPolicy(Qt.NoFocus)
         self.aboutText.setAutoFormatting(QTextEdit.AutoAll)
         self.aboutText.setTextInteractionFlags(Qt.LinksAccessibleByMouse)
+        self.ghLink = QLabel(aboutWindow)
+        self.ghLink.setObjectName(u"ghLink")
+        self.ghLink.setGeometry(QRect(40, 480, 111, 16))
 
         self.retranslateUi(aboutWindow)
 
@@ -99,5 +102,6 @@ class Ui_aboutWindow(object):
                         "de, and PySide6.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI';\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This software is licenced under the GNU General Public Licence v3.0 (GPL-3.0)</p></body></html>", None))
+        self.ghLink.setText(QCoreApplication.translate("aboutWindow", u"<html><head/><body><p><a href=\"http://github.com/LyAhn/ImageNexus\"><span style=\" text-decoration: underline; color:#007af4;\">Github Repo</span></a></p></body></html>", None))
     # retranslateUi
 

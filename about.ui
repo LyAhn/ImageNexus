@@ -164,6 +164,19 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <set>Qt::LinksAccessibleByMouse</set>
    </property>
   </widget>
+  <widget class="QLabel" name="ghLink">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>480</y>
+     <width>111</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://github.com/LyAhn/ImageNexus&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;Github Repo&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
  </widget>
  <resources>
   <include location="resources.qrc"/>

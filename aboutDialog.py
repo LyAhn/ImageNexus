@@ -1,7 +1,6 @@
-import sys
-from PySide6.QtCore import Property, QEasingCurve, QPropertyAnimation, Qt
-from PySide6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QGraphicsView, QMainWindow, QApplication
-from PySide6.QtGui import QPixmap, QCursor, QTransform
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QGraphicsView, QMainWindow
+from PySide6.QtGui import QPixmap, QCursor
 from ui_about import Ui_aboutWindow
 
 class aboutDialog(QMainWindow):
@@ -15,6 +14,7 @@ class aboutDialog(QMainWindow):
         self.setup_connections()
         self.setWindowTitle("About")
         self.ui.versionLabel.setText(f"v{aboutDialog.version}")
+        self.ui.ghLink.setOpenExternalLinks(True)
         # Logo section
         self.scene = QGraphicsScene()
         self.scene.setBackgroundBrush(Qt.transparent)
