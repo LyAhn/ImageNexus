@@ -1,22 +1,42 @@
-import numpy as np
-from PIL import Image, UnidentifiedImageError, ExifTags
+from PIL import Image, UnidentifiedImageError, ExifTags, ImageSequence
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QGraphicsScene
 from PySide6.QtGui import QPixmap, QImage
 from PySide6.QtCore import Qt
 import traceback
+import os
 
 class Pixelize:
     def __init__(self, ui):
         self.ui = ui
         self.image = None
         self.pixelated_image = None
+        self.original_file_path = None
+        self.last_save_directory = None
         self.setup_connections()
 
     def setup_connections(self):
         self.ui.pxLoadImageBtn.clicked.connect(self.load_image_for_pixelation)
-        self.ui.pxPixelateBtn.clicked.connect(self.pixelate_image)
+        self.ui.pxPixelateBtn.clicked.connect(self.process_image)
         self.ui.pxSizeSlider.valueChanged.connect(self.ui.pxSpinBox.setValue)
         self.ui.pxSpinBox.valueChanged.connect(self.ui.pxSizeSlider.setValue)
+        self.ui.pxSaveBtn.clicked.connect(self.save_pixelated_image)
+
+    def save_dialog(self):
+        if self.pixelated_image is None:
+            QMessageBox.warning(None, "Warning", "Please pixelate an image first.")
+            return
+
+        selected_format = self.ui.pxFileFormats.currentText().lower()
+        file_filter = f"{selected_format.upper()} Files (*.{selected_format})"
+        file_path, _ = QFileDialog.getSaveFileName(
+            None,
+            "Save Image",
+            "",
+            file_filter
+        )
+
+        if file_path:
+            self.save_pixelated_image(file_path)
 
     def load_image_for_pixelation(self):
         file_path, _ = QFileDialog.getOpenFileName(
@@ -34,39 +54,79 @@ class Pixelize:
 
     def load_image(self, file_path):
         try:
-            self.image = Image.open(file_path)
-            
-            # Check for EXIF orientation data
-            for orientation in ExifTags.TAGS.keys():
-                if ExifTags.TAGS[orientation] == 'Orientation':
-                    break
-            
-            exif = self.image._getexif()
-            if exif is not None:
-                exif = dict(exif.items())
-                if orientation in exif:
-                    if exif[orientation] == 3:
-                        self.image = self.image.rotate(180, expand=True)
-                    elif exif[orientation] == 6:
-                        self.image = self.image.rotate(270, expand=True)
-                    elif exif[orientation] == 8:
-                        self.image = self.image.rotate(90, expand=True)
-            
-            # Convert to RGB mode
-            self.image = self.image.convert('RGB')
-            
-            # Debug information
-            print(f"Image mode: {self.image.mode}")
-            print(f"Image size: {self.image.size}")
-            print(f"Image format: {self.image.format}")
-            
-            return True
+            self.original_file_path = file_path
+            with Image.open(file_path) as img:
+                # Handle transparency
+                if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
+                    # Convert to RGBA if it's not already
+                    img = img.convert('RGBA')
+
+                    # Create a new image with white background
+                    background = Image.new('RGBA', img.size, (255, 255, 255, 255))
+
+                    # Paste the image on the background, using its alpha channel as mask
+                    background.paste(img, (0, 0), img)
+
+                    # Convert to RGB
+                    self.image = background.convert('RGB')
+                else:
+                    self.image = img.convert('RGB')
+
+                # Check if the image is a GIF
+                if img.format == 'GIF' and getattr(img, 'is_animated', False):
+                    # Extract the first frame of the GIF
+                    frames = list(ImageSequence.Iterator(img))
+                    self.image = frames[0].convert('RGB')
+
+                # Handle EXIF orientation
+                for orientation in ExifTags.TAGS.keys():
+                    if ExifTags.TAGS[orientation] == 'Orientation':
+                        break
+
+                try:
+                    exif = self.image._getexif()
+                    if exif is not None:
+                        exif = dict(exif.items())
+                        if orientation in exif:
+                            if exif[orientation] == 3:
+                                self.image = self.image.rotate(180, expand=True)
+                            elif exif[orientation] == 6:
+                                self.image = self.image.rotate(270, expand=True)
+                            elif exif[orientation] == 8:
+                                self.image = self.image.rotate(90, expand=True)
+                except AttributeError:
+                    # Image doesn't have _getexif method, skip EXIF processing
+                    pass
+
+                # Debug information
+                print(f"Image mode: {self.image.mode}")
+                print(f"Image size: {self.image.size}")
+                print(f"Image format: {self.image.format}")
+
+                return True
+
+        except UnidentifiedImageError:
+            print(f"Cannot identify image file: {file_path}")
+            error_message = (
+                "The selected file could not be loaded as an image.\n\n"
+                "Possible reasons:\n"
+                "- The file may be corrupted. \n"
+                "- The file may not actually be an image file. \n"
+                "- The file may be an unsupported image format.\n\n"
+                "Please check the file and try again with a valid image."
+            )
+            QMessageBox.critical(None, "Error Loading Image", error_message)
+            return False
+
         except Exception as e:
             print(f"Error loading image: {e}")
             traceback.print_exc()
+            error_message = f"An unexpected error occurred while loading the image:\n\n{str(e)}"
+            QMessageBox.critical(None, "Error", error_message)
             return False
 
-    def pixelate_image(self):
+
+    def process_image(self):
         if self.image is None:
             QMessageBox.warning(None, "Warning", "Please load an image first.")
             return
@@ -115,13 +175,51 @@ class Pixelize:
             self.ui.pxGraphicsView.setScene(scene)
             self.ui.pxGraphicsView.fitInView(scene.sceneRect(), Qt.KeepAspectRatio)
 
-    def save_pixelated_image(self, file_path):
+    def save_pixelated_image(self):
         if self.pixelated_image is None:
+            QMessageBox.warning(None, "Warning", "Please pixelate an image first.")
             return False
+
+        # Get the selected file format from the QComboBox
+        selected_format = self.ui.pxFileFormats.currentText().lower()
+        # Get the pixel size used for pixelation
+        pixel_size = self.ui.pxSpinBox.value()
+        # Create a file filter based on the selected format
+        file_filter = f"{selected_format.upper()} Files (*.{selected_format})"
+        # Get the original file name without extension
+        original_filename = os.path.splitext(os.path.basename(self.original_file_path))[0]
+        # Create the suggested file name
+        suggested_filename = f"{original_filename}_Pixelated_{pixel_size}px.{selected_format}"
+
+        initial_dr = self.last_save_directory or os.path.dirname(self.original_file_path)
+
+        # Open a file dialog to choose the save location
+        file_path, _ = QFileDialog.getSaveFileName(
+            None,
+            "Save Pixelated Image",
+            suggested_filename,
+            file_filter
+        )
+
+        if not file_path:  # User cancelled the dialog
+            return False
+
         try:
-            self.pixelated_image.save(file_path)
+            # Ensure the file has the correct extension
+            if not file_path.lower().endswith(f".{selected_format}"):
+                file_path += f".{selected_format}"
+
+            # Save the image in the selected format
+            self.pixelated_image.save(file_path, format=selected_format.upper())
+            self.ui.statusbar.showMessage(f"Image saved successfully as {file_path}")
+
+            # Update the last save directory
+            self.last_save_directory = os.path.dirname(file_path)
             return True
         except Exception as e:
+            QMessageBox.critical(None, "Error", f"Failed to save image: {str(e)}")
             print(f"Error saving image: {e}")
             traceback.print_exc()
             return False
+
+#TODO: Add drag and drop support
