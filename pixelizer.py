@@ -103,6 +103,10 @@ class Pixelize:
         qimage = QImage(data, image.width, image.height, image.width * 3, QImage.Format_RGB888)
         return QPixmap.fromImage(qimage)
 
+    def resize_image(self):
+        if self.image:
+            self.display_image(pixelated=self.pixelated_image is not None)
+
     def display_image(self, pixelated=False):
         pixmap = self.get_pixmap(pixelated)
         if pixmap:

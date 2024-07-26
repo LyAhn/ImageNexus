@@ -485,7 +485,11 @@ class ImageNexus(QMainWindow):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         if self.ui.qrOutputView.scene():
+
             self.ui.qrOutputView.fitInView(self.ui.qrOutputView.scene().sceneRect(), Qt.KeepAspectRatio)
+
+        if hasattr(self, 'pixelizer'):
+            self.pixelizer.resize_image()
 
 ### QR Code Generator End ###
 

@@ -18,10 +18,10 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
     QGraphicsView, QGridLayout, QGroupBox, QLabel,
-    QLineEdit, QMainWindow, QMenu, QMenuBar,
-    QProgressBar, QPushButton, QSizePolicy, QSlider,
-    QSpinBox, QStatusBar, QTabWidget, QTextEdit,
-    QToolButton, QWidget)
+    QLayout, QLineEdit, QMainWindow, QMenu,
+    QMenuBar, QProgressBar, QPushButton, QSizePolicy,
+    QSlider, QSpacerItem, QSpinBox, QStatusBar,
+    QTabWidget, QTextEdit, QToolButton, QWidget)
 import resources_rc
 
 class Ui_ImageNexus(object):
@@ -43,8 +43,8 @@ class Ui_ImageNexus(object):
         self.actionExit.setObjectName(u"actionExit")
         self.centralwidget = QWidget(ImageNexus)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.gridLayout_14 = QGridLayout(self.centralwidget)
-        self.gridLayout_14.setObjectName(u"gridLayout_14")
+        self.gridLayout_12 = QGridLayout(self.centralwidget)
+        self.gridLayout_12.setObjectName(u"gridLayout_12")
         self.tabWidget = QTabWidget(self.centralwidget)
         self.tabWidget.setObjectName(u"tabWidget")
         self.tabWidget.setEnabled(True)
@@ -467,36 +467,29 @@ class Ui_ImageNexus(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.qrGenerator), u"QR Generator")
         self.pixelTab = QWidget()
         self.pixelTab.setObjectName(u"pixelTab")
-        self.gridLayout_12 = QGridLayout(self.pixelTab)
-        self.gridLayout_12.setObjectName(u"gridLayout_12")
-        self.pxLoadImageBtn = QPushButton(self.pixelTab)
-        self.pxLoadImageBtn.setObjectName(u"pxLoadImageBtn")
+        self.gridLayout_17 = QGridLayout(self.pixelTab)
+        self.gridLayout_17.setObjectName(u"gridLayout_17")
+        self.pxOptions = QWidget(self.pixelTab)
+        self.pxOptions.setObjectName(u"pxOptions")
+        self.gridLayout_16 = QGridLayout(self.pxOptions)
+        self.gridLayout_16.setObjectName(u"gridLayout_16")
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.gridLayout_12.addWidget(self.pxLoadImageBtn, 0, 1, 1, 1)
+        self.gridLayout_16.addItem(self.verticalSpacer, 1, 0, 1, 1)
 
-        self.pxGraphicsView = QGraphicsView(self.pixelTab)
-        self.pxGraphicsView.setObjectName(u"pxGraphicsView")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
+        self.optionsGroup = QGroupBox(self.pxOptions)
+        self.optionsGroup.setObjectName(u"optionsGroup")
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
         sizePolicy3.setHorizontalStretch(0)
         sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.pxGraphicsView.sizePolicy().hasHeightForWidth())
-        self.pxGraphicsView.setSizePolicy(sizePolicy3)
-
-        self.gridLayout_12.addWidget(self.pxGraphicsView, 0, 2, 3, 1)
-
-        self.optionsGroup = QGroupBox(self.pixelTab)
-        self.optionsGroup.setObjectName(u"optionsGroup")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.optionsGroup.sizePolicy().hasHeightForWidth())
-        self.optionsGroup.setSizePolicy(sizePolicy4)
-        self.gridLayout_13 = QGridLayout(self.optionsGroup)
-        self.gridLayout_13.setObjectName(u"gridLayout_13")
+        sizePolicy3.setHeightForWidth(self.optionsGroup.sizePolicy().hasHeightForWidth())
+        self.optionsGroup.setSizePolicy(sizePolicy3)
+        self.gridLayout_14 = QGridLayout(self.optionsGroup)
+        self.gridLayout_14.setObjectName(u"gridLayout_14")
         self.pxSizeLabel = QLabel(self.optionsGroup)
         self.pxSizeLabel.setObjectName(u"pxSizeLabel")
 
-        self.gridLayout_13.addWidget(self.pxSizeLabel, 0, 0, 1, 1)
+        self.gridLayout_14.addWidget(self.pxSizeLabel, 0, 0, 1, 1)
 
         self.pxSizeSlider = QSlider(self.optionsGroup)
         self.pxSizeSlider.setObjectName(u"pxSizeSlider")
@@ -504,26 +497,103 @@ class Ui_ImageNexus(object):
         self.pxSizeSlider.setMaximum(128)
         self.pxSizeSlider.setOrientation(Qt.Horizontal)
 
-        self.gridLayout_13.addWidget(self.pxSizeSlider, 1, 0, 1, 1)
+        self.gridLayout_14.addWidget(self.pxSizeSlider, 1, 0, 1, 1)
 
         self.pxSpinBox = QSpinBox(self.optionsGroup)
         self.pxSpinBox.setObjectName(u"pxSpinBox")
+        self.pxSpinBox.setMinimumSize(QSize(75, 0))
+        self.pxSpinBox.setMaximumSize(QSize(75, 16777215))
         self.pxSpinBox.setMinimum(2)
         self.pxSpinBox.setMaximum(128)
 
-        self.gridLayout_13.addWidget(self.pxSpinBox, 1, 1, 1, 1)
+        self.gridLayout_14.addWidget(self.pxSpinBox, 1, 1, 1, 1)
+
+        self.pxLoadImageBtn = QPushButton(self.optionsGroup)
+        self.pxLoadImageBtn.setObjectName(u"pxLoadImageBtn")
+        sizePolicy.setHeightForWidth(self.pxLoadImageBtn.sizePolicy().hasHeightForWidth())
+        self.pxLoadImageBtn.setSizePolicy(sizePolicy)
+
+        self.gridLayout_14.addWidget(self.pxLoadImageBtn, 2, 0, 1, 1)
 
 
-        self.gridLayout_12.addWidget(self.optionsGroup, 1, 0, 1, 1)
+        self.gridLayout_16.addWidget(self.optionsGroup, 0, 0, 1, 1)
 
-        self.pxPixelateBtn = QPushButton(self.pixelTab)
+
+        self.gridLayout_17.addWidget(self.pxOptions, 0, 0, 1, 1)
+
+        self.pxSepLine1 = QFrame(self.pixelTab)
+        self.pxSepLine1.setObjectName(u"pxSepLine1")
+        self.pxSepLine1.setFrameShape(QFrame.Shape.VLine)
+        self.pxSepLine1.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.gridLayout_17.addWidget(self.pxSepLine1, 0, 1, 1, 1)
+
+        self.pxOutput = QWidget(self.pixelTab)
+        self.pxOutput.setObjectName(u"pxOutput")
+        self.gridLayout_13 = QGridLayout(self.pxOutput)
+        self.gridLayout_13.setObjectName(u"gridLayout_13")
+        self.pxGraphicsView = QGraphicsView(self.pxOutput)
+        self.pxGraphicsView.setObjectName(u"pxGraphicsView")
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.pxGraphicsView.sizePolicy().hasHeightForWidth())
+        self.pxGraphicsView.setSizePolicy(sizePolicy4)
+
+        self.gridLayout_13.addWidget(self.pxGraphicsView, 0, 0, 1, 1)
+
+        self.pxSepLine2 = QFrame(self.pxOutput)
+        self.pxSepLine2.setObjectName(u"pxSepLine2")
+        self.pxSepLine2.setFrameShape(QFrame.Shape.HLine)
+        self.pxSepLine2.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.gridLayout_13.addWidget(self.pxSepLine2, 1, 0, 1, 1)
+
+        self.pxFunctionBox = QGroupBox(self.pxOutput)
+        self.pxFunctionBox.setObjectName(u"pxFunctionBox")
+        sizePolicy.setHeightForWidth(self.pxFunctionBox.sizePolicy().hasHeightForWidth())
+        self.pxFunctionBox.setSizePolicy(sizePolicy)
+        self.pxFunctionBox.setMaximumSize(QSize(300, 16777215))
+        self.pxFunctionBox.setLayoutDirection(Qt.RightToLeft)
+        self.pxFunctionBox.setAlignment(Qt.AlignBottom|Qt.AlignLeading|Qt.AlignLeft)
+        self.pxFunctionBox.setFlat(True)
+        self.gridLayout_15 = QGridLayout(self.pxFunctionBox)
+        self.gridLayout_15.setObjectName(u"gridLayout_15")
+        self.gridLayout_15.setSizeConstraint(QLayout.SetDefaultConstraint)
+        self.pxPixelateBtn = QPushButton(self.pxFunctionBox)
         self.pxPixelateBtn.setObjectName(u"pxPixelateBtn")
+        sizePolicy.setHeightForWidth(self.pxPixelateBtn.sizePolicy().hasHeightForWidth())
+        self.pxPixelateBtn.setSizePolicy(sizePolicy)
 
-        self.gridLayout_12.addWidget(self.pxPixelateBtn, 2, 1, 1, 1)
+        self.gridLayout_15.addWidget(self.pxPixelateBtn, 0, 1, 1, 1)
+
+        self.pxFileFormats = QComboBox(self.pxFunctionBox)
+        self.pxFileFormats.addItem("")
+        self.pxFileFormats.addItem("")
+        self.pxFileFormats.addItem("")
+        self.pxFileFormats.addItem("")
+        self.pxFileFormats.addItem("")
+        self.pxFileFormats.setObjectName(u"pxFileFormats")
+        sizePolicy.setHeightForWidth(self.pxFileFormats.sizePolicy().hasHeightForWidth())
+        self.pxFileFormats.setSizePolicy(sizePolicy)
+        self.pxFileFormats.setLayoutDirection(Qt.LeftToRight)
+
+        self.gridLayout_15.addWidget(self.pxFileFormats, 1, 0, 1, 1)
+
+        self.pxSaveBtn = QPushButton(self.pxFunctionBox)
+        self.pxSaveBtn.setObjectName(u"pxSaveBtn")
+
+        self.gridLayout_15.addWidget(self.pxSaveBtn, 1, 1, 1, 1)
+
+
+        self.gridLayout_13.addWidget(self.pxFunctionBox, 2, 0, 1, 1)
+
+
+        self.gridLayout_17.addWidget(self.pxOutput, 0, 2, 1, 1)
 
         self.tabWidget.addTab(self.pixelTab, "")
 
-        self.gridLayout_14.addWidget(self.tabWidget, 0, 0, 1, 1)
+        self.gridLayout_12.addWidget(self.tabWidget, 1, 0, 1, 1)
 
         ImageNexus.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(ImageNexus)
@@ -549,7 +619,7 @@ class Ui_ImageNexus(object):
         self.pxSizeSlider.sliderMoved.connect(self.pxSpinBox.setValue)
         self.pxSpinBox.valueChanged.connect(self.pxSizeSlider.setValue)
 
-        self.tabWidget.setCurrentIndex(4)
+        self.tabWidget.setCurrentIndex(0)
         self.qrGenButton.setDefault(False)
 
 
@@ -659,10 +729,18 @@ class Ui_ImageNexus(object):
         self.errorCorrectionCombo.setItemText(2, QCoreApplication.translate("ImageNexus", u"Quartile", None))
         self.errorCorrectionCombo.setItemText(3, QCoreApplication.translate("ImageNexus", u"High", None))
 
-        self.pxLoadImageBtn.setText(QCoreApplication.translate("ImageNexus", u"Load Image", None))
         self.optionsGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Options", None))
         self.pxSizeLabel.setText(QCoreApplication.translate("ImageNexus", u"Pixel Size", None))
+        self.pxLoadImageBtn.setText(QCoreApplication.translate("ImageNexus", u"Load Image", None))
+        self.pxFunctionBox.setTitle("")
         self.pxPixelateBtn.setText(QCoreApplication.translate("ImageNexus", u"Pixelate", None))
+        self.pxFileFormats.setItemText(0, QCoreApplication.translate("ImageNexus", u"BMP", None))
+        self.pxFileFormats.setItemText(1, QCoreApplication.translate("ImageNexus", u"JPG", None))
+        self.pxFileFormats.setItemText(2, QCoreApplication.translate("ImageNexus", u"PNG", None))
+        self.pxFileFormats.setItemText(3, QCoreApplication.translate("ImageNexus", u"TIFF", None))
+        self.pxFileFormats.setItemText(4, QCoreApplication.translate("ImageNexus", u"WEBP", None))
+
+        self.pxSaveBtn.setText(QCoreApplication.translate("ImageNexus", u"Save", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.pixelTab), QCoreApplication.translate("ImageNexus", u"Pixelator", None))
         self.menuFile.setTitle(QCoreApplication.translate("ImageNexus", u"File", None))
         self.menuHelp.setTitle(QCoreApplication.translate("ImageNexus", u"Help", None))
