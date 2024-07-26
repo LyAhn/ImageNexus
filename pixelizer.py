@@ -61,8 +61,8 @@ class Pixelize:
                     # Convert to RGBA if it's not already
                     img = img.convert('RGBA')
 
-                    # Create a new image with white background
-                    background = Image.new('RGBA', img.size, (255, 255, 255, 255))
+                    # Create a new image with dark but not black background
+                    background = Image.new('RGBA', img.size, (31, 31, 31, 31))
 
                     # Paste the image on the background, using its alpha channel as mask
                     background.paste(img, (0, 0), img)
@@ -190,8 +190,6 @@ class Pixelize:
         original_filename = os.path.splitext(os.path.basename(self.original_file_path))[0]
         # Create the suggested file name
         suggested_filename = f"{original_filename}_Pixelated_{pixel_size}px.{selected_format}"
-
-        initial_dr = self.last_save_directory or os.path.dirname(self.original_file_path)
 
         # Open a file dialog to choose the save location
         file_path, _ = QFileDialog.getSaveFileName(
