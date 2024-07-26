@@ -10,6 +10,7 @@ from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
 from qrcode.image.styles.colormasks import SolidFillColorMask
 from aboutDialog import aboutDialog
+from pixelizer import Pixelize
 
 
 version = "0.4.3"
@@ -21,7 +22,7 @@ class ImageNexus(QMainWindow):
         self.ui.setupUi(self)
         self.setup_connections()
         self.setWindowTitle(f"ImageNexus v{version}")
-
+        self.pixelizer = Pixelize(self.ui)
 
 
     def setup_connections(self):
@@ -191,7 +192,7 @@ class ImageNexus(QMainWindow):
                 return
 
         if os.path.isfile(output_path):
-            overwrite = QMessageBox.question(self, "Overwrite Existing File", 
+            overwrite = QMessageBox.question(self, "Overwrite Existing File",
                 "An existing file with the same name already exists.\n\nDo you want to overwrite it?",
                 QMessageBox.Yes | QMessageBox.No)
             if overwrite == QMessageBox.No:
