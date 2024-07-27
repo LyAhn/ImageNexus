@@ -1,3 +1,14 @@
+"""
+This file is part of ImageNexus
+
+ImageNexus is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation
+
+Copyright (c) 2024, LyAhn
+
+This code is licensed under the GPL-3.0 license (see LICENSE.txt for details)
+"""
 import os
 from PIL import Image
 from PySide6.QtWidgets import QApplication, QFileDialog, QMessageBox

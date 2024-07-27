@@ -1,11 +1,19 @@
+"""
+This file is part of ImageNexus
+
+ImageNexus is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation
+
+Copyright (c) 2024, LyAhn
+
+This code is licensed under the GPL-3.0 license (see LICENSE.txt for details)
+"""
 import os
 import io
 import json
 from PIL import Image
 import qrcode
-from qrcode.image.styledpil import StyledPilImage
-from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
-from qrcode.image.styles.colormasks import SolidFillColorMask
 from PySide6.QtWidgets import QMessageBox, QFileDialog, QColorDialog, QDialog, QLabel, QLineEdit, QDialogButtonBox, QVBoxLayout
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QImage, QPixmap
