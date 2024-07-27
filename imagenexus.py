@@ -524,7 +524,7 @@ class ImageNexus(QMainWindow):
                 return
 
             dialog = QDialog(self)
-            dialog.setWindowTitle("Fill Placeholders")
+            dialog.setWindowTitle("Placeholder Editor")
             layout = QVBoxLayout()
 
             inputs = {}
@@ -542,7 +542,7 @@ class ImageNexus(QMainWindow):
 
             dialog.setLayout(layout)
 
-            if dialog.exec_() == QDialog.Accepted:
+            if dialog.exec() == QDialog.Accepted:
                 qr_data = self.ui.qrTextInput.toPlainText()
                 for key, input_field in inputs.items():
                     placeholder = f"[{key.upper()}]"

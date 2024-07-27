@@ -656,7 +656,7 @@ class Ui_ImageNexus(object):
         self.pxSizeSlider.sliderMoved.connect(self.pxSpinBox.setValue)
         self.pxSpinBox.valueChanged.connect(self.pxSizeSlider.setValue)
 
-        self.tabWidget.setCurrentIndex(3)
+        self.tabWidget.setCurrentIndex(0)
         self.qrGenButton.setDefault(False)
 
 

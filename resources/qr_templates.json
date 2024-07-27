@@ -2,9 +2,9 @@
   "qr_code_types": [
     {
       "name": "URL",
-      "format": "https://{website}",
+      "format": "{website}",
       "placeholders": {
-        "website": "www.example.com"
+        "website": "https://example.com"
       }
     },
     {
@@ -69,8 +69,8 @@
       "name": "Geolocation",
       "format": "geo:{latitude},{longitude}",
       "placeholders": {
-        "latitude": "37.4220",
-        "longitude": "-122.0841"
+        "latitude": "51.509865",
+        "longitude": "-0.118092"
       }
     }
   ]
