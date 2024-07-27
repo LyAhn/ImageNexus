@@ -14,8 +14,21 @@ from PySide6.QtWidgets import QGraphicsScene
 class QRGenerator:
     def __init__(self, ui):
         self.ui = ui
+        self.setup_connections()
         self.qr_templates = []
         self.load_qr_templates()
+
+    def setup_connections(self):
+        self.ui.qrGenButton.clicked.connect(self.preview_qr_code)
+        self.ui.saveQRButton.clicked.connect(self.save_qr_code)
+        self.ui.browseFolderButton.clicked.connect(self.browse_output_folder)
+        self.ui.logoBrowseButton.clicked.connect(self.browse_logo)
+        self.ui.bgColourButton.clicked.connect(lambda: self.choose_color('bg'))
+        self.ui.codeColourButton.clicked.connect(lambda: self.choose_color('code'))
+        self.ui.addBgCheckbox.stateChanged.connect(self.preview_qr_code)
+        self.ui.aspectRatioCheck.stateChanged.connect(self.preview_qr_code)
+        self.ui.qrTemplates.currentIndexChanged.connect(self.on_qr_template_changed)
+        self.ui.fillPlaceHoldersButton.clicked.connect(self.fill_placeholders)
 
     def preview_qr_code(self):
         qr_image = self.generate_qr_code()
@@ -236,11 +249,11 @@ class QRGenerator:
             if dialog.exec() == QDialog.Accepted:
                 # Get the original template format
                 format_with_placeholders = template['format']
-                
+
                 # Replace placeholders with user input
                 for key, input_field in inputs.items():
                     placeholder = f"{{{key}}}"
                     format_with_placeholders = format_with_placeholders.replace(placeholder, input_field.text())
-                
+
                 # Update the QR text input with the new text
                 self.ui.qrTextInput.setPlainText(format_with_placeholders)
