@@ -158,7 +158,6 @@ class QRGenerator:
         if not output_folder:
             QMessageBox.warning(None, "Warning", "Please select an output folder.")
             return
-        # Check if output folder exists, if not create it
         if not os.path.exists(output_folder):
             try:
                 os.makedirs(output_folder)
@@ -168,15 +167,19 @@ class QRGenerator:
 
         qr_image = self.generate_qr_code()
         if qr_image:
-            # ensure the image is 1024x1024
-            qr_image= qr_image.resize((1024, 1024), Image.LANCZOS)
+            qr_image = qr_image.resize((1024, 1024), Image.LANCZOS)
 
             save_format = self.ui.saveAsComboBox.currentText().lower()
             file_name = f"qr_code.{save_format}"
             file_path = os.path.join(output_folder, file_name)
 
+            # Convert to RGB if saving as JPEG
+            if save_format.lower() in ['jpg', 'jpeg']:
+                qr_image = qr_image.convert('RGB')
+
             qr_image.save(file_path)
             QMessageBox.information(None, "Success", f"QR code saved as {file_path}")
+
 
     def browse_output_folder(self):
         folder_path = QFileDialog.getExistingDirectory(None, "Select Output Folder")
