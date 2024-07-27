@@ -526,46 +526,6 @@
                <string>Select a template</string>
               </property>
              </item>
-             <item>
-              <property name="text">
-               <string>URL</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>WiFi</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>vCard</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Email</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Email 2</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>SMS</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Geolocation</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Calender Event</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item row="5" column="7">
