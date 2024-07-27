@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.0
+## Created by: Qt User Interface Compiler version 6.7.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -22,7 +22,6 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
     QMenuBar, QProgressBar, QPushButton, QSizePolicy,
     QSlider, QSpacerItem, QSpinBox, QStatusBar,
     QTabWidget, QTextEdit, QToolButton, QWidget)
-import resources_rc
 
 class Ui_ImageNexus(object):
     def setupUi(self, ImageNexus):
@@ -31,7 +30,7 @@ class Ui_ImageNexus(object):
         ImageNexus.resize(872, 602)
         ImageNexus.setMinimumSize(QSize(650, 475))
         icon = QIcon()
-        icon.addFile(u":/images/resources/icon.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u":/images/resources/icon.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         ImageNexus.setWindowIcon(icon)
         self.actionHelp = QAction(ImageNexus)
         self.actionHelp.setObjectName(u"actionHelp")
@@ -480,7 +479,7 @@ class Ui_ImageNexus(object):
         sizePolicy2.setHeightForWidth(self.fillPlaceHoldersButton.sizePolicy().hasHeightForWidth())
         self.fillPlaceHoldersButton.setSizePolicy(sizePolicy2)
         icon1 = QIcon()
-        icon1.addFile(u":/images/resources/wrench32px.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u":/images/resources/wrench32px.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.fillPlaceHoldersButton.setIcon(icon1)
 
         self.gridLayout_7.addWidget(self.fillPlaceHoldersButton, 0, 8, 1, 1)

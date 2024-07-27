@@ -20,7 +20,7 @@
    <string>ImageNexus {version}</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset>
     <normaloff>:/images/resources/icon.ico</normaloff>:/images/resources/icon.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -777,7 +777,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="resources.qrc">
+              <iconset>
                <normaloff>:/images/resources/wrench32px.ico</normaloff>:/images/resources/wrench32px.ico</iconset>
              </property>
             </widget>
@@ -1075,9 +1075,7 @@
    </property>
   </action>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>actionExit</sender>
