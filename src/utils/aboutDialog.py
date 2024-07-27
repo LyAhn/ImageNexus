@@ -1,8 +1,8 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QGraphicsView, QMainWindow
 from PySide6.QtGui import QPixmap, QCursor
-from ui_about import Ui_aboutWindow
-from version import appVersion
+from src.ui.ui_about import Ui_aboutWindow
+from src.utils.version import appVersion
 
 class aboutDialog(QMainWindow):
 

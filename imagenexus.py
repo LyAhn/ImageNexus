@@ -1,14 +1,14 @@
 # This Python file uses the following encoding: utf-8
-from qr_generator import QRGenerator
-from pixelizer import Pixelize
+from src.core.qr_generator import QRGenerator
+from src.core.pixelizer import Pixelize
 import sys
 import os
 from PIL import Image, UnidentifiedImageError
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 from PySide6.QtCore import Qt
-from ui_form import Ui_ImageNexus
-from aboutDialog import aboutDialog
-from version import appVersion
+from src.ui.ui_form import Ui_ImageNexus
+from src.utils.aboutDialog import aboutDialog
+from src.utils.version import appVersion
 
 
 version = appVersion
