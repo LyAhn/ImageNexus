@@ -2,8 +2,9 @@
 import sys
 import os
 import io
+import json
 from PIL import Image, UnidentifiedImageError
-from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QColorDialog, QGraphicsScene
+from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QColorDialog, QGraphicsScene, QDialog, QLabel, QLineEdit, QDialogButtonBox, QVBoxLayout
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPixmap, QImage
 from ui_form import Ui_ImageNexus
@@ -26,6 +27,9 @@ class ImageNexus(QMainWindow):
         self.setup_connections()
         self.setWindowTitle(f"ImageNexus v{version}")
         self.pixelizer = Pixelize(self.ui)
+        #self.qr_templates = self.load_qr_templates()
+        self.load_qr_templates()
+
 
 
     def setup_connections(self):
@@ -53,6 +57,8 @@ class ImageNexus(QMainWindow):
         self.ui.codeColourButton.clicked.connect(lambda: self.choose_color('code'))
         self.ui.addBgCheckbox.stateChanged.connect(self.preview_qr_code)
         self.ui.aspectRatioCheck.stateChanged.connect(self.preview_qr_code)
+        self.ui.qrTemplates.currentIndexChanged.connect(self.on_qr_template_changed)
+        self.ui.fillPlaceHoldersButton.clicked.connect(self.fill_placeholders)
 
         # Help Menu
         self.ui.actionAbout.triggered.connect(self.show_about)
@@ -316,6 +322,7 @@ class ImageNexus(QMainWindow):
                 self.ui.statusbar.showMessage(f"Error converting {input_path}: {str(e)}")
 
         QMessageBox.information(self, "Success", "Batch conversion completed!")
+
 ### QR Code Generator Start ###
     def preview_qr_code(self):
         qr_image = self.generate_qr_code()
@@ -340,7 +347,7 @@ class ImageNexus(QMainWindow):
         # Convert color strings to tuples
         def color_string_to_tuple(color_string):
             return tuple(map(int, color_string.split(',')))
-        
+
         def get_color(color_input, default):
             color_text = color_input.text().strip()
             return color_string_to_tuple(color_text) if color_text else default
@@ -360,7 +367,7 @@ class ImageNexus(QMainWindow):
         logo_path = self.ui.logoImageInput.text()
         if logo_path and os.path.isfile(logo_path):
             logo = Image.open(logo_path).convert('RGBA')
-            
+
             qr_size = qr_image.size[0]
             max_size = qr_size // 3
 
@@ -396,15 +403,11 @@ class ImageNexus(QMainWindow):
 
             # Paste the logo onto the QR code
             qr_image.paste(logo, box, logo)
-            
+
             # After generating QR, resize to 1024
             qr_image = qr_image.resize((1024, 1024), Image.LANCZOS)
 
         return qr_image
-
-
-
-
 
     def get_error_correction(self):
         error_correction = self.ui.errorCorrectionCombo.currentText()
@@ -436,9 +439,6 @@ class ImageNexus(QMainWindow):
         self.ui.qrOutputView.setSceneRect(scene.sceneRect())
         self.ui.qrOutputView.fitInView(scene.sceneRect(), Qt.KeepAspectRatio)
 
-
-
-
     def save_qr_code(self):
         output_folder = self.ui.outputFolderText.text()
         if not output_folder:
@@ -456,15 +456,13 @@ class ImageNexus(QMainWindow):
         if qr_image:
             # ensure the image is 1024x1024
             qr_image= qr_image.resize((1024, 1024), Image.LANCZOS)
-            
+
             save_format = self.ui.saveAsComboBox.currentText().lower()
             file_name = f"qr_code.{save_format}"
             file_path = os.path.join(output_folder, file_name)
 
             qr_image.save(file_path)
             QMessageBox.information(self, "Success", f"QR code saved as {file_path}")
-
-
 
     def browse_output_folder(self):
         folder_path = QFileDialog.getExistingDirectory(self, "Select Output Folder")
@@ -485,6 +483,74 @@ class ImageNexus(QMainWindow):
             else:
                 self.ui.codeColourInput.setText(rgb_values)
 
+    def populate_qr_templates(self):
+        self.ui.qrTemplates.clear()
+        self.ui.qrTemplates.addItem("Select a template")
+        for template in self.qr_templates:
+            self.ui.qrTemplates.addItem(template['name'])
+
+    def load_qr_templates(self):
+        try:
+            with open('resources/qr_templates.json', 'r') as file:
+                data = json.load(file)
+                self.qr_templates = data['qr_code_types']
+
+            self.ui.qrTemplates.clear()
+            self.ui.qrTemplates.addItem("Select a template")
+            for template in self.qr_templates:
+                self.ui.qrTemplates.addItem(template['name'])
+        except FileNotFoundError:
+            print("Error: 'resources/qr_templates.json' file not found.")
+            self.qr_templates = []
+        except json.JSONDecodeError:
+            print("Error: Invalid JSON format in 'resources/qr_templates.json'.")
+            self.qr_templates = []
+
+    def on_qr_template_changed(self, index):
+        if index > 0:  # index 0 is the "Select a template" item
+            template = self.qr_templates[index - 1]
+            format_with_placeholders = template['format']
+            for key, value in template.get('placeholders', {}).items():
+                format_with_placeholders = format_with_placeholders.replace(f"{{{key}}}", f"[{key.upper()}]")
+            self.ui.qrTextInput.setPlainText(format_with_placeholders)
+
+    def fill_placeholders(self):
+        template_index = self.ui.qrTemplates.currentIndex()
+        if template_index > 0 and template_index <= len(self.qr_templates):
+            template = self.qr_templates[template_index - 1]
+            placeholders = template.get('placeholders', {})
+
+            if not placeholders:
+                return
+
+            dialog = QDialog(self)
+            dialog.setWindowTitle("Fill Placeholders")
+            layout = QVBoxLayout()
+
+            inputs = {}
+            for key, default_value in placeholders.items():
+                label = QLabel(f"{key}:")
+                input_field = QLineEdit(default_value)
+                inputs[key] = input_field
+                layout.addWidget(label)
+                layout.addWidget(input_field)
+
+            buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+            buttons.accepted.connect(dialog.accept)
+            buttons.rejected.connect(dialog.reject)
+            layout.addWidget(buttons)
+
+            dialog.setLayout(layout)
+
+            if dialog.exec_() == QDialog.Accepted:
+                qr_data = self.ui.qrTextInput.toPlainText()
+                for key, input_field in inputs.items():
+                    placeholder = f"[{key.upper()}]"
+                    qr_data = qr_data.replace(placeholder, input_field.text())
+                self.ui.qrTextInput.setPlainText(qr_data)
+
+### QR Code Generator End ###
+
     def resizeEvent(self, event):
         super().resizeEvent(event)
         if self.ui.qrOutputView.scene():
@@ -494,7 +560,7 @@ class ImageNexus(QMainWindow):
         if hasattr(self, 'pixelizer'):
             self.pixelizer.resize_image()
 
-### QR Code Generator End ###
+
 
 #TODO: Add built-in templates for these QR formats, making it easier to create specialized QR codes.
 if __name__ == "__main__":

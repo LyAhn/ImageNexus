@@ -1,0 +1,77 @@
+{
+  "qr_code_types": [
+    {
+      "name": "URL",
+      "format": "https://{website}",
+      "placeholders": {
+        "website": "www.example.com"
+      }
+    },
+    {
+      "name": "WiFi",
+      "format": "WIFI:T:{network_type};S:{ssid};P:{password};;",
+      "placeholders": {
+        "network_type": "WPA",
+        "ssid": "Your_Network_Name",
+        "password": "Your_Network_Password"
+      }
+    },
+    {
+      "name": "vCard",
+      "format": "BEGIN:VCARD\nVERSION:3.0\nN:{surname};{name}\nFN:{full_name}\nORG:{organization}\nTITLE:{job_title}\nTEL:{phone_number}\nEMAIL:{email}\nURL:{url}\nADR:;;{street_address};{city};{state};{postal_code};{country}\nEND:VCARD",
+      "placeholders": {
+        "surname": "Doe",
+        "name": "John",
+        "full_name": "John Doe",
+        "organization": "Example Corp",
+        "job_title": "Software Developer",
+        "phone_number": "+1234567890",
+        "email": "john.doe@example.com",
+        "url": "https://www.johndoe.com",
+        "street_address": "123 Main St",
+        "city": "Anytown",
+        "state": "State",
+        "postal_code": "12345",
+        "country": "Country"
+      }
+    },
+    {
+      "name": "Email",
+      "format": "mailto:{email}",
+      "placeholders": {
+        "email": "email@example.com"
+      }
+    },
+    {
+      "name": "Email 2",
+      "format": "mailto:{email}?subject={subject}&body={body}",
+      "placeholders": {
+        "email": "email@example.com",
+        "subject": "Email Subject",
+        "body": "Email Body"
+      }
+    },
+    {
+      "name": "SMS",
+      "format": "sms:{phone_number}",
+      "placeholders": {
+        "phone_number": "+1234567890"
+      }
+    },
+    {
+      "name": "Phone Number",
+      "format": "tel:{phone_number}",
+      "placeholders": {
+        "phone_number": "+1234567890"
+      }
+    },
+    {
+      "name": "Geolocation",
+      "format": "geo:{latitude},{longitude}",
+      "placeholders": {
+        "latitude": "37.4220",
+        "longitude": "-122.0841"
+      }
+    }
+  ]
+}
