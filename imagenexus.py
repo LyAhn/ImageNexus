@@ -1,5 +1,7 @@
 # This Python file uses the following encoding: utf-8
-import sys, os, io
+import sys
+import os
+import io
 from PIL import Image, UnidentifiedImageError
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QColorDialog, QGraphicsScene
 from PySide6.QtCore import Qt
@@ -10,10 +12,11 @@ from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
 from qrcode.image.styles.colormasks import SolidFillColorMask
 from aboutDialog import aboutDialog
+from version import appVersion
 from pixelizer import Pixelize
 
 
-version = "0.4.3"
+version = appVersion
 
 class ImageNexus(QMainWindow):
     def __init__(self, parent=None):
