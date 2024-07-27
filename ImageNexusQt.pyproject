@@ -2,7 +2,7 @@
     "files": [
         "imagenexus.py",
         "src/ui/form.ui",
-        "resources/resources.qrc",
+        "resources.qrc",
         "src/ui/about.ui",
         "src/utils/aboutDialog.py"
     ]

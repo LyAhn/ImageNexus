@@ -22,6 +22,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
     QMenuBar, QProgressBar, QPushButton, QSizePolicy,
     QSlider, QSpacerItem, QSpinBox, QStatusBar,
     QTabWidget, QTextEdit, QToolButton, QWidget)
+import rc_resources
 
 class Ui_ImageNexus(object):
     def setupUi(self, ImageNexus):
