@@ -4,7 +4,7 @@ from src.core.frame_extractor import FrameExtractor
 from src.core.img_converter import ImgConverter
 from src.core.batch_converter import BatchConvert
 from src.core.qr_generator import QRGenerator
-from src.core.pixelizer import Pixelize
+from src.core.pixelate import Pixelate
 from src.ui.ui_form import Ui_ImageNexus
 from src.utils.aboutDialog import aboutDialog
 from src.utils.version import appVersion
@@ -24,7 +24,7 @@ class ImageNexus(QMainWindow):
         self.img_converter = ImgConverter(self.ui)
         self.batch_converter = BatchConvert(self.ui)
         self.qr_generator = QRGenerator(self.ui)
-        self.pixelizer = Pixelize(self.ui)
+        self.pixelizer = Pixelate(self.ui)
 
         self.setup_connections()
         self.qr_generator.load_qr_templates()

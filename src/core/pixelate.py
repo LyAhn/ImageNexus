@@ -16,7 +16,7 @@ from PySide6.QtCore import Qt
 import traceback
 import os
 
-class Pixelize:
+class Pixelate:
     def __init__(self, ui):
         self.ui = ui
         self.image = None
