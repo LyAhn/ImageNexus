@@ -1,16 +1,15 @@
 # This Python file uses the following encoding: utf-8
 import sys
-from src.core.qr_generator import QRGenerator
-from src.core.pixelizer import Pixelize
 from src.core.frame_extractor import FrameExtractor
 from src.core.img_converter import ImgConverter
 from src.core.batch_converter import BatchConvert
+from src.core.qr_generator import QRGenerator
+from src.core.pixelizer import Pixelize
 from src.ui.ui_form import Ui_ImageNexus
 from src.utils.aboutDialog import aboutDialog
 from src.utils.version import appVersion
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtCore import Qt
-
 
 
 version = appVersion
@@ -33,20 +32,7 @@ class ImageNexus(QMainWindow):
 
     def setup_connections(self):
 
-
-        # QR Code Generator tab
-        self.ui.qrGenButton.clicked.connect(self.qr_generator.preview_qr_code)
-        self.ui.saveQRButton.clicked.connect(self.qr_generator.save_qr_code)
-        self.ui.browseFolderButton.clicked.connect(self.qr_generator.browse_output_folder)
-        self.ui.logoBrowseButton.clicked.connect(self.qr_generator.browse_logo)
-        self.ui.bgColourButton.clicked.connect(lambda: self.qr_generator.choose_color('bg'))
-        self.ui.codeColourButton.clicked.connect(lambda: self.qr_generator.choose_color('code'))
-        self.ui.addBgCheckbox.stateChanged.connect(self.qr_generator.preview_qr_code)
-        self.ui.aspectRatioCheck.stateChanged.connect(self.qr_generator.preview_qr_code)
-        self.ui.qrTemplates.currentIndexChanged.connect(self.qr_generator.on_qr_template_changed)
-        self.ui.fillPlaceHoldersButton.clicked.connect(self.qr_generator.fill_placeholders)
-
-        # Help Menu
+        # Top Menu Bar
         self.ui.actionAbout.triggered.connect(self.show_about)
 
     def show_about(self):
