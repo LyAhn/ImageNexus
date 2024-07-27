@@ -212,15 +212,14 @@ class QRGenerator:
         if template_index > 0 and template_index <= len(self.qr_templates):
             template = self.qr_templates[template_index - 1]
             placeholders = template.get('placeholders', {})
-
             if not placeholders:
                 return
 
             dialog = QDialog()
             dialog.setWindowTitle("Placeholder Editor")
             layout = QVBoxLayout()
-
             inputs = {}
+
             for key, default_value in placeholders.items():
                 label = QLabel(f"{key}:")
                 input_field = QLineEdit(default_value)
@@ -232,12 +231,16 @@ class QRGenerator:
             buttons.accepted.connect(dialog.accept)
             buttons.rejected.connect(dialog.reject)
             layout.addWidget(buttons)
-
             dialog.setLayout(layout)
 
             if dialog.exec() == QDialog.Accepted:
-                qr_data = self.ui.qrTextInput.toPlainText()
+                # Get the original template format
+                format_with_placeholders = template['format']
+                
+                # Replace placeholders with user input
                 for key, input_field in inputs.items():
-                    placeholder = f"[{key.upper()}]"
-                    qr_data = qr_data.replace(placeholder, input_field.text())
-                self.ui.qrTextInput.setPlainText(qr_data)
+                    placeholder = f"{{{key}}}"
+                    format_with_placeholders = format_with_placeholders.replace(placeholder, input_field.text())
+                
+                # Update the QR text input with the new text
+                self.ui.qrTextInput.setPlainText(format_with_placeholders)
