@@ -1013,6 +1013,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionHelp"/>
+    <addaction name="actionReloadTemplates"/>
     <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuFile"/>
@@ -1038,6 +1039,11 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionReloadTemplates">
+   <property name="text">
+    <string>Reload Templates</string>
    </property>
   </action>
  </widget>
