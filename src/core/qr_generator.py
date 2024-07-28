@@ -17,7 +17,7 @@ import qrcode
 from PySide6.QtWidgets import QMessageBox, QFileDialog, QColorDialog, QDialog, QLabel, QLineEdit, QDialogButtonBox, QVBoxLayout
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QImage, QPixmap
-from PySide6.QtWidgets import QGraphicsScene
+from PySide6.QtWidgets import QGraphicsScene, QPushButton, QSizePolicy
 
 class QRGenerator:
     def __init__(self, ui):
@@ -25,6 +25,7 @@ class QRGenerator:
         self.setup_connections()
         self.qr_templates = []
         self.load_qr_templates()
+        self.current_qr_image = None
 
     def setup_connections(self):
         self.ui.qrGenButton.clicked.connect(self.preview_qr_code)
@@ -37,16 +38,41 @@ class QRGenerator:
         self.ui.qrAspectRatioCheck.stateChanged.connect(self.preview_qr_code)
         self.ui.qrTemplates.currentIndexChanged.connect(self.on_qr_template_changed)
         self.ui.qrPlaceholderEditor.clicked.connect(self.fill_placeholders)
+        self.ui.qrOutputView.mousePressEvent = self.on_preview_clicked
+
+        #self.ui.qrTextInput.textChanged.connect(self.preview_qr_code) # remove this comment if you want live QR code preview while typing - Not advised
+        self.ui.qrCodeSize.valueChanged.connect(self.preview_qr_code)
+        self.ui.qrBorderSize.valueChanged.connect(self.preview_qr_code)
+        self.ui.qrErrorCorrectList.currentIndexChanged.connect(self.preview_qr_code)
+        self.ui.qrLogoInput.textChanged.connect(self.preview_qr_code)
+        self.ui.qrBgColourInput.textChanged.connect(self.preview_qr_code)
+        self.ui.qrCodeColourInput.textChanged.connect(self.preview_qr_code)
+
+    def on_preview_clicked(self, event):
+        if event.button() == Qt.LeftButton:
+            self.show_preview_window()
 
     def preview_qr_code(self):
-        qr_image = self.generate_qr_code()
-        if qr_image:
-            self.display_qr_code(qr_image)
+        qr_data = self.ui.qrTextInput.toPlainText().strip()
+        if qr_data:
+            qr_image = self.generate_qr_code()
+            if qr_image:
+                self.display_qr_code(qr_image)
+        else:
+            # Clear the QR code display if the input is empty
+            self.clear_qr_display()
+            self.current_qr_image = None # Clears the buffer
+
+    def clear_qr_display(self):
+        scene = self.ui.qrOutputView.scene()
+        if scene:
+            scene.clear()
+        self.ui.qrOutputView.setScene(QGraphicsScene())
+        self.current_qr_image = None # Clear the buffer
 
     def generate_qr_code(self):
-        qr_data = self.ui.qrTextInput.toPlainText()
+        qr_data = self.ui.qrTextInput.toPlainText().strip()
         if not qr_data:
-            QMessageBox.warning(None, "Warning", "Please enter some data for the QR code.")
             return None
 
         qr = qrcode.QRCode(
@@ -135,35 +161,32 @@ class QRGenerator:
             return qrcode.constants.ERROR_CORRECT_H
 
     def display_qr_code(self, qr_image):
+        self.current_qr_image = qr_image  # Store the current QR image
         buffer = io.BytesIO()
         qr_image.save(buffer, format="PNG")
         qimage = QImage()
         qimage.loadFromData(buffer.getvalue())
         pixmap = QPixmap.fromImage(qimage)
-
         scene = self.ui.qrOutputView.scene()
         if scene is None:
             scene = QGraphicsScene()
             self.ui.qrOutputView.setScene(scene)
-
         scene.clear()
         scene_item = scene.addPixmap(pixmap)
         scene.setSceneRect(scene_item.boundingRect())
-
         self.ui.qrOutputView.setSceneRect(scene.sceneRect())
         self.ui.qrOutputView.fitInView(scene.sceneRect(), Qt.KeepAspectRatio)
 
     def save_qr_code(self):
+        qr_data = self.ui.qrTextInput.toPlainText().strip()
+        if not qr_data:
+            QMessageBox.warning(None, "Warning", "Please enter some data for the QR code.")
+            return
+
         output_folder = self.ui.qrOutputFolder.text()
         if not output_folder:
             QMessageBox.warning(None, "Warning", "Please select an output folder.")
             return
-        if not os.path.exists(output_folder):
-            try:
-                os.makedirs(output_folder)
-            except OSError as e:
-                QMessageBox.critical(None, "Error", f"Failed to create output folder: {e}")
-                return
 
         qr_image = self.generate_qr_code()
         if qr_image:
@@ -268,3 +291,70 @@ class QRGenerator:
 
                 # Update the QR text input with the new text
                 self.ui.qrTextInput.setPlainText(format_with_placeholders)
+
+    # def show_preview_window(self):
+    #     if hasattr(self, 'current_qr_image'):
+    #         preview_dialog = QDialog(self.ui.qrOutputView)
+    #         preview_dialog.setWindowTitle("QR Code Preview")
+    #         preview_dialog.setGeometry(100, 100, 300, 300)
+    #         layout = QVBoxLayout()
+    #         label = QLabel()
+
+    #         # Convert PIL Image to QPixmap
+    #         buffer = io.BytesIO()
+    #         self.current_qr_image.save(buffer, format="PNG")
+    #         qimage = QImage()
+    #         qimage.loadFromData(buffer.getvalue())
+    #         pixmap = QPixmap.fromImage(qimage)
+
+    #         label.setPixmap(pixmap)
+    #         layout.addWidget(label)
+
+    #         close_button = QPushButton("Close")
+    #         close_button.clicked.connect(preview_dialog.close)
+    #         layout.addWidget(close_button)
+
+    #         preview_dialog.setLayout(layout)
+    #         preview_dialog.exec()
+    #     else:
+    #         QMessageBox.warning(None, "Warning", "No QR code has been generated yet.")
+    
+    def show_preview_window(self):
+        if hasattr(self, 'current_qr_image') and self.current_qr_image:
+            preview_dialog = QDialog(self.ui.qrOutputView)
+            preview_dialog.setWindowTitle("QR Code Preview")
+            # set minimum size
+            #preview_dialog.setMinimumSize(300, 300)
+            layout = QVBoxLayout()
+            label = QLabel()
+
+            # Convert PIL Image to QPixmap
+            buffer = io.BytesIO()
+            self.current_qr_image.save(buffer, format="PNG")
+            qimage = QImage()
+            qimage.loadFromData(buffer.getvalue())
+            pixmap = QPixmap.fromImage(qimage)
+
+            label.setPixmap(pixmap)
+            #label.setScaledContents(True)  # This will scale the image to fit the label
+            label.setAlignment(Qt.AlignCenter)
+            label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            label.setMinimumSize(200, 200)
+
+            # Resize the pixmap to fit the label while preserving aspect ratio
+            label.resizeEvent = lambda event: label.setPixmap(pixmap.scaled(
+                label.width(), label.height(),
+                Qt.KeepAspectRatio, Qt.SmoothTransformation
+            ))
+
+            layout.addWidget(label)
+
+            close_button = QPushButton("Close")
+            close_button.clicked.connect(preview_dialog.close)
+            layout.addWidget(close_button)
+
+            preview_dialog.setLayout(layout)
+            preview_dialog.exec()
+        else:
+            # Only show a warning if there's no QR code and the user explicitly tries to preview
+            QMessageBox.warning(None, "Warning", "No QR code has been generated yet.")
