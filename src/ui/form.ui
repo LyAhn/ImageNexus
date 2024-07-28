@@ -160,35 +160,35 @@
          <widget class="QWidget" name="widget_2" native="true">
           <layout class="QGridLayout" name="gridLayout_4">
            <item row="0" column="5">
-            <widget class="QToolButton" name="inputBrowse2">
+            <widget class="QToolButton" name="icBrowseInput">
              <property name="text">
               <string>Browse</string>
              </property>
             </widget>
            </item>
            <item row="0" column="0" colspan="2">
-            <widget class="QLabel" name="selectGifLabel_2">
+            <widget class="QLabel" name="icInputFileLbl">
              <property name="text">
               <string>Select Input File:</string>
              </property>
             </widget>
            </item>
            <item row="2" column="5">
-            <widget class="QToolButton" name="outputBrowse2">
+            <widget class="QToolButton" name="icBrowseOutput">
              <property name="text">
               <string>Browse</string>
              </property>
             </widget>
            </item>
            <item row="4" column="0">
-            <widget class="QLabel" name="saveAsLabel_2">
+            <widget class="QLabel" name="icFormatOptionsLbl">
              <property name="text">
               <string>Output Format:</string>
              </property>
             </widget>
            </item>
            <item row="5" column="0" colspan="6">
-            <widget class="QProgressBar" name="progressBar_2">
+            <widget class="QProgressBar" name="icProgressBar">
              <property name="value">
               <number>0</number>
              </property>
@@ -198,28 +198,28 @@
             </widget>
            </item>
            <item row="0" column="4">
-            <widget class="QLineEdit" name="fileInput2">
+            <widget class="QLineEdit" name="icFileInput">
              <property name="placeholderText">
               <string>Select an image...</string>
              </property>
             </widget>
            </item>
            <item row="2" column="0" colspan="3">
-            <widget class="QLabel" name="outputFolderLabel_2">
+            <widget class="QLabel" name="icOutputFolderLbl">
              <property name="text">
               <string>Output Folder:</string>
              </property>
             </widget>
            </item>
            <item row="2" column="4">
-            <widget class="QLineEdit" name="outputFolder2">
+            <widget class="QLineEdit" name="icOutputFolder">
              <property name="placeholderText">
               <string>Select an output folder...</string>
              </property>
             </widget>
            </item>
            <item row="4" column="2">
-            <widget class="QComboBox" name="saveAsFormat_2">
+            <widget class="QComboBox" name="icFormatOptions">
              <item>
               <property name="text">
                <string>GIF</string>
@@ -248,7 +248,7 @@
             </widget>
            </item>
            <item row="4" column="5">
-            <widget class="QPushButton" name="converter_button">
+            <widget class="QPushButton" name="icConvertBtn">
              <property name="text">
               <string>Convert</string>
              </property>

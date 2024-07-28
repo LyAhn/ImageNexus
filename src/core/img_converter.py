@@ -21,25 +21,25 @@ class ImgConverter:
 
     def setup_connections(self):
         # Image Converter tab
-        self.ui.inputBrowse2.clicked.connect(self.select_input_file)
-        self.ui.outputBrowse2.clicked.connect(self.select_output_folder_converter)
-        self.ui.converter_button.clicked.connect(self.convert_file)
+        self.ui.icBrowseInput.clicked.connect(self.select_input_file)
+        self.ui.icBrowseOutput.clicked.connect(self.select_output_folder_converter)
+        self.ui.icConvertBtn.clicked.connect(self.convert_file)
 
     def select_input_file(self):
         file_path, _ = QFileDialog.getOpenFileName(None, "Select Input File", "", "Image files (*.gif *.png *.jpg *.jpeg *.bmp *.tiff)")
         if file_path:
-            self.ui.fileInput2.setText(file_path)
+            self.ui.icFileInput.setText(file_path)
             self.input_format = os.path.splitext(file_path)[1][1:].lower()
 
     def select_output_folder_converter(self):
         folder_path = QFileDialog.getExistingDirectory(None, "Select Output Folder")
         if folder_path:
-            self.ui.outputFolder2.setText(folder_path)
+            self.ui.icOutputFolder.setText(folder_path)
 
     def convert_file(self):
-        input_path = self.ui.fileInput2.text()
-        output_folder = self.ui.outputFolder2.text()
-        output_format = self.ui.saveAsFormat_2.currentText().lower()
+        input_path = self.ui.icFileInput.text()
+        output_folder = self.ui.icOutputFolder.text()
+        output_format = self.ui.icFormatOptions.currentText().lower()
 
         if not input_path or not output_folder:
             QMessageBox.critical(None, "Error", "Please select both input file and output folder.")
