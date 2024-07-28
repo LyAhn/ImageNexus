@@ -28,15 +28,15 @@ class QRGenerator:
 
     def setup_connections(self):
         self.ui.qrGenButton.clicked.connect(self.preview_qr_code)
-        self.ui.saveQRButton.clicked.connect(self.save_qr_code)
-        self.ui.browseFolderButton.clicked.connect(self.browse_output_folder)
-        self.ui.logoBrowseButton.clicked.connect(self.browse_logo)
-        self.ui.bgColourButton.clicked.connect(lambda: self.choose_color('bg'))
-        self.ui.codeColourButton.clicked.connect(lambda: self.choose_color('code'))
-        self.ui.addBgCheckbox.stateChanged.connect(self.preview_qr_code)
-        self.ui.aspectRatioCheck.stateChanged.connect(self.preview_qr_code)
+        self.ui.qrSaveQRBtn.clicked.connect(self.save_qr_code)
+        self.ui.qrBrowseOutput.clicked.connect(self.browse_output_folder)
+        self.ui.qrBrowseLogo.clicked.connect(self.browse_logo)
+        self.ui.qrBgColourBtn.clicked.connect(lambda: self.choose_color('bg'))
+        self.ui.qrCodeColourBtn.clicked.connect(lambda: self.choose_color('code'))
+        self.ui.qrAddBGCheck.stateChanged.connect(self.preview_qr_code)
+        self.ui.qrAspectRatioCheck.stateChanged.connect(self.preview_qr_code)
         self.ui.qrTemplates.currentIndexChanged.connect(self.on_qr_template_changed)
-        self.ui.fillPlaceHoldersButton.clicked.connect(self.fill_placeholders)
+        self.ui.qrPlaceholderEditor.clicked.connect(self.fill_placeholders)
 
     def preview_qr_code(self):
         qr_image = self.generate_qr_code()
@@ -50,10 +50,10 @@ class QRGenerator:
             return None
 
         qr = qrcode.QRCode(
-            version=self.ui.qrSizeSpinBox.value(),
+            version=self.ui.qrCodeSize.value(),
             error_correction=self.get_error_correction(),
             box_size=40,
-            border=self.ui.borderSpinBox.value(),
+            border=self.ui.qrBorderSize.value(),
         )
         qr.add_data(qr_data)
         qr.make(fit=True)
@@ -66,10 +66,10 @@ class QRGenerator:
             color_text = color_input.text().strip()
             return color_string_to_tuple(color_text) if color_text else default
 
-        #bg_color = color_string_to_tuple(self.ui.bgColourInput.text())
-        #fill_color = color_string_to_tuple(self.ui.codeColourInput.text())
-        bg_color = get_color(self.ui.bgColourInput, (255, 255, 255))
-        fill_color = get_color(self.ui.codeColourInput, (0, 0, 0))
+        #bg_color = color_string_to_tuple(self.ui.qrBgColourInput.text())
+        #fill_color = color_string_to_tuple(self.ui.qrCodeColourInput.text())
+        bg_color = get_color(self.ui.qrBgColourInput, (255, 255, 255))
+        fill_color = get_color(self.ui.qrCodeColourInput, (0, 0, 0))
 
         # Create the QR code image
         qr_image = qr.make_image(
@@ -78,7 +78,7 @@ class QRGenerator:
 
         )
 
-        logo_path = self.ui.logoImageInput.text()
+        logo_path = self.ui.qrLogoInput.text()
         if logo_path and os.path.isfile(logo_path):
             logo = Image.open(logo_path).convert('RGBA')
 
@@ -86,7 +86,7 @@ class QRGenerator:
             max_size = qr_size // 3
 
             # Preserve aspect ratio
-            if self.ui.aspectRatioCheck.isChecked():
+            if self.ui.qrAspectRatioCheck.isChecked():
                 ratio = min(max_size / logo.width, max_size / logo.height)
                 new_size = (int(logo.width * ratio), int(logo.height * ratio))
             else:
@@ -95,7 +95,7 @@ class QRGenerator:
             logo = logo.resize(new_size, Image.LANCZOS)
 
             # Create a new image with the background if checkbox is checked
-            if self.ui.addBgCheckbox.isChecked():
+            if self.ui.qrAddBGCheck.isChecked():
                 bg = Image.new('RGBA', (max_size, max_size), (255, 255, 255, 255))
                 offset = ((max_size - logo.width) // 2, (max_size - logo.height) // 2)
                 bg.paste(logo, offset, logo)
@@ -124,7 +124,7 @@ class QRGenerator:
         return qr_image
 
     def get_error_correction(self):
-        error_correction = self.ui.errorCorrectionCombo.currentText()
+        error_correction = self.ui.qrErrorCorrectList.currentText()
         if error_correction == "Low":
             return qrcode.constants.ERROR_CORRECT_L
         elif error_correction == "Medium":
@@ -154,7 +154,7 @@ class QRGenerator:
         self.ui.qrOutputView.fitInView(scene.sceneRect(), Qt.KeepAspectRatio)
 
     def save_qr_code(self):
-        output_folder = self.ui.outputFolderText.text()
+        output_folder = self.ui.qrOutputFolder.text()
         if not output_folder:
             QMessageBox.warning(None, "Warning", "Please select an output folder.")
             return
@@ -169,7 +169,7 @@ class QRGenerator:
         if qr_image:
             qr_image = qr_image.resize((1024, 1024), Image.LANCZOS)
 
-            save_format = self.ui.saveAsComboBox.currentText().lower()
+            save_format = self.ui.qrFormatOptions.currentText().lower()
             file_name = f"qr_code.{save_format}"
             file_path = os.path.join(output_folder, file_name)
 
@@ -184,21 +184,21 @@ class QRGenerator:
     def browse_output_folder(self):
         folder_path = QFileDialog.getExistingDirectory(None, "Select Output Folder")
         if folder_path:
-            self.ui.outputFolderText.setText(folder_path)
+            self.ui.qrOutputFolder.setText(folder_path)
 
     def browse_logo(self):
         file_path, _ = QFileDialog.getOpenFileName(None, "Select Logo Image", "", "Image Files (*.png *.jpg *.bmp)")
         if file_path:
-            self.ui.logoImageInput.setText(file_path)
+            self.ui.qrLogoInput.setText(file_path)
 
     def choose_color(self, color_type):
         color = QColorDialog.getColor()
         if color.isValid():
             rgb_values = f"{color.red()}, {color.green()}, {color.blue()}"
             if color_type == 'bg':
-                self.ui.bgColourInput.setText(rgb_values)
+                self.ui.qrBgColourInput.setText(rgb_values)
             else:
-                self.ui.codeColourInput.setText(rgb_values)
+                self.ui.qrCodeColourInput.setText(rgb_values)
 
     def populate_qr_templates(self):
         self.ui.qrTemplates.clear()

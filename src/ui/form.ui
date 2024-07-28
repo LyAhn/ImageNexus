@@ -396,7 +396,7 @@
              </property>
              <layout class="QGridLayout" name="gridLayout_8">
               <item row="0" column="0">
-               <widget class="QLineEdit" name="bgColourInput">
+               <widget class="QLineEdit" name="qrBgColourInput">
                 <property name="text">
                  <string/>
                 </property>
@@ -406,7 +406,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QToolButton" name="bgColourButton">
+               <widget class="QToolButton" name="qrBgColourBtn">
                 <property name="text">
                  <string>...</string>
                 </property>
@@ -435,7 +435,7 @@
             </widget>
            </item>
            <item row="5" column="1" colspan="5">
-            <widget class="QLineEdit" name="logoImageInput">
+            <widget class="QLineEdit" name="qrLogoInput">
              <property name="text">
               <string/>
              </property>
@@ -445,14 +445,14 @@
             </widget>
            </item>
            <item row="9" column="0">
-            <widget class="QLabel" name="errorCorrectLabel">
+            <widget class="QLabel" name="qrErrorCorrectLbl">
              <property name="text">
               <string>Error Correction:</string>
              </property>
             </widget>
            </item>
            <item row="11" column="2">
-            <widget class="QComboBox" name="saveAsComboBox">
+            <widget class="QComboBox" name="qrFormatOptions">
              <item>
               <property name="text">
                <string>BMP</string>
@@ -488,7 +488,7 @@
             </widget>
            </item>
            <item row="12" column="3">
-            <widget class="QPushButton" name="browseFolderButton">
+            <widget class="QPushButton" name="qrBrowseOutput">
              <property name="text">
               <string>Browse</string>
              </property>
@@ -529,7 +529,7 @@
             </widget>
            </item>
            <item row="5" column="7">
-            <widget class="QPushButton" name="logoBrowseButton">
+            <widget class="QPushButton" name="qrBrowseLogo">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -542,7 +542,7 @@
             </widget>
            </item>
            <item row="7" column="2">
-            <widget class="QCheckBox" name="addBgCheckbox">
+            <widget class="QCheckBox" name="qrAddBGCheck">
              <property name="statusTip">
               <string>Add a background to a transparent logo</string>
              </property>
@@ -552,14 +552,14 @@
             </widget>
            </item>
            <item row="9" column="3" colspan="2">
-            <widget class="QLabel" name="borderSpinLabel">
+            <widget class="QLabel" name="qrBorderSizeLbl">
              <property name="text">
               <string>Border Size:</string>
              </property>
             </widget>
            </item>
            <item row="11" column="5" colspan="3">
-            <widget class="QSpinBox" name="qrSizeSpinBox">
+            <widget class="QSpinBox" name="qrCodeSize">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -584,7 +584,7 @@
             </widget>
            </item>
            <item row="12" column="2">
-            <widget class="QLineEdit" name="outputFolderText"/>
+            <widget class="QLineEdit" name="qrOutputFolder"/>
            </item>
            <item row="0" column="1" colspan="5">
             <widget class="QTextEdit" name="qrTextInput">
@@ -600,7 +600,7 @@
             </widget>
            </item>
            <item row="9" column="2">
-            <widget class="QComboBox" name="errorCorrectionCombo">
+            <widget class="QComboBox" name="qrErrorCorrectList">
              <item>
               <property name="text">
                <string>Low</string>
@@ -624,21 +624,21 @@
             </widget>
            </item>
            <item row="11" column="0" colspan="2">
-            <widget class="QLabel" name="saveAsLabel_3">
+            <widget class="QLabel" name="qrFormatOptionsLbl">
              <property name="text">
               <string>Save As:</string>
              </property>
             </widget>
            </item>
            <item row="12" column="0">
-            <widget class="QLabel" name="outputFolderLabel_4">
+            <widget class="QLabel" name="qrOutputFolderLbl">
              <property name="text">
               <string>Output Folder:</string>
              </property>
             </widget>
            </item>
            <item row="7" column="3">
-            <widget class="QCheckBox" name="aspectRatioCheck">
+            <widget class="QCheckBox" name="qrAspectRatioCheck">
              <property name="statusTip">
               <string>Keeps the aspect ratio of the embeded image</string>
              </property>
@@ -648,14 +648,14 @@
             </widget>
            </item>
            <item row="5" column="0">
-            <widget class="QLabel" name="logoImageLabel">
+            <widget class="QLabel" name="qrLogoInputLbl">
              <property name="text">
               <string>Logo Image:</string>
              </property>
             </widget>
            </item>
            <item row="12" column="9">
-            <widget class="QPushButton" name="saveQRButton">
+            <widget class="QPushButton" name="qrSaveQRBtn">
              <property name="text">
               <string>Save QR Code</string>
              </property>
@@ -678,7 +678,7 @@
              </property>
              <layout class="QGridLayout" name="gridLayout_9">
               <item row="0" column="0">
-               <widget class="QLineEdit" name="codeColourInput">
+               <widget class="QLineEdit" name="qrCodeColourInput">
                 <property name="text">
                  <string/>
                 </property>
@@ -688,7 +688,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QToolButton" name="codeColourButton">
+               <widget class="QToolButton" name="qrCodeColourBtn">
                 <property name="text">
                  <string>...</string>
                 </property>
@@ -698,7 +698,7 @@
             </widget>
            </item>
            <item row="9" column="5" colspan="5">
-            <widget class="QSpinBox" name="borderSpinBox">
+            <widget class="QSpinBox" name="qrBorderSize">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -723,7 +723,7 @@
             </widget>
            </item>
            <item row="0" column="8">
-            <widget class="QPushButton" name="fillPlaceHoldersButton">
+            <widget class="QPushButton" name="qrPlaceholderEditor">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
