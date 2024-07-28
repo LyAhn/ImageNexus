@@ -21,25 +21,25 @@ class FrameExtractor:
 
     def setup_connections(self):
 
-        self.ui.browseInput1.clicked.connect(self.select_gif)
-        self.ui.browseOutput1.clicked.connect(self.select_output_folder)
-        self.ui.extractor_button.clicked.connect(self.extract_frames)
+        self.ui.feBrowseInput.clicked.connect(self.select_gif)
+        self.ui.feBrowseOutput.clicked.connect(self.select_output_folder)
+        self.ui.feExtractBtn.clicked.connect(self.extract_frames)
 
     def select_gif(self):
         file_path, _ = QFileDialog.getOpenFileName(None, "Select GIF", "", "Image files (*.gif *.webp)")
         if file_path:
-            self.ui.fileInput1.setText(file_path)
+            self.ui.feFileInput.setText(file_path)
 
     def select_output_folder(self):
         folder_path = QFileDialog.getExistingDirectory(None, "Select Output Folder")
         if folder_path:
-            self.ui.output_folder_entry.setText(folder_path)
+            self.ui.feOutputFolder.setText(folder_path)
 
     def extract_frames(self):
-        gif_path = self.ui.fileInput1.text()
-        output_folder = self.ui.output_folder_entry.text()
-        file_type = self.ui.saveAsFormat.currentText().lower()
-        generate_frame_info = self.ui.generate_infocheckBox.isChecked()
+        gif_path = self.ui.feFileInput.text()
+        output_folder = self.ui.feOutputFolder.text()
+        file_type = self.ui.feFormatOptions.currentText().lower()
+        generate_frame_info = self.ui.feInfoCheckbox.isChecked()
 
         if not gif_path or not output_folder:
             QMessageBox.critical(None, "Error", "Please select both GIF file and output folder.")
@@ -63,7 +63,7 @@ class FrameExtractor:
 
         try:
             with Image.open(gif_path) as img:
-                self.ui.progressBar.setMaximum(img.n_frames)
+                self.ui.feProgressBar.setMaximum(img.n_frames)
                 frame_info = []
                 total_duration = 0
 
@@ -84,7 +84,7 @@ class FrameExtractor:
                     else:
                         img.save(frame_path)
 
-                    self.ui.progressBar.setValue(i + 1)
+                    self.ui.feProgressBar.setValue(i + 1)
                     self.ui.statusbar.showMessage(f"Extracting frame {i+1} of {img.n_frames}")
                     QApplication.processEvents()
 
@@ -97,7 +97,7 @@ class FrameExtractor:
             self.ui.statusbar.showMessage(f"Error: {str(e)}")
             QMessageBox.critical(None, "Error", f"An error occurred: {str(e)}")
         finally:
-            self.ui.progressBar.setValue(0)
+            self.ui.feProgressBar.setValue(0)
 
     def generate_frame_info_file(self, output_folder, frame_info):
         info_file_path = os.path.join(output_folder, "frame_info.txt")

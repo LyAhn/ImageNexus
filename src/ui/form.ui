@@ -51,14 +51,14 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_3">
            <item row="0" column="5">
-            <widget class="QToolButton" name="browseInput1">
+            <widget class="QToolButton" name="feBrowseInput">
              <property name="text">
               <string>Browse</string>
              </property>
             </widget>
            </item>
            <item row="3" column="2">
-            <widget class="QComboBox" name="saveAsFormat">
+            <widget class="QComboBox" name="feFormatOptions">
              <item>
               <property name="text">
                <string>PNG</string>
@@ -72,35 +72,35 @@
             </widget>
            </item>
            <item row="0" column="0" colspan="2">
-            <widget class="QLabel" name="selectGifLabel">
+            <widget class="QLabel" name="feSelectGifLbl">
              <property name="text">
               <string>Select GIF:</string>
              </property>
             </widget>
            </item>
            <item row="2" column="4">
-            <widget class="QLineEdit" name="output_folder_entry">
+            <widget class="QLineEdit" name="feOutputFolder">
              <property name="placeholderText">
               <string>Select an output folder...</string>
              </property>
             </widget>
            </item>
            <item row="2" column="5">
-            <widget class="QToolButton" name="browseOutput1">
+            <widget class="QToolButton" name="feBrowseOutput">
              <property name="text">
               <string>Browse</string>
              </property>
             </widget>
            </item>
            <item row="3" column="1">
-            <widget class="QLabel" name="saveAsLabel">
+            <widget class="QLabel" name="feFormatOptionsLbl">
              <property name="text">
               <string>Save as:</string>
              </property>
             </widget>
            </item>
            <item row="9" column="0" colspan="6">
-            <widget class="QProgressBar" name="progressBar">
+            <widget class="QProgressBar" name="feProgressBar">
              <property name="value">
               <number>0</number>
              </property>
@@ -110,21 +110,21 @@
             </widget>
            </item>
            <item row="0" column="4">
-            <widget class="QLineEdit" name="fileInput1">
+            <widget class="QLineEdit" name="feFileInput">
              <property name="placeholderText">
               <string>Select a GIF...</string>
              </property>
             </widget>
            </item>
            <item row="2" column="0" colspan="3">
-            <widget class="QLabel" name="outputFolderLabel">
+            <widget class="QLabel" name="feOutputFolderLbl">
              <property name="text">
               <string>Output Folder:</string>
              </property>
             </widget>
            </item>
            <item row="3" column="4">
-            <widget class="QCheckBox" name="generate_infocheckBox">
+            <widget class="QCheckBox" name="feInfoCheckbox">
              <property name="text">
               <string>Generate frame info file</string>
              </property>
@@ -134,7 +134,7 @@
             </widget>
            </item>
            <item row="3" column="5">
-            <widget class="QPushButton" name="extractor_button">
+            <widget class="QPushButton" name="feExtractBtn">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
