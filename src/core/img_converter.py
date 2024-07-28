@@ -67,16 +67,17 @@ class ImgConverter:
             with Image.open(input_path) as img:
                 if self.input_format == 'gif' and output_format != 'gif':
                     img.seek(0)
-                    if output_format == 'jpeg':
-                        if img.mode == 'RGBA':
-                            img = img.convert('RGB')
-                    elif output_format == 'bmp':
-                        if img.mode != 'RGB':
-                            img = img.convert('RGB')
-                img.save(output_path, format=output_format.upper())
 
-            self.ui.statusbar.showMessage("Image converted successfully!")
-            QMessageBox.information(None, "Success", "Image converted successfully!")
+                if output_format == 'jpeg':
+                    if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
+                        img = img.convert('RGB')
+                elif output_format == 'bmp':
+                    if img.mode != 'RGB':
+                        img = img.convert('RGB')
+
+                img.save(output_path, format=output_format.upper())
+                self.ui.statusbar.showMessage("Image converted successfully!")
+                QMessageBox.information(None, "Success", "Image converted successfully!")
         except Exception as e:
             self.ui.statusbar.showMessage(f"Error: {str(e)}")
             QMessageBox.critical(None, "Error", f"An error occurred: {str(e)}")

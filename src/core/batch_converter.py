@@ -50,24 +50,46 @@ class BatchConvert:
             QMessageBox.critical(None, "Error", "Please select input files/folder and output folder.")
             return
 
-        # Add overwrite check here
-        existing_files = [f for f in os.listdir(output_folder) if f.endswith(f'.{output_format}')]
-        filecount = len(existing_files)
-        
-        if filecount > 0:
-            overwrite = QMessageBox.question(None, "Overwrite Existing Files",
-                                            f"The output folder already contains {filecount} existing files with the same format.\n\nDo you want to overwrite these files?",
-                                            QMessageBox.Yes | QMessageBox.No)
-            if overwrite == QMessageBox.No:
+        if not os.path.exists(output_folder):
+            try:
+                os.makedirs(output_folder)
+            except OSError as e:
+                QMessageBox.critical(None, "Error", f"Failed to create output folder: {e}")
                 return
 
         conversion_type = self.ui.conversionType.currentText()
-        
+
+        # Check for existing files before conversion
+        existing_files_count = 0
+
         if conversion_type == "Files":
             input_paths = input_paths.split(", ")
-            self.convert_batch_files(input_paths, output_folder, output_format, overwrite == QMessageBox.Yes)
+            for input_path in input_paths:
+                output_filename = os.path.splitext(os.path.basename(input_path))[0] + f".{output_format}"
+                output_path = os.path.join(output_folder, output_filename)
+                if os.path.exists(output_path):
+                    existing_files_count += 1
         elif conversion_type == "Folder":
-            self.convert_batch_folder(input_paths, output_folder, output_format, overwrite == QMessageBox.Yes)
+            for root, _, files in os.walk(input_paths):
+                for file in files:
+                    if file.lower().endswith(('.gif', '.png', '.jpg', '.jpeg', '.bmp', '.tiff')):
+                        output_filename = os.path.splitext(file)[0] + f".{output_format}"
+                        output_path = os.path.join(output_folder, output_filename)
+                        if os.path.exists(output_path):
+                            existing_files_count += 1
+
+        # Single overwrite confirmation dialog
+        overwrite = True
+        if existing_files_count > 0:
+            message = f"{existing_files_count} file(s) with the same name and format already exist in the output folder.\n\nDo you want to overwrite these files?"
+            reply = QMessageBox.question(None, "Overwrite Existing Files", message,
+                                        QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            overwrite = (reply == QMessageBox.Yes)
+
+        if conversion_type == "Files":
+            self.convert_batch_files(input_paths, output_folder, output_format, overwrite)
+        elif conversion_type == "Folder":
+            self.convert_batch_folder(input_paths, output_folder, output_format, overwrite)
 
 
     def convert_jpeg_mode(self, img):
@@ -80,6 +102,14 @@ class BatchConvert:
         return img
 
     def convert_batch_folder(self, folder_path, output_folder, output_format, overwrite):
+        if not os.path.exists(output_folder):
+            try:
+                os.makedirs(output_folder)
+            except OSError as e:
+                QMessageBox.critical(None, "Error", f"Failed to create output folder: {e}")
+                return
+
+        # Supported image formats
         image_extensions = ['.gif', '.png', '.jpg', '.jpeg', '.bmp', '.tiff']
         supported_formats = ['GIF', 'PNG', 'JPEG', 'JPG', 'BMP', 'TIFF']
 
@@ -123,6 +153,13 @@ class BatchConvert:
         QMessageBox.information(None, "Success", "Batch conversion completed!")
 
     def convert_batch_files(self, input_paths, output_folder, output_format, overwrite):
+        if not os.path.exists(output_folder):
+            try:
+                os.makedirs(output_folder)
+            except OSError as e:
+                QMessageBox.critical(None, "Error", f"Failed to create output folder: {e}")
+                return
+
         for input_path in input_paths:
             try:
                 with Image.open(input_path) as img:
