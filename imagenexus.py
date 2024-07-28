@@ -34,6 +34,7 @@ class ImageNexus(QMainWindow):
 
         # Top Menu Bar
         self.ui.actionAbout.triggered.connect(self.show_about)
+        self.ui.actionReloadTemplates.triggered.connect(self.qr_generator.load_qr_templates)
 
     def show_about(self):
         self.about_dialog = aboutDialog(self)
