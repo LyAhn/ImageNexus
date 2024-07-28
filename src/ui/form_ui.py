@@ -513,6 +513,7 @@ class Ui_ImageNexus(object):
         self.pxSizeSlider.setObjectName(u"pxSizeSlider")
         self.pxSizeSlider.setMinimum(2)
         self.pxSizeSlider.setMaximum(128)
+        self.pxSizeSlider.setSliderPosition(8)
         self.pxSizeSlider.setOrientation(Qt.Orientation.Horizontal)
 
         self.gridLayout_14.addWidget(self.pxSizeSlider, 1, 0, 1, 1)
@@ -523,6 +524,7 @@ class Ui_ImageNexus(object):
         self.pxSpinBox.setMaximumSize(QSize(75, 16777215))
         self.pxSpinBox.setMinimum(2)
         self.pxSpinBox.setMaximum(128)
+        self.pxSpinBox.setValue(8)
 
         self.gridLayout_14.addWidget(self.pxSpinBox, 1, 1, 1, 1)
 
