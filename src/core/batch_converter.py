@@ -20,32 +20,31 @@ class BatchConvert:
         self.ui = ui
         self.setup_connections()
 
-
     def setup_connections(self):
-        self.ui.inputBrowse3.clicked.connect(self.select_batch_input)
-        self.ui.outputBrowse3.clicked.connect(self.select_output_folder_batch)
-        self.ui.converter_button2.clicked.connect(self.convert_batch)
+        self.ui.bcInputBrowse.clicked.connect(self.select_batch_input)
+        self.ui.bcOutputBrowse.clicked.connect(self.select_output_folder_batch)
+        self.ui.bcConvertBtn.clicked.connect(self.convert_batch)
 
     def select_batch_input(self):
         conversion_type = self.ui.conversionType.currentText()
         if conversion_type == "Files":
             file_paths, _ = QFileDialog.getOpenFileNames(None, "Select Input Files", "", "Image files (*.gif *.png *.jpg *.jpeg *.bmp *.tiff)")
-            self.ui.fileInput3.setText(", ".join(file_paths))
+            self.ui.bcFileInput.setText(", ".join(file_paths))
         elif conversion_type == "Folder":
             folder_path = QFileDialog.getExistingDirectory(None, "Select Input Folder")
-            self.ui.fileInput3.setText(folder_path)
+            self.ui.bcFileInput.setText(folder_path)
 
     def select_output_folder_batch(self):
         folder_path = QFileDialog.getExistingDirectory(None, "Select Output Folder")
         if folder_path:
-            self.ui.outputFolder3.setText(folder_path)
+            self.ui.bcOutputFolder.setText(folder_path)
 
 
     def convert_batch(self):
-        input_paths = self.ui.fileInput3.text()
-        output_folder = self.ui.outputFolder3.text()
+        input_paths = self.ui.bcFileInput.text()
+        output_folder = self.ui.bcOutputFolder.text()
         output_format = self.ui.formatOptions.currentText().lower()
-        
+
         if not os.path.exists(output_folder):
             try:
                 os.makedirs(output_folder)
@@ -58,12 +57,13 @@ class BatchConvert:
             return
 
         conversion_type = self.ui.conversionType.currentText()
-        
+
         # Check for existing files before conversion
         existing_files_count = self.count_existing_files(input_paths, output_folder, output_format, conversion_type)
 
         # Single overwrite confirmation dialog
         overwrite = True
+
         if existing_files_count > 0:
             message = f"{existing_files_count} file(s) with the same name and format already exist in the output folder.\n\nDo you want to overwrite these files?"
             reply = QMessageBox.question(None, "Overwrite Existing Files", message,
@@ -114,7 +114,7 @@ class BatchConvert:
         skipped_files_count = 0
         image_extensions = ['.gif', '.png', '.jpg', '.jpeg', '.bmp', '.tiff']
         supported_formats = ['GIF', 'PNG', 'JPEG', 'JPG', 'BMP', 'TIFF']
-        
+
         if not os.path.exists(output_folder):
             try:
                 os.makedirs(output_folder)
@@ -157,7 +157,7 @@ class BatchConvert:
                     self.ui.statusbar.showMessage(f"Skipping unsupported file: {input_path}")
 
         return skipped_files_count
-    
+
     def convert_batch_files(self, input_paths, output_folder, output_format, overwrite):
         skipped_files_count = 0
 

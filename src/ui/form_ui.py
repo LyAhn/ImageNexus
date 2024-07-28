@@ -49,7 +49,7 @@ class Ui_ImageNexus(object):
         self.tabWidget.setObjectName(u"tabWidget")
         self.tabWidget.setEnabled(True)
         self.tabWidget.setAutoFillBackground(False)
-        self.tabWidget.setTabShape(QTabWidget.Rounded)
+        self.tabWidget.setTabShape(QTabWidget.TabShape.Rounded)
         self.frameExtractor = QWidget()
         self.frameExtractor.setObjectName(u"frameExtractor")
         self.gridLayout_2 = QGridLayout(self.frameExtractor)
@@ -205,10 +205,10 @@ class Ui_ImageNexus(object):
         self.widget_3.setObjectName(u"widget_3")
         self.gridLayout_5 = QGridLayout(self.widget_3)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.inputBrowse3 = QToolButton(self.widget_3)
-        self.inputBrowse3.setObjectName(u"inputBrowse3")
+        self.bcInputBrowse = QToolButton(self.widget_3)
+        self.bcInputBrowse.setObjectName(u"bcInputBrowse")
 
-        self.gridLayout_5.addWidget(self.inputBrowse3, 1, 3, 1, 1)
+        self.gridLayout_5.addWidget(self.bcInputBrowse, 1, 3, 1, 1)
 
         self.formatOptions = QComboBox(self.widget_3)
         self.formatOptions.addItem("")
@@ -227,45 +227,45 @@ class Ui_ImageNexus(object):
 
         self.gridLayout_5.addWidget(self.conversionType, 0, 1, 1, 1)
 
-        self.outputFolderLabel_3 = QLabel(self.widget_3)
-        self.outputFolderLabel_3.setObjectName(u"outputFolderLabel_3")
+        self.bcOutputFolderLbl = QLabel(self.widget_3)
+        self.bcOutputFolderLbl.setObjectName(u"bcOutputFolderLbl")
 
-        self.gridLayout_5.addWidget(self.outputFolderLabel_3, 2, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.bcOutputFolderLbl, 2, 0, 1, 1)
 
-        self.outputFormatLabel = QLabel(self.widget_3)
-        self.outputFormatLabel.setObjectName(u"outputFormatLabel")
+        self.bcOutputFormatLbl = QLabel(self.widget_3)
+        self.bcOutputFormatLbl.setObjectName(u"bcOutputFormatLbl")
 
-        self.gridLayout_5.addWidget(self.outputFormatLabel, 3, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.bcOutputFormatLbl, 3, 0, 1, 1)
 
-        self.converter_button2 = QPushButton(self.widget_3)
-        self.converter_button2.setObjectName(u"converter_button2")
+        self.bcConvertBtn = QPushButton(self.widget_3)
+        self.bcConvertBtn.setObjectName(u"bcConvertBtn")
 
-        self.gridLayout_5.addWidget(self.converter_button2, 3, 3, 1, 1)
+        self.gridLayout_5.addWidget(self.bcConvertBtn, 3, 3, 1, 1)
 
-        self.outputFolder3 = QLineEdit(self.widget_3)
-        self.outputFolder3.setObjectName(u"outputFolder3")
+        self.bcOutputFolder = QLineEdit(self.widget_3)
+        self.bcOutputFolder.setObjectName(u"bcOutputFolder")
 
-        self.gridLayout_5.addWidget(self.outputFolder3, 2, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.bcOutputFolder, 2, 2, 1, 1)
 
-        self.selectGifLabel_4 = QLabel(self.widget_3)
-        self.selectGifLabel_4.setObjectName(u"selectGifLabel_4")
+        self.bcConversionTypeLbl = QLabel(self.widget_3)
+        self.bcConversionTypeLbl.setObjectName(u"bcConversionTypeLbl")
 
-        self.gridLayout_5.addWidget(self.selectGifLabel_4, 0, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.bcConversionTypeLbl, 0, 0, 1, 1)
 
-        self.selectGifLabel_3 = QLabel(self.widget_3)
-        self.selectGifLabel_3.setObjectName(u"selectGifLabel_3")
+        self.bcInputFileLbl = QLabel(self.widget_3)
+        self.bcInputFileLbl.setObjectName(u"bcInputFileLbl")
 
-        self.gridLayout_5.addWidget(self.selectGifLabel_3, 1, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.bcInputFileLbl, 1, 0, 1, 1)
 
-        self.fileInput3 = QLineEdit(self.widget_3)
-        self.fileInput3.setObjectName(u"fileInput3")
+        self.bcFileInput = QLineEdit(self.widget_3)
+        self.bcFileInput.setObjectName(u"bcFileInput")
 
-        self.gridLayout_5.addWidget(self.fileInput3, 1, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.bcFileInput, 1, 2, 1, 1)
 
-        self.outputBrowse3 = QToolButton(self.widget_3)
-        self.outputBrowse3.setObjectName(u"outputBrowse3")
+        self.bcOutputBrowse = QToolButton(self.widget_3)
+        self.bcOutputBrowse.setObjectName(u"bcOutputBrowse")
 
-        self.gridLayout_5.addWidget(self.outputBrowse3, 2, 3, 1, 1)
+        self.gridLayout_5.addWidget(self.bcOutputBrowse, 2, 3, 1, 1)
 
 
         self.gridLayout_6.addWidget(self.widget_3, 0, 0, 1, 1)
@@ -344,7 +344,7 @@ class Ui_ImageNexus(object):
         self.qrGenButton.setObjectName(u"qrGenButton")
         sizePolicy.setHeightForWidth(self.qrGenButton.sizePolicy().hasHeightForWidth())
         self.qrGenButton.setSizePolicy(sizePolicy)
-        self.qrGenButton.setLayoutDirection(Qt.RightToLeft)
+        self.qrGenButton.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
         self.qrGenButton.setFlat(False)
 
         self.gridLayout_7.addWidget(self.qrGenButton, 11, 9, 1, 1)
@@ -392,8 +392,8 @@ class Ui_ImageNexus(object):
 
         self.qrTextInput = QTextEdit(self.widget_4)
         self.qrTextInput.setObjectName(u"qrTextInput")
-        self.qrTextInput.setFrameShape(QFrame.Panel)
-        self.qrTextInput.setFrameShadow(QFrame.Sunken)
+        self.qrTextInput.setFrameShape(QFrame.Shape.Panel)
+        self.qrTextInput.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_7.addWidget(self.qrTextInput, 0, 1, 1, 5)
 
@@ -513,7 +513,7 @@ class Ui_ImageNexus(object):
         self.pxSizeSlider.setObjectName(u"pxSizeSlider")
         self.pxSizeSlider.setMinimum(2)
         self.pxSizeSlider.setMaximum(128)
-        self.pxSizeSlider.setOrientation(Qt.Horizontal)
+        self.pxSizeSlider.setOrientation(Qt.Orientation.Horizontal)
 
         self.gridLayout_14.addWidget(self.pxSizeSlider, 1, 0, 1, 1)
 
@@ -572,12 +572,12 @@ class Ui_ImageNexus(object):
         sizePolicy.setHeightForWidth(self.pxFunctionBox.sizePolicy().hasHeightForWidth())
         self.pxFunctionBox.setSizePolicy(sizePolicy)
         self.pxFunctionBox.setMaximumSize(QSize(300, 16777215))
-        self.pxFunctionBox.setLayoutDirection(Qt.LeftToRight)
-        self.pxFunctionBox.setAlignment(Qt.AlignBottom|Qt.AlignLeading|Qt.AlignLeft)
+        self.pxFunctionBox.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.pxFunctionBox.setAlignment(Qt.AlignmentFlag.AlignBottom|Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft)
         self.pxFunctionBox.setFlat(False)
         self.gridLayout_15 = QGridLayout(self.pxFunctionBox)
         self.gridLayout_15.setObjectName(u"gridLayout_15")
-        self.gridLayout_15.setSizeConstraint(QLayout.SetDefaultConstraint)
+        self.gridLayout_15.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
         self.pxSaveBtn = QPushButton(self.pxFunctionBox)
         self.pxSaveBtn.setObjectName(u"pxSaveBtn")
 
@@ -592,7 +592,7 @@ class Ui_ImageNexus(object):
         self.pxFileFormats.setObjectName(u"pxFileFormats")
         sizePolicy.setHeightForWidth(self.pxFileFormats.sizePolicy().hasHeightForWidth())
         self.pxFileFormats.setSizePolicy(sizePolicy)
-        self.pxFileFormats.setLayoutDirection(Qt.LeftToRight)
+        self.pxFileFormats.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
 
         self.gridLayout_15.addWidget(self.pxFileFormats, 1, 1, 1, 1)
 
@@ -610,7 +610,7 @@ class Ui_ImageNexus(object):
         sizePolicy5.setVerticalStretch(0)
         sizePolicy5.setHeightForWidth(self.pxFileTypeLbl.sizePolicy().hasHeightForWidth())
         self.pxFileTypeLbl.setSizePolicy(sizePolicy5)
-        self.pxFileTypeLbl.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.pxFileTypeLbl.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_15.addWidget(self.pxFileTypeLbl, 1, 0, 1, 1)
 
@@ -627,7 +627,7 @@ class Ui_ImageNexus(object):
         ImageNexus.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(ImageNexus)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 872, 21))
+        self.menubar.setGeometry(QRect(0, 0, 872, 25))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.menubar)
@@ -688,7 +688,7 @@ class Ui_ImageNexus(object):
 
         self.converter_button.setText(QCoreApplication.translate("ImageNexus", u"Convert", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.imageConverter), QCoreApplication.translate("ImageNexus", u"Image Converter", None))
-        self.inputBrowse3.setText(QCoreApplication.translate("ImageNexus", u"Browse", None))
+        self.bcInputBrowse.setText(QCoreApplication.translate("ImageNexus", u"Browse", None))
         self.formatOptions.setItemText(0, QCoreApplication.translate("ImageNexus", u"GIF", None))
         self.formatOptions.setItemText(1, QCoreApplication.translate("ImageNexus", u"PNG", None))
         self.formatOptions.setItemText(2, QCoreApplication.translate("ImageNexus", u"JPEG", None))
@@ -698,14 +698,14 @@ class Ui_ImageNexus(object):
         self.conversionType.setItemText(0, QCoreApplication.translate("ImageNexus", u"Files", None))
         self.conversionType.setItemText(1, QCoreApplication.translate("ImageNexus", u"Folder", None))
 
-        self.outputFolderLabel_3.setText(QCoreApplication.translate("ImageNexus", u"Output Folder:", None))
-        self.outputFormatLabel.setText(QCoreApplication.translate("ImageNexus", u"Output Format:", None))
-        self.converter_button2.setText(QCoreApplication.translate("ImageNexus", u"Convert Files", None))
-        self.outputFolder3.setPlaceholderText(QCoreApplication.translate("ImageNexus", u"Select an output folder...", None))
-        self.selectGifLabel_4.setText(QCoreApplication.translate("ImageNexus", u"Conversion Type:", None))
-        self.selectGifLabel_3.setText(QCoreApplication.translate("ImageNexus", u"Select Input File:", None))
-        self.fileInput3.setPlaceholderText(QCoreApplication.translate("ImageNexus", u"Select an image or folder...", None))
-        self.outputBrowse3.setText(QCoreApplication.translate("ImageNexus", u"Browse", None))
+        self.bcOutputFolderLbl.setText(QCoreApplication.translate("ImageNexus", u"Output Folder:", None))
+        self.bcOutputFormatLbl.setText(QCoreApplication.translate("ImageNexus", u"Output Format:", None))
+        self.bcConvertBtn.setText(QCoreApplication.translate("ImageNexus", u"Convert Files", None))
+        self.bcOutputFolder.setPlaceholderText(QCoreApplication.translate("ImageNexus", u"Select an output folder...", None))
+        self.bcConversionTypeLbl.setText(QCoreApplication.translate("ImageNexus", u"Conversion Type:", None))
+        self.bcInputFileLbl.setText(QCoreApplication.translate("ImageNexus", u"Select Input File:", None))
+        self.bcFileInput.setPlaceholderText(QCoreApplication.translate("ImageNexus", u"Select an image or folder...", None))
+        self.bcOutputBrowse.setText(QCoreApplication.translate("ImageNexus", u"Browse", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.batchConverter), QCoreApplication.translate("ImageNexus", u"Batch Converter", None))
         self.bgColourGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Background Colour", None))
         self.bgColourInput.setText("")
