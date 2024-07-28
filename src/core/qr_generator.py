@@ -241,9 +241,12 @@ class QRGenerator:
                 self.ui.qrTemplates.addItem(template['name'])
         except FileNotFoundError:
             print("Error: 'resources/qr_templates.json' file not found.")
+            QMessageBox.warning(None, "Warning", "Error: 'resources/qr_templates.json' file not found.\nRedownload the template file and try again.")
+
             self.qr_templates = []
         except json.JSONDecodeError:
             print("Error: Invalid JSON format in 'resources/qr_templates.json'.")
+            QMessageBox.warning(None, "Warning", "Error: Invalid JSON format in 'resources/qr_templates.json'.\nCheck any new additions match the format.")
             self.qr_templates = []
 
     def on_qr_template_changed(self, index):
