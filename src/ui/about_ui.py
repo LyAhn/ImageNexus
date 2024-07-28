@@ -17,7 +17,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QGraphicsView, QLabel,
     QSizePolicy, QTextEdit, QWidget)
-import resources_rc
 
 class Ui_aboutWindow(object):
     def setupUi(self, aboutWindow):
@@ -49,7 +48,7 @@ class Ui_aboutWindow(object):
         self.line.setFrameShadow(QFrame.Shadow.Sunken)
         self.versionLabel = QLabel(aboutWindow)
         self.versionLabel.setObjectName(u"versionLabel")
-        self.versionLabel.setGeometry(QRect(230, 60, 49, 16))
+        self.versionLabel.setGeometry(QRect(230, 60, 81, 16))
         self.logoView = QGraphicsView(aboutWindow)
         self.logoView.setObjectName(u"logoView")
         self.logoView.setGeometry(QRect(20, 10, 75, 75))

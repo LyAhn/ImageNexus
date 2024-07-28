@@ -29,7 +29,7 @@
    <string>About</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset>
     <normaloff>:/images/resources/icon.ico</normaloff>:/images/resources/icon.ico</iconset>
   </property>
   <widget class="QLabel" name="appTextLabel">
@@ -75,7 +75,7 @@
     <rect>
      <x>230</x>
      <y>60</y>
-     <width>49</width>
+     <width>81</width>
      <height>16</height>
     </rect>
    </property>
@@ -178,8 +178,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
    </property>
   </widget>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -1,11 +1,12 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QGraphicsView, QMainWindow
 from PySide6.QtGui import QPixmap, QCursor
-from ui_about import Ui_aboutWindow
+from src.ui.ui_about import Ui_aboutWindow
+from src.utils.version import appVersion
 
 class aboutDialog(QMainWindow):
 
-    version = "0.4.3"
+    version = appVersion
 
     def __init__(self, parent=None):
         super().__init__(parent)
