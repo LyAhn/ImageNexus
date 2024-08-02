@@ -281,6 +281,86 @@ class Ui_ImageNexus(object):
         self.widget_4.setObjectName(u"widget_4")
         self.gridLayout_7 = QGridLayout(self.widget_4)
         self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.qrCodeSize = QSpinBox(self.widget_4)
+        self.qrCodeSize.setObjectName(u"qrCodeSize")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.qrCodeSize.sizePolicy().hasHeightForWidth())
+        self.qrCodeSize.setSizePolicy(sizePolicy1)
+        self.qrCodeSize.setMaximumSize(QSize(80, 16777215))
+        self.qrCodeSize.setToolTipDuration(-2)
+        self.qrCodeSize.setMinimum(1)
+        self.qrCodeSize.setMaximum(40)
+
+        self.gridLayout_7.addWidget(self.qrCodeSize, 13, 5, 1, 3)
+
+        self.qrSaveQRBtn = QPushButton(self.widget_4)
+        self.qrSaveQRBtn.setObjectName(u"qrSaveQRBtn")
+
+        self.gridLayout_7.addWidget(self.qrSaveQRBtn, 14, 9, 1, 1)
+
+        self.qrBorderSizeLbl = QLabel(self.widget_4)
+        self.qrBorderSizeLbl.setObjectName(u"qrBorderSizeLbl")
+
+        self.gridLayout_7.addWidget(self.qrBorderSizeLbl, 11, 3, 1, 2)
+
+        self.qrOutputGroup = QGroupBox(self.widget_4)
+        self.qrOutputGroup.setObjectName(u"qrOutputGroup")
+        self.gridLayout_11 = QGridLayout(self.qrOutputGroup)
+        self.gridLayout_11.setObjectName(u"gridLayout_11")
+        self.qrOutputView = QGraphicsView(self.qrOutputGroup)
+        self.qrOutputView.setObjectName(u"qrOutputView")
+        self.qrOutputView.setBaseSize(QSize(0, 0))
+
+        self.gridLayout_11.addWidget(self.qrOutputView, 1, 0, 1, 1)
+
+        self.qrDisableLiveQR = QCheckBox(self.qrOutputGroup)
+        self.qrDisableLiveQR.setObjectName(u"qrDisableLiveQR")
+
+        self.gridLayout_11.addWidget(self.qrDisableLiveQR, 2, 0, 1, 1)
+
+
+        self.gridLayout_7.addWidget(self.qrOutputGroup, 0, 9, 11, 1)
+
+        self.qrErrorCorrectList = QComboBox(self.widget_4)
+        self.qrErrorCorrectList.addItem("")
+        self.qrErrorCorrectList.addItem("")
+        self.qrErrorCorrectList.addItem("")
+        self.qrErrorCorrectList.addItem("")
+        self.qrErrorCorrectList.setObjectName(u"qrErrorCorrectList")
+
+        self.gridLayout_7.addWidget(self.qrErrorCorrectList, 11, 2, 1, 1)
+
+        self.qrGenButton = QPushButton(self.widget_4)
+        self.qrGenButton.setObjectName(u"qrGenButton")
+        sizePolicy.setHeightForWidth(self.qrGenButton.sizePolicy().hasHeightForWidth())
+        self.qrGenButton.setSizePolicy(sizePolicy)
+        self.qrGenButton.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
+        self.qrGenButton.setFlat(False)
+
+        self.gridLayout_7.addWidget(self.qrGenButton, 13, 9, 1, 1)
+
+        self.qrBrowseLogo = QPushButton(self.widget_4)
+        self.qrBrowseLogo.setObjectName(u"qrBrowseLogo")
+        sizePolicy.setHeightForWidth(self.qrBrowseLogo.sizePolicy().hasHeightForWidth())
+        self.qrBrowseLogo.setSizePolicy(sizePolicy)
+
+        self.gridLayout_7.addWidget(self.qrBrowseLogo, 7, 7, 1, 1)
+
+        self.qrPlaceholderEditor = QPushButton(self.widget_4)
+        self.qrPlaceholderEditor.setObjectName(u"qrPlaceholderEditor")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.qrPlaceholderEditor.sizePolicy().hasHeightForWidth())
+        self.qrPlaceholderEditor.setSizePolicy(sizePolicy2)
+        icon1 = QIcon()
+        icon1.addFile(u":/images/resources/wrench32px.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.qrPlaceholderEditor.setIcon(icon1)
+
+        self.gridLayout_7.addWidget(self.qrPlaceholderEditor, 0, 8, 1, 1)
+
         self.bgColourGroup = QGroupBox(self.widget_4)
         self.bgColourGroup.setObjectName(u"bgColourGroup")
         self.bgColourGroup.setEnabled(True)
@@ -297,30 +377,24 @@ class Ui_ImageNexus(object):
         self.gridLayout_8.addWidget(self.qrBgColourBtn, 0, 1, 1, 1)
 
 
-        self.gridLayout_7.addWidget(self.bgColourGroup, 8, 0, 1, 3)
+        self.gridLayout_7.addWidget(self.bgColourGroup, 10, 0, 1, 3)
 
-        self.qrOutputGroup = QGroupBox(self.widget_4)
-        self.qrOutputGroup.setObjectName(u"qrOutputGroup")
-        self.gridLayout_11 = QGridLayout(self.qrOutputGroup)
-        self.gridLayout_11.setObjectName(u"gridLayout_11")
-        self.qrOutputView = QGraphicsView(self.qrOutputGroup)
-        self.qrOutputView.setObjectName(u"qrOutputView")
-        self.qrOutputView.setBaseSize(QSize(0, 0))
+        self.qrAspectRatioCheck = QCheckBox(self.widget_4)
+        self.qrAspectRatioCheck.setObjectName(u"qrAspectRatioCheck")
 
-        self.gridLayout_11.addWidget(self.qrOutputView, 0, 0, 1, 1)
-
-
-        self.gridLayout_7.addWidget(self.qrOutputGroup, 0, 9, 9, 1)
+        self.gridLayout_7.addWidget(self.qrAspectRatioCheck, 9, 3, 1, 1)
 
         self.qrLogoInput = QLineEdit(self.widget_4)
         self.qrLogoInput.setObjectName(u"qrLogoInput")
 
-        self.gridLayout_7.addWidget(self.qrLogoInput, 5, 1, 1, 5)
+        self.gridLayout_7.addWidget(self.qrLogoInput, 7, 1, 1, 5)
 
-        self.qrErrorCorrectLbl = QLabel(self.widget_4)
-        self.qrErrorCorrectLbl.setObjectName(u"qrErrorCorrectLbl")
+        self.qrRemoveLogoBtn = QPushButton(self.widget_4)
+        self.qrRemoveLogoBtn.setObjectName(u"qrRemoveLogoBtn")
+        sizePolicy.setHeightForWidth(self.qrRemoveLogoBtn.sizePolicy().hasHeightForWidth())
+        self.qrRemoveLogoBtn.setSizePolicy(sizePolicy)
 
-        self.gridLayout_7.addWidget(self.qrErrorCorrectLbl, 9, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.qrRemoveLogoBtn, 9, 7, 1, 1)
 
         self.qrFormatOptions = QComboBox(self.widget_4)
         self.qrFormatOptions.addItem("")
@@ -330,67 +404,12 @@ class Ui_ImageNexus(object):
         self.qrFormatOptions.addItem("")
         self.qrFormatOptions.setObjectName(u"qrFormatOptions")
 
-        self.gridLayout_7.addWidget(self.qrFormatOptions, 11, 2, 1, 1)
-
-        self.qrSizeLabel = QLabel(self.widget_4)
-        self.qrSizeLabel.setObjectName(u"qrSizeLabel")
-
-        self.gridLayout_7.addWidget(self.qrSizeLabel, 11, 3, 1, 2)
-
-        self.qrBrowseOutput = QPushButton(self.widget_4)
-        self.qrBrowseOutput.setObjectName(u"qrBrowseOutput")
-
-        self.gridLayout_7.addWidget(self.qrBrowseOutput, 12, 3, 1, 1)
-
-        self.qrGenButton = QPushButton(self.widget_4)
-        self.qrGenButton.setObjectName(u"qrGenButton")
-        sizePolicy.setHeightForWidth(self.qrGenButton.sizePolicy().hasHeightForWidth())
-        self.qrGenButton.setSizePolicy(sizePolicy)
-        self.qrGenButton.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
-        self.qrGenButton.setFlat(False)
-
-        self.gridLayout_7.addWidget(self.qrGenButton, 11, 9, 1, 1)
-
-        self.qrTemplates = QComboBox(self.widget_4)
-        self.qrTemplates.addItem("")
-        self.qrTemplates.setObjectName(u"qrTemplates")
-
-        self.gridLayout_7.addWidget(self.qrTemplates, 0, 7, 1, 1)
-
-        self.qrBrowseLogo = QPushButton(self.widget_4)
-        self.qrBrowseLogo.setObjectName(u"qrBrowseLogo")
-        sizePolicy.setHeightForWidth(self.qrBrowseLogo.sizePolicy().hasHeightForWidth())
-        self.qrBrowseLogo.setSizePolicy(sizePolicy)
-
-        self.gridLayout_7.addWidget(self.qrBrowseLogo, 5, 7, 1, 1)
+        self.gridLayout_7.addWidget(self.qrFormatOptions, 13, 2, 1, 1)
 
         self.qrAddBGCheck = QCheckBox(self.widget_4)
         self.qrAddBGCheck.setObjectName(u"qrAddBGCheck")
 
-        self.gridLayout_7.addWidget(self.qrAddBGCheck, 7, 2, 1, 1)
-
-        self.qrBorderSizeLbl = QLabel(self.widget_4)
-        self.qrBorderSizeLbl.setObjectName(u"qrBorderSizeLbl")
-
-        self.gridLayout_7.addWidget(self.qrBorderSizeLbl, 9, 3, 1, 2)
-
-        self.qrCodeSize = QSpinBox(self.widget_4)
-        self.qrCodeSize.setObjectName(u"qrCodeSize")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Fixed)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.qrCodeSize.sizePolicy().hasHeightForWidth())
-        self.qrCodeSize.setSizePolicy(sizePolicy1)
-        self.qrCodeSize.setMaximumSize(QSize(80, 16777215))
-        self.qrCodeSize.setMinimum(1)
-        self.qrCodeSize.setMaximum(40)
-
-        self.gridLayout_7.addWidget(self.qrCodeSize, 11, 5, 1, 3)
-
-        self.qrOutputFolder = QLineEdit(self.widget_4)
-        self.qrOutputFolder.setObjectName(u"qrOutputFolder")
-
-        self.gridLayout_7.addWidget(self.qrOutputFolder, 12, 2, 1, 1)
+        self.gridLayout_7.addWidget(self.qrAddBGCheck, 9, 2, 1, 1)
 
         self.qrTextInput = QTextEdit(self.widget_4)
         self.qrTextInput.setObjectName(u"qrTextInput")
@@ -399,44 +418,31 @@ class Ui_ImageNexus(object):
 
         self.gridLayout_7.addWidget(self.qrTextInput, 0, 1, 1, 5)
 
-        self.qrErrorCorrectList = QComboBox(self.widget_4)
-        self.qrErrorCorrectList.addItem("")
-        self.qrErrorCorrectList.addItem("")
-        self.qrErrorCorrectList.addItem("")
-        self.qrErrorCorrectList.addItem("")
-        self.qrErrorCorrectList.setObjectName(u"qrErrorCorrectList")
+        self.qrSizeLabel = QLabel(self.widget_4)
+        self.qrSizeLabel.setObjectName(u"qrSizeLabel")
 
-        self.gridLayout_7.addWidget(self.qrErrorCorrectList, 9, 2, 1, 1)
+        self.gridLayout_7.addWidget(self.qrSizeLabel, 13, 3, 1, 2)
 
         self.qrFormatOptionsLbl = QLabel(self.widget_4)
         self.qrFormatOptionsLbl.setObjectName(u"qrFormatOptionsLbl")
 
-        self.gridLayout_7.addWidget(self.qrFormatOptionsLbl, 11, 0, 1, 2)
+        self.gridLayout_7.addWidget(self.qrFormatOptionsLbl, 13, 0, 1, 2)
 
         self.qrOutputFolderLbl = QLabel(self.widget_4)
         self.qrOutputFolderLbl.setObjectName(u"qrOutputFolderLbl")
 
-        self.gridLayout_7.addWidget(self.qrOutputFolderLbl, 12, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.qrOutputFolderLbl, 14, 0, 1, 1)
 
-        self.qrAspectRatioCheck = QCheckBox(self.widget_4)
-        self.qrAspectRatioCheck.setObjectName(u"qrAspectRatioCheck")
+        self.qrTemplates = QComboBox(self.widget_4)
+        self.qrTemplates.addItem("")
+        self.qrTemplates.setObjectName(u"qrTemplates")
 
-        self.gridLayout_7.addWidget(self.qrAspectRatioCheck, 7, 3, 1, 1)
+        self.gridLayout_7.addWidget(self.qrTemplates, 0, 7, 1, 1)
 
         self.qrLogoInputLbl = QLabel(self.widget_4)
         self.qrLogoInputLbl.setObjectName(u"qrLogoInputLbl")
 
-        self.gridLayout_7.addWidget(self.qrLogoInputLbl, 5, 0, 1, 1)
-
-        self.qrSaveQRBtn = QPushButton(self.widget_4)
-        self.qrSaveQRBtn.setObjectName(u"qrSaveQRBtn")
-
-        self.gridLayout_7.addWidget(self.qrSaveQRBtn, 12, 9, 1, 1)
-
-        self.qrTextInputLabel = QLabel(self.widget_4)
-        self.qrTextInputLabel.setObjectName(u"qrTextInputLabel")
-
-        self.gridLayout_7.addWidget(self.qrTextInputLabel, 0, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.qrLogoInputLbl, 7, 0, 1, 1)
 
         self.codeColourGroup = QGroupBox(self.widget_4)
         self.codeColourGroup.setObjectName(u"codeColourGroup")
@@ -454,30 +460,37 @@ class Ui_ImageNexus(object):
         self.gridLayout_9.addWidget(self.qrCodeColourBtn, 0, 1, 1, 1)
 
 
-        self.gridLayout_7.addWidget(self.codeColourGroup, 8, 3, 1, 5)
+        self.gridLayout_7.addWidget(self.codeColourGroup, 10, 3, 1, 5)
+
+        self.qrBrowseOutput = QPushButton(self.widget_4)
+        self.qrBrowseOutput.setObjectName(u"qrBrowseOutput")
+
+        self.gridLayout_7.addWidget(self.qrBrowseOutput, 14, 3, 1, 1)
+
+        self.qrOutputFolder = QLineEdit(self.widget_4)
+        self.qrOutputFolder.setObjectName(u"qrOutputFolder")
+
+        self.gridLayout_7.addWidget(self.qrOutputFolder, 14, 2, 1, 1)
+
+        self.qrTextInputLabel = QLabel(self.widget_4)
+        self.qrTextInputLabel.setObjectName(u"qrTextInputLabel")
+
+        self.gridLayout_7.addWidget(self.qrTextInputLabel, 0, 0, 1, 1)
+
+        self.qrErrorCorrectLbl = QLabel(self.widget_4)
+        self.qrErrorCorrectLbl.setObjectName(u"qrErrorCorrectLbl")
+
+        self.gridLayout_7.addWidget(self.qrErrorCorrectLbl, 11, 0, 1, 1)
 
         self.qrBorderSize = QSpinBox(self.widget_4)
         self.qrBorderSize.setObjectName(u"qrBorderSize")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.qrBorderSize.sizePolicy().hasHeightForWidth())
         self.qrBorderSize.setSizePolicy(sizePolicy2)
         self.qrBorderSize.setMaximumSize(QSize(80, 16777215))
         self.qrBorderSize.setMaximum(10)
         self.qrBorderSize.setValue(1)
 
-        self.gridLayout_7.addWidget(self.qrBorderSize, 9, 5, 1, 5)
-
-        self.qrPlaceholderEditor = QPushButton(self.widget_4)
-        self.qrPlaceholderEditor.setObjectName(u"qrPlaceholderEditor")
-        sizePolicy2.setHeightForWidth(self.qrPlaceholderEditor.sizePolicy().hasHeightForWidth())
-        self.qrPlaceholderEditor.setSizePolicy(sizePolicy2)
-        icon1 = QIcon()
-        icon1.addFile(u":/images/resources/wrench32px.ico", QSize(), QIcon.Normal, QIcon.Off)
-        self.qrPlaceholderEditor.setIcon(icon1)
-
-        self.gridLayout_7.addWidget(self.qrPlaceholderEditor, 0, 8, 1, 1)
+        self.gridLayout_7.addWidget(self.qrBorderSize, 11, 5, 1, 5)
 
 
         self.gridLayout_10.addWidget(self.widget_4, 0, 0, 1, 1)
@@ -713,63 +726,65 @@ class Ui_ImageNexus(object):
         self.bcFileInput.setPlaceholderText(QCoreApplication.translate("ImageNexus", u"Select an image or folder...", None))
         self.bcOutputBrowse.setText(QCoreApplication.translate("ImageNexus", u"Browse", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.batchConverter), QCoreApplication.translate("ImageNexus", u"Batch Converter", None))
+#if QT_CONFIG(statustip)
+        self.qrCodeSize.setStatusTip(QCoreApplication.translate("ImageNexus", u"Value between 1-40", None))
+#endif // QT_CONFIG(statustip)
+        self.qrSaveQRBtn.setText(QCoreApplication.translate("ImageNexus", u"Save QR Code", None))
+        self.qrBorderSizeLbl.setText(QCoreApplication.translate("ImageNexus", u"Border Size:", None))
+        self.qrOutputGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Generated QR", None))
+        self.qrDisableLiveQR.setText(QCoreApplication.translate("ImageNexus", u"Disable Live Preview", None))
+        self.qrErrorCorrectList.setItemText(0, QCoreApplication.translate("ImageNexus", u"Low", None))
+        self.qrErrorCorrectList.setItemText(1, QCoreApplication.translate("ImageNexus", u"Medium", None))
+        self.qrErrorCorrectList.setItemText(2, QCoreApplication.translate("ImageNexus", u"Quartile", None))
+        self.qrErrorCorrectList.setItemText(3, QCoreApplication.translate("ImageNexus", u"High", None))
+
+        self.qrGenButton.setText(QCoreApplication.translate("ImageNexus", u"Generate QR", None))
+#if QT_CONFIG(shortcut)
+        self.qrGenButton.setShortcut(QCoreApplication.translate("ImageNexus", u"Ctrl+S", None))
+#endif // QT_CONFIG(shortcut)
+        self.qrBrowseLogo.setText(QCoreApplication.translate("ImageNexus", u"Browse", None))
+#if QT_CONFIG(statustip)
+        self.qrPlaceholderEditor.setStatusTip(QCoreApplication.translate("ImageNexus", u"Placeholder Editor", None))
+#endif // QT_CONFIG(statustip)
+        self.qrPlaceholderEditor.setText("")
         self.bgColourGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Background Colour", None))
         self.qrBgColourInput.setText("")
         self.qrBgColourInput.setPlaceholderText(QCoreApplication.translate("ImageNexus", u"255, 255, 255", None))
         self.qrBgColourBtn.setText(QCoreApplication.translate("ImageNexus", u"...", None))
-        self.qrOutputGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Generated QR", None))
+#if QT_CONFIG(statustip)
+        self.qrAspectRatioCheck.setStatusTip(QCoreApplication.translate("ImageNexus", u"Keeps the aspect ratio of the embeded image", None))
+#endif // QT_CONFIG(statustip)
+        self.qrAspectRatioCheck.setText(QCoreApplication.translate("ImageNexus", u"Keep Aspect Ratio?", None))
         self.qrLogoInput.setText("")
         self.qrLogoInput.setPlaceholderText(QCoreApplication.translate("ImageNexus", u"Insert a logo... (Optional)", None))
-        self.qrErrorCorrectLbl.setText(QCoreApplication.translate("ImageNexus", u"Error Correction:", None))
+        self.qrRemoveLogoBtn.setText(QCoreApplication.translate("ImageNexus", u"Remove Logo", None))
         self.qrFormatOptions.setItemText(0, QCoreApplication.translate("ImageNexus", u"BMP", None))
         self.qrFormatOptions.setItemText(1, QCoreApplication.translate("ImageNexus", u"JPG", None))
         self.qrFormatOptions.setItemText(2, QCoreApplication.translate("ImageNexus", u"PNG", None))
         self.qrFormatOptions.setItemText(3, QCoreApplication.translate("ImageNexus", u"TIFF", None))
         self.qrFormatOptions.setItemText(4, QCoreApplication.translate("ImageNexus", u"WEBP", None))
 
-        self.qrSizeLabel.setText(QCoreApplication.translate("ImageNexus", u"QR Size:", None))
-        self.qrBrowseOutput.setText(QCoreApplication.translate("ImageNexus", u"Browse", None))
-        self.qrGenButton.setText(QCoreApplication.translate("ImageNexus", u"Generate QR", None))
-#if QT_CONFIG(shortcut)
-        self.qrGenButton.setShortcut(QCoreApplication.translate("ImageNexus", u"Ctrl+S", None))
-#endif // QT_CONFIG(shortcut)
-        self.qrTemplates.setItemText(0, QCoreApplication.translate("ImageNexus", u"Select a template", None))
-
-        self.qrBrowseLogo.setText(QCoreApplication.translate("ImageNexus", u"Browse", None))
 #if QT_CONFIG(statustip)
         self.qrAddBGCheck.setStatusTip(QCoreApplication.translate("ImageNexus", u"Add a background to a transparent logo", None))
 #endif // QT_CONFIG(statustip)
         self.qrAddBGCheck.setText(QCoreApplication.translate("ImageNexus", u"Add background?", None))
-        self.qrBorderSizeLbl.setText(QCoreApplication.translate("ImageNexus", u"Border Size:", None))
-#if QT_CONFIG(statustip)
-        self.qrCodeSize.setStatusTip(QCoreApplication.translate("ImageNexus", u"Value between 1-40", None))
-#endif // QT_CONFIG(statustip)
         self.qrTextInput.setPlaceholderText(QCoreApplication.translate("ImageNexus", u"Please enter some text to generate a QR code... See the QR Guidelines in the resources folder on QR Formats.", None))
-        self.qrErrorCorrectList.setItemText(0, QCoreApplication.translate("ImageNexus", u"Low", None))
-        self.qrErrorCorrectList.setItemText(1, QCoreApplication.translate("ImageNexus", u"Medium", None))
-        self.qrErrorCorrectList.setItemText(2, QCoreApplication.translate("ImageNexus", u"Quartile", None))
-        self.qrErrorCorrectList.setItemText(3, QCoreApplication.translate("ImageNexus", u"High", None))
-
+        self.qrSizeLabel.setText(QCoreApplication.translate("ImageNexus", u"QR Size:", None))
         self.qrFormatOptionsLbl.setText(QCoreApplication.translate("ImageNexus", u"Save As:", None))
         self.qrOutputFolderLbl.setText(QCoreApplication.translate("ImageNexus", u"Output Folder:", None))
-#if QT_CONFIG(statustip)
-        self.qrAspectRatioCheck.setStatusTip(QCoreApplication.translate("ImageNexus", u"Keeps the aspect ratio of the embeded image", None))
-#endif // QT_CONFIG(statustip)
-        self.qrAspectRatioCheck.setText(QCoreApplication.translate("ImageNexus", u"Keep Aspect Ratio?", None))
+        self.qrTemplates.setItemText(0, QCoreApplication.translate("ImageNexus", u"Select a template", None))
+
         self.qrLogoInputLbl.setText(QCoreApplication.translate("ImageNexus", u"Logo Image:", None))
-        self.qrSaveQRBtn.setText(QCoreApplication.translate("ImageNexus", u"Save QR Code", None))
-        self.qrTextInputLabel.setText(QCoreApplication.translate("ImageNexus", u"QR Data:", None))
         self.codeColourGroup.setTitle(QCoreApplication.translate("ImageNexus", u"QR Code Colour", None))
         self.qrCodeColourInput.setText("")
         self.qrCodeColourInput.setPlaceholderText(QCoreApplication.translate("ImageNexus", u"0, 0, 0", None))
         self.qrCodeColourBtn.setText(QCoreApplication.translate("ImageNexus", u"...", None))
+        self.qrBrowseOutput.setText(QCoreApplication.translate("ImageNexus", u"Browse", None))
+        self.qrTextInputLabel.setText(QCoreApplication.translate("ImageNexus", u"QR Data:", None))
+        self.qrErrorCorrectLbl.setText(QCoreApplication.translate("ImageNexus", u"Error Correction:", None))
 #if QT_CONFIG(statustip)
         self.qrBorderSize.setStatusTip(QCoreApplication.translate("ImageNexus", u"Value between 0-10", None))
 #endif // QT_CONFIG(statustip)
-#if QT_CONFIG(statustip)
-        self.qrPlaceholderEditor.setStatusTip(QCoreApplication.translate("ImageNexus", u"Placeholder Editor", None))
-#endif // QT_CONFIG(statustip)
-        self.qrPlaceholderEditor.setText("")
         self.optionsGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Options", None))
         self.pxSizeLabel.setText(QCoreApplication.translate("ImageNexus", u"Pixel Size", None))
         self.pxLoadImageBtn.setText(QCoreApplication.translate("ImageNexus", u"Load Image", None))
