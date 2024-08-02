@@ -631,7 +631,7 @@ class Ui_ImageNexus(object):
         ImageNexus.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(ImageNexus)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 872, 25))
+        self.menubar.setGeometry(QRect(0, 0, 872, 21))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.menubar)
