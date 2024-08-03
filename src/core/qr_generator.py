@@ -200,6 +200,8 @@ class QRGenerator:
         output_folder = self.ui.qrOutputFolder.text()
         if not output_folder:
             QMessageBox.warning(None, "Warning", "Please select an output folder.")
+            self.browse_output_folder()
+            self.save_qr_code()
             return
 
         qr_image = self.generate_qr_code()
