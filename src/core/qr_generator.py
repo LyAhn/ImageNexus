@@ -218,11 +218,12 @@ class QRGenerator:
 
         output_folder = self.ui.qrOutputFolder.text()
         if not output_folder:
-            QMessageBox.warning(None, "Warning", "Please select an output folder.")
-            if self.browse_output_folder():
-                self.save_qr_code()
-            pass
+            output_folder = QFileDialog.getExistingDirectory(None, "Select Output Folder")
+            if not output_folder:
+                return  # User cancelled folder selection
+            self.ui.qrOutputFolder.setText(output_folder)
 
+        # Continue with the rest of the save_qr_code() method
         qr_image = self.generate_qr_code()
         if qr_image:
             qr_image = qr_image.resize((1024, 1024), Image.BICUBIC)
