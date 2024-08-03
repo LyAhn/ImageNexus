@@ -12,6 +12,8 @@ This code is licensed under the GPL-3.0 license (see LICENSE.txt for details)
 import os
 import io
 import json
+import cv2
+import numpy as np
 from PIL import Image
 import qrcode
 from PySide6.QtWidgets import QMessageBox, QFileDialog, QColorDialog, QDialog, QLabel, QLineEdit, QDialogButtonBox, QVBoxLayout
@@ -85,6 +87,20 @@ class QRGenerator:
         self.ui.qrOutputView.setScene(QGraphicsScene())
         self.current_qr_image = None # Clear the buffer
 
+    # def generate_qr_code(self):
+    #     qr_data = self.ui.qrTextInput.toPlainText().strip()
+    #     if not qr_data:
+    #         return None
+
+    #     qr = qrcode.QRCode(
+    #         version=self.ui.qrCodeSize.value(),
+    #         error_correction=self.get_error_correction(),
+    #         box_size=15,
+    #         border=self.ui.qrBorderSize.value(),
+    #     )
+    #     qr.add_data(qr_data)
+    #     qr.make(fit=True)
+
     def generate_qr_code(self):
         qr_data = self.ui.qrTextInput.toPlainText().strip()
         if not qr_data:
@@ -93,76 +109,78 @@ class QRGenerator:
         qr = qrcode.QRCode(
             version=self.ui.qrCodeSize.value(),
             error_correction=self.get_error_correction(),
-            box_size=40,
+            box_size=10,
             border=self.ui.qrBorderSize.value(),
         )
         qr.add_data(qr_data)
         qr.make(fit=True)
 
-        # Convert color strings to tuples
-        def color_string_to_tuple(color_string):
-            return tuple(map(int, color_string.split(',')))
+        bg_color = self.get_color_tuple(self.ui.qrBgColourInput.text(), (255, 255, 255))
+        fg_color = self.get_color_tuple(self.ui.qrCodeColourInput.text(), (0, 0, 0))
+        qr_image = qr.make_image(fill_color=fg_color, back_color=bg_color)
+        qr_image = qr_image.convert('RGB')
 
-        def get_color(color_input, default):
-            color_text = color_input.text().strip()
-            return color_string_to_tuple(color_text) if color_text else default
+        qr_array = np.array(qr_image)
+        qr_cv = cv2.cvtColor(qr_array, cv2.COLOR_RGB2BGR)
 
-        #bg_color = color_string_to_tuple(self.ui.qrBgColourInput.text())
-        #fill_color = color_string_to_tuple(self.ui.qrCodeColourInput.text())
-        bg_color = get_color(self.ui.qrBgColourInput, (255, 255, 255))
-        fill_color = get_color(self.ui.qrCodeColourInput, (0, 0, 0))
-
-        # Create the QR code image
-        qr_image = qr.make_image(
-            fill_color=fill_color,
-            back_color=bg_color,
-
-        )
+        target_size = (1024, 1024)
+        qr_code_resized = cv2.resize(qr_cv, target_size, interpolation=cv2.INTER_AREA)
 
         logo_path = self.ui.qrLogoInput.text()
         if logo_path and os.path.isfile(logo_path):
             logo = Image.open(logo_path).convert('RGBA')
+            if logo is not None:
+                logo_size = min(qr_code_resized.shape[0], qr_code_resized.shape[1]) // 3
 
-            qr_size = qr_image.size[0]
-            max_size = qr_size // 3
+                if self.ui.qrAspectRatioCheck.isChecked():
+                    # Preserve aspect ratio
+                    logo.thumbnail((logo_size, logo_size), Image.LANCZOS)
+                else:
+                    # Resize without preserving aspect ratio
+                    logo = logo.resize((logo_size, logo_size), Image.LANCZOS)
 
-            # Preserve aspect ratio
-            if self.ui.qrAspectRatioCheck.isChecked():
-                ratio = min(max_size / logo.width, max_size / logo.height)
-                new_size = (int(logo.width * ratio), int(logo.height * ratio))
-            else:
-                new_size = (max_size, max_size)
+                if self.ui.qrAddBGCheck.isChecked():
+                    bg_size = (logo_size, logo_size)
+                    logo_bg = Image.new('RGBA', bg_size, (255, 255, 255, 255))
+                    logo_pos = ((bg_size[0] - logo.size[0]) // 2,
+                                (bg_size[1] - logo.size[1]) // 2)
+                    logo_bg.paste(logo, logo_pos, logo)
+                    logo = logo_bg
 
-            logo = logo.resize(new_size, Image.LANCZOS)
+                logo_np = np.array(logo)
+                logo_cv = cv2.cvtColor(logo_np, cv2.COLOR_RGBA2BGRA)
 
-            # Create a new image with the background if checkbox is checked
-            if self.ui.qrAddBGCheck.isChecked():
-                bg = Image.new('RGBA', (max_size, max_size), (255, 255, 255, 255))
-                offset = ((max_size - logo.width) // 2, (max_size - logo.height) // 2)
-                bg.paste(logo, offset, logo)
-                logo = bg
-            else:
-                # If no background, create a transparent image of max_size
-                bg = Image.new('RGBA', (max_size, max_size), (0, 0, 0, 0))
-                offset = ((max_size - logo.width) // 2, (max_size - logo.height) // 2)
-                bg.paste(logo, offset, logo)
-                logo = bg
+                top_left_x = (qr_code_resized.shape[1] - logo_cv.shape[1]) // 2
+                top_left_y = (qr_code_resized.shape[0] - logo_cv.shape[0]) // 2
 
-            # Calculate the position to paste the logo
-            box = ((qr_image.size[0] - logo.size[0]) // 2,
-                (qr_image.size[1] - logo.size[1]) // 2)
+                if logo_cv.shape[2] == 4:
+                    alpha = logo_cv[:, :, 3] / 255.0
+                    alpha = np.expand_dims(alpha, axis=2)
+                    rgb = cv2.cvtColor(logo_cv, cv2.COLOR_BGRA2BGR)
 
-            # Convert QR image to RGBA if it's not already
-            if qr_image.mode != 'RGBA':
-                qr_image = qr_image.convert('RGBA')
+                    roi = qr_code_resized[top_left_y:top_left_y+logo_cv.shape[0], 
+                                        top_left_x:top_left_x+logo_cv.shape[1]]
+                    qr_code_resized[top_left_y:top_left_y+logo_cv.shape[0], 
+                                    top_left_x:top_left_x+logo_cv.shape[1]] = \
+                        (1 - alpha) * roi + alpha * rgb
 
-            # Paste the logo onto the QR code
-            qr_image.paste(logo, box, logo)
+        return Image.fromarray(cv2.cvtColor(qr_code_resized, cv2.COLOR_BGR2RGB))
 
-            # After generating QR, resize to 1024
-            qr_image = qr_image.resize((1024, 1024), Image.LANCZOS)
+    def generate_and_display_qr(self):
+        qr_data = self.ui.qrTextInput.toPlainText().strip()
+        if qr_data:
+            qr_image = self.generate_qr_code()
+            if qr_image:
+                self.display_qr_code(qr_image)
+        else:
+            self.clear_qr_display()
+            self.current_qr_image = None
 
-        return qr_image
+    def get_color_tuple(self, color_string, default):
+        try:
+            return tuple(map(int, color_string.split(',')))
+        except ValueError:
+            return default
 
     def get_error_correction(self):
         error_correction = self.ui.qrErrorCorrectList.currentText()
@@ -203,11 +221,11 @@ class QRGenerator:
             QMessageBox.warning(None, "Warning", "Please select an output folder.")
             if self.browse_output_folder():
                 self.save_qr_code()
-            return
+            pass
 
         qr_image = self.generate_qr_code()
         if qr_image:
-            qr_image = qr_image.resize((1024, 1024), Image.LANCZOS)
+            qr_image = qr_image.resize((1024, 1024), Image.BICUBIC)
 
             save_format = self.ui.qrFormatOptions.currentText().lower()
             file_name = f"qr_code.{save_format}"
@@ -225,8 +243,6 @@ class QRGenerator:
         folder_path = QFileDialog.getExistingDirectory(None, "Select Output Folder")
         if folder_path:
             self.ui.qrOutputFolder.setText(folder_path)
-            return True
-        return False
 
     def browse_logo(self):
         file_path, _ = QFileDialog.getOpenFileName(None, "Select Logo Image", "", "Image Files (*.png *.jpg *.bmp)")
