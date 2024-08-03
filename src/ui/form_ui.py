@@ -480,7 +480,12 @@ class Ui_ImageNexus(object):
         sizePolicy2.setHeightForWidth(self.qrPlaceholderEditor.sizePolicy().hasHeightForWidth())
         self.qrPlaceholderEditor.setSizePolicy(sizePolicy2)
         icon3 = QIcon()
-        icon3.addFile(u":/images/resources/wrench32px.ico", QSize(), QIcon.Normal, QIcon.Off)
+        iconThemeName = u"QIcon::ThemeIcon::DocumentProperties"
+        if QIcon.hasThemeIcon(iconThemeName):
+            icon3 = QIcon.fromTheme(iconThemeName)
+        else:
+            icon3.addFile(u":/images/resources/wrench32px.ico", QSize(), QIcon.Normal, QIcon.Off)
+
         self.qrPlaceholderEditor.setIcon(icon3)
 
         self.gridLayout_7.addWidget(self.qrPlaceholderEditor, 0, 8, 1, 1)

@@ -15,9 +15,10 @@ import json
 from PIL import Image
 import qrcode
 from PySide6.QtWidgets import QMessageBox, QFileDialog, QColorDialog, QDialog, QLabel, QLineEdit, QDialogButtonBox, QVBoxLayout
+from PySide6.QtWidgets import QGridLayout
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QImage, QPixmap, QKeySequence, QShortcut
-from PySide6.QtWidgets import QGraphicsScene, QPushButton, QSizePolicy
+from PySide6.QtGui import QImage, QPixmap, QKeySequence, QShortcut, QIcon
+from PySide6.QtWidgets import QGraphicsScene, QPushButton, QSizePolicy, QScrollArea, QWidget
 from src.utils.templateEditor import JSONEditorDialog
 
 
@@ -200,8 +201,8 @@ class QRGenerator:
         output_folder = self.ui.qrOutputFolder.text()
         if not output_folder:
             QMessageBox.warning(None, "Warning", "Please select an output folder.")
-            self.browse_output_folder()
-            self.save_qr_code()
+            if self.browse_output_folder():
+                self.save_qr_code()
             return
 
         qr_image = self.generate_qr_code()
@@ -224,6 +225,8 @@ class QRGenerator:
         folder_path = QFileDialog.getExistingDirectory(None, "Select Output Folder")
         if folder_path:
             self.ui.qrOutputFolder.setText(folder_path)
+            return True
+        return False
 
     def browse_logo(self):
         file_path, _ = QFileDialog.getOpenFileName(None, "Select Logo Image", "", "Image Files (*.png *.jpg *.bmp)")
@@ -283,34 +286,52 @@ class QRGenerator:
 
             dialog = QDialog()
             dialog.setWindowTitle("Placeholder Editor")
+            dialog.setWindowIcon(QIcon.fromTheme("document-properties"))
             layout = QVBoxLayout()
+
+            # Create a scroll area
+            scroll_area = QScrollArea()
+            scroll_area.setWidgetResizable(True)
+            scroll_content = QWidget()
+            grid_layout = QGridLayout(scroll_content)
+
             inputs = {}
+            row = 0
+            col = 0
+            max_cols = 2  # Adjust this value to change the number of columns
 
             for key, default_value in placeholders.items():
                 label = QLabel(f"{key}:")
                 input_field = QLineEdit(default_value)
                 inputs[key] = input_field
-                layout.addWidget(label)
-                layout.addWidget(input_field)
 
+                grid_layout.addWidget(label, row, col * 2)
+                grid_layout.addWidget(input_field, row, col * 2 + 1)
+
+                col += 1
+                if col >= max_cols:
+                    col = 0
+                    row += 1
+
+            scroll_area.setWidget(scroll_content)
+            layout.addWidget(scroll_area)
+
+            # Add buttons
             buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
             buttons.accepted.connect(dialog.accept)
             buttons.rejected.connect(dialog.reject)
             layout.addWidget(buttons)
+
             dialog.setLayout(layout)
 
             if dialog.exec() == QDialog.Accepted:
-                # Get the original template format
+                # Process the inputs and update the QR code text
                 format_with_placeholders = template['format']
-
-                # Replace placeholders with user input
                 for key, input_field in inputs.items():
                     placeholder = f"{{{key}}}"
                     format_with_placeholders = format_with_placeholders.replace(placeholder, input_field.text())
 
-                # Update the QR text input with the new text
                 self.ui.qrTextInput.setPlainText(format_with_placeholders)
-                # Update the preview
                 self.preview_qr_code()
 
     def show_preview_window(self):

@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout,
-                                QPushButton, QMessageBox, QInputDialog,
+                                QPushButton, QMessageBox, QInputDialog, QApplication,
                                QListWidget, QLabel, QLineEdit, QDialogButtonBox, QTableWidget,
                                QTableWidgetItem, QSplitter, QWidget, QHeaderView, QUndoView)
 from PySide6.QtGui import QIcon, QFont, QShortcut, QUndoStack, QKeySequence
@@ -12,6 +12,7 @@ class JSONEditorDialog(QDialog):
         super().__init__(None)
         self.json_file_path = json_file_path
         self.setWindowTitle("QR Template Editor")
+        self.setWindowIcon(QIcon.fromTheme("input-keyboard"))
         self.setMinimumSize(800, 600)
 
         main_layout = QHBoxLayout(self)
@@ -60,9 +61,12 @@ class JSONEditorDialog(QDialog):
         placeholder_button_layout = QHBoxLayout()
         self.add_placeholder_button = QPushButton("Add Placeholder")
         self.add_placeholder_button.setIcon(QIcon.fromTheme("list-add"))
+        self.edit_placeholder_button = QPushButton("Edit Placeholder")
+        self.edit_placeholder_button.setIcon(QIcon.fromTheme("mail-message-new"))
         self.remove_placeholder_button = QPushButton("Remove Placeholder")
         self.remove_placeholder_button.setIcon(QIcon.fromTheme("list-remove"))
         placeholder_button_layout.addWidget(self.add_placeholder_button)
+        placeholder_button_layout.addWidget(self.edit_placeholder_button)
         placeholder_button_layout.addWidget(self.remove_placeholder_button)
         right_layout.addLayout(placeholder_button_layout)
 
@@ -81,6 +85,7 @@ class JSONEditorDialog(QDialog):
         self.save_button.clicked.connect(self.save_changes)
         self.add_placeholder_button.clicked.connect(self.add_placeholder)
         self.remove_placeholder_button.clicked.connect(self.remove_placeholder)
+        self.edit_placeholder_button.clicked.connect(self.edit_placeholder)
 
         self.load_json()
 
@@ -216,6 +221,17 @@ class JSONEditorDialog(QDialog):
             current_template = self.template_list.currentItem().text()
             self.update_placeholder(current_template, placeholder_name, None, remove=True)
             self.placeholder_list.takeItem(self.placeholder_list.row(current_item))
+
+    def edit_placeholder(self):
+        current_item = self.placeholder_list.currentItem()
+        if current_item:
+            placeholder_name, old_value = current_item.text().split(': ')
+            new_value, ok = QInputDialog.getText(self, "Edit Placeholder", "Enter new default value:", text=old_value)
+            if ok:
+                current_template = self.template_list.currentItem().text()
+                self.update_placeholder(current_template, placeholder_name, new_value)
+                current_item.setText(f"{placeholder_name}: {new_value}")
+
 
     def update_placeholder(self, template_name, placeholder_name, value, remove=False):
         with open(self.json_file_path, 'r+') as file:
