@@ -43,6 +43,12 @@ class Ui_ImageNexus(object):
         self.actionExit.setObjectName(u"actionExit")
         self.actionReloadTemplates = QAction(ImageNexus)
         self.actionReloadTemplates.setObjectName(u"actionReloadTemplates")
+        icon1 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.ViewRefresh))
+        self.actionReloadTemplates.setIcon(icon1)
+        self.actionQRTemplateEditor = QAction(ImageNexus)
+        self.actionQRTemplateEditor.setObjectName(u"actionQRTemplateEditor")
+        icon2 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.InputKeyboard))
+        self.actionQRTemplateEditor.setIcon(icon2)
         self.centralwidget = QWidget(ImageNexus)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout_12 = QGridLayout(self.centralwidget)
@@ -473,9 +479,13 @@ class Ui_ImageNexus(object):
         self.qrPlaceholderEditor.setObjectName(u"qrPlaceholderEditor")
         sizePolicy2.setHeightForWidth(self.qrPlaceholderEditor.sizePolicy().hasHeightForWidth())
         self.qrPlaceholderEditor.setSizePolicy(sizePolicy2)
-        icon1 = QIcon()
-        icon1.addFile(u":/images/resources/wrench32px.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.qrPlaceholderEditor.setIcon(icon1)
+        icon3 = QIcon()
+        if QIcon.hasThemeIcon(QIcon.ThemeIcon.DocumentProperties):
+            icon3 = QIcon.fromTheme(QIcon.ThemeIcon.DocumentProperties)
+        else:
+            icon3.addFile(u":/images/resources/wrench32px.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+
+        self.qrPlaceholderEditor.setIcon(icon3)
 
         self.gridLayout_7.addWidget(self.qrPlaceholderEditor, 0, 8, 1, 1)
 
@@ -634,6 +644,8 @@ class Ui_ImageNexus(object):
         self.menubar.setGeometry(QRect(0, 0, 872, 21))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
+        self.menuTools = QMenu(self.menuFile)
+        self.menuTools.setObjectName(u"menuTools")
         self.menuHelp = QMenu(self.menubar)
         self.menuHelp.setObjectName(u"menuHelp")
         ImageNexus.setMenuBar(self.menubar)
@@ -643,7 +655,9 @@ class Ui_ImageNexus(object):
 
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
+        self.menuFile.addAction(self.menuTools.menuAction())
         self.menuFile.addAction(self.actionExit)
+        self.menuTools.addAction(self.actionQRTemplateEditor)
         self.menuHelp.addAction(self.actionHelp)
         self.menuHelp.addAction(self.actionReloadTemplates)
         self.menuHelp.addAction(self.actionAbout)
@@ -666,6 +680,7 @@ class Ui_ImageNexus(object):
         self.actionAbout.setText(QCoreApplication.translate("ImageNexus", u"About", None))
         self.actionExit.setText(QCoreApplication.translate("ImageNexus", u"Exit", None))
         self.actionReloadTemplates.setText(QCoreApplication.translate("ImageNexus", u"Reload Templates", None))
+        self.actionQRTemplateEditor.setText(QCoreApplication.translate("ImageNexus", u"QR Template Editor", None))
         self.feBrowseInput.setText(QCoreApplication.translate("ImageNexus", u"Browse", None))
         self.feFormatOptions.setItemText(0, QCoreApplication.translate("ImageNexus", u"PNG", None))
         self.feFormatOptions.setItemText(1, QCoreApplication.translate("ImageNexus", u"GIF", None))
@@ -785,6 +800,7 @@ class Ui_ImageNexus(object):
         self.pxFileTypeLbl.setText(QCoreApplication.translate("ImageNexus", u"FIle Type", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.pixelTab), QCoreApplication.translate("ImageNexus", u"Quick Pixelator", None))
         self.menuFile.setTitle(QCoreApplication.translate("ImageNexus", u"File", None))
+        self.menuTools.setTitle(QCoreApplication.translate("ImageNexus", u"Tools", None))
         self.menuHelp.setTitle(QCoreApplication.translate("ImageNexus", u"Help", None))
     # retranslateUi
 
