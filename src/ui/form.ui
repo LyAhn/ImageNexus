@@ -1006,6 +1006,13 @@
     <property name="title">
      <string>File</string>
     </property>
+    <widget class="QMenu" name="menuTools">
+     <property name="title">
+      <string>Tools</string>
+     </property>
+     <addaction name="actionQRTemplateEditor"/>
+    </widget>
+    <addaction name="menuTools"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -1042,8 +1049,19 @@
    </property>
   </action>
   <action name="actionReloadTemplates">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
+   </property>
    <property name="text">
     <string>Reload Templates</string>
+   </property>
+  </action>
+  <action name="actionQRTemplateEditor">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::InputKeyboard"/>
+   </property>
+   <property name="text">
+    <string>QR Template Editor</string>
    </property>
   </action>
  </widget>

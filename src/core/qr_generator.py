@@ -18,6 +18,8 @@ from PySide6.QtWidgets import QMessageBox, QFileDialog, QColorDialog, QDialog, Q
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QImage, QPixmap, QKeySequence, QShortcut
 from PySide6.QtWidgets import QGraphicsScene, QPushButton, QSizePolicy
+from src.utils.templateEditor import JSONEditorDialog
+
 
 class QRGenerator:
     def __init__(self, ui):
@@ -27,6 +29,7 @@ class QRGenerator:
         self.load_qr_templates()
         self.current_qr_image = None
         self.create_shortcut()
+        self.editor = JSONEditorDialog
 
     def setup_connections(self):
         self.ui.qrGenButton.clicked.connect(self.preview_qr_code)
@@ -48,6 +51,12 @@ class QRGenerator:
         self.ui.qrLogoInput.textChanged.connect(self.preview_qr_code)
         self.ui.qrBgColourInput.textChanged.connect(self.preview_qr_code)
         self.ui.qrCodeColourInput.textChanged.connect(self.preview_qr_code)
+        self.ui.actionQRTemplateEditor.triggered.connect(self.open_json_editor)
+
+    def open_json_editor(self):
+        editor = JSONEditorDialog('resources/qr_templates.json', self.ui)
+        if editor.exec() == QDialog.Accepted:
+            self.load_qr_templates()  # Reload templates after editing
 
     def create_shortcut(self):
         shortcut = QShortcut(QKeySequence("Ctrl+Return"), self.ui.qrTextInput)
