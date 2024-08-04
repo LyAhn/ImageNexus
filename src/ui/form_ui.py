@@ -800,6 +800,11 @@ class Ui_ImageNexus(object):
 
         self.t2aInputGridLayout.addWidget(self.t2aConvertBtn, 1, 1, 1, 1)
 
+        self.t2aDiscordCheck = QCheckBox(self.t2aInputFrame)
+        self.t2aDiscordCheck.setObjectName(u"t2aDiscordCheck")
+
+        self.t2aInputGridLayout.addWidget(self.t2aDiscordCheck, 0, 1, 1, 1)
+
 
         self.gridLayout_28.addLayout(self.t2aInputGridLayout, 0, 1, 1, 1)
 
@@ -857,9 +862,9 @@ class Ui_ImageNexus(object):
         self.pxSizeSlider.sliderMoved.connect(self.pxSpinBox.setValue)
         self.pxSpinBox.valueChanged.connect(self.pxSizeSlider.setValue)
 
-        self.tabWidget.setCurrentIndex(5)
+        self.tabWidget.setCurrentIndex(0)
         self.qrGenButton.setDefault(False)
-        self.toolBox.setCurrentIndex(1)
+        self.toolBox.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(ImageNexus)
@@ -1004,6 +1009,10 @@ class Ui_ImageNexus(object):
 #if QT_CONFIG(shortcut)
         self.t2aConvertBtn.setShortcut(QCoreApplication.translate("ImageNexus", u"Return", None))
 #endif // QT_CONFIG(shortcut)
+#if QT_CONFIG(statustip)
+        self.t2aDiscordCheck.setStatusTip(QCoreApplication.translate("ImageNexus", u"Format for Discord", None))
+#endif // QT_CONFIG(statustip)
+        self.t2aDiscordCheck.setText(QCoreApplication.translate("ImageNexus", u"Discord?", None))
         self.toolBox.setItemText(self.toolBox.indexOf(self.txt2ascii), QCoreApplication.translate("ImageNexus", u"TXT2ASCII", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.ascii), QCoreApplication.translate("ImageNexus", u"ASCII", None))
         self.menuFile.setTitle(QCoreApplication.translate("ImageNexus", u"File", None))

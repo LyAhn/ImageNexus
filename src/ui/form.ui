@@ -38,7 +38,7 @@
        <enum>QTabWidget::TabShape::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>5</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="frameExtractor">
        <attribute name="title">
@@ -1001,7 +1001,7 @@
            <enum>QFrame::Shape::StyledPanel</enum>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="img2ascii">
            <property name="geometry">
@@ -1271,6 +1271,16 @@
                    </property>
                    <property name="shortcut">
                     <string>Return</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QCheckBox" name="t2aDiscordCheck">
+                   <property name="statusTip">
+                    <string>Format for Discord</string>
+                   </property>
+                   <property name="text">
+                    <string>Discord?</string>
                    </property>
                   </widget>
                  </item>

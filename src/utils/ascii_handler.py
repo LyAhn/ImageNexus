@@ -29,6 +29,7 @@ class AsciiHandler:
         self.ui.i2aSaveBtn.clicked.connect(self.save_image)
         self.ui.t2aConvertBtn.clicked.connect(self.convert_text)
         self.ui.t2aFontList.itemSelectionChanged.connect(self.update_font_size)
+        self.ui.t2aDiscordCheck.stateChanged.connect(self.convert_text)
 
     def populate_fonts(self):
         self.ui.t2aFontList.clear()
@@ -56,15 +57,35 @@ class AsciiHandler:
         font_size = self.ui.t2aFontSize.currentText()
 
         try:
-            # The 'size' parameter is not used in text2art, so we'll ignore it
             ascii_art = text2art(text, font=selected_font, chr_ignore=True)
-            self.ui.t2aTextOutput.setPlainText(ascii_art)
+
+            # Check if Discord formatting is enabled
+            if self.ui.t2aDiscordCheck.isChecked():
+                ascii_art = self.format_for_discord(ascii_art)
             
+            self.ui.t2aTextOutput.setPlainText(ascii_art)
             # Adjust the text edit size to fit the content
             document_height = self.ui.t2aTextOutput.document().size().height()
             self.ui.t2aTextOutput.setMinimumHeight(int(document_height + 10))  # Add some padding
         except Exception as e:
             QMessageBox.warning(self.ui.centralwidget, "Error", f"Failed to generate ASCII art: {str(e)}")
+
+
+    def format_for_discord(self, ascii_art):
+        # Split the ASCII art into lines
+        lines = ascii_art.split('\n')
+
+        # Add a single space at the beginning of each line
+        indented_lines = [' ' + line for line in lines]
+
+        # Join the lines back together
+        formatted_art = '\n'.join(indented_lines)
+
+        # Wrap the entire art in a single pair of backticks
+        formatted_art = f"```\n{formatted_art}\n```"
+
+        return formatted_art
+
 
     def setup_text_output(self):
         font = QFont("Courier")
