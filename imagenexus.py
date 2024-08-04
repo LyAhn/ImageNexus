@@ -7,6 +7,7 @@ from src.core.qr_generator import QRGenerator
 from src.core.pixelate import Pixelate
 from src.ui.ui_form import Ui_ImageNexus
 from src.utils.aboutDialog import aboutDialog
+from src.utils.ascii_handler import AsciiHandler
 from src.utils.version import appVersion
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtCore import Qt
@@ -25,6 +26,7 @@ class ImageNexus(QMainWindow):
         self.batch_converter = BatchConvert(self.ui)
         self.qr_generator = QRGenerator(self.ui)
         self.pixelizer = Pixelate(self.ui)
+        self.ascii_handler = AsciiHandler(self.ui)
 
         self.setup_connections()
         self.qr_generator.load_qr_templates()
@@ -49,6 +51,9 @@ class ImageNexus(QMainWindow):
 
         if hasattr(self, 'pixelizer'):
             self.pixelizer.resize_image()
+
+        if hasattr(self.ascii_handler.ascii_art, 'resize_event'):
+            self.ascii_handler.resize_event()
 
 
 

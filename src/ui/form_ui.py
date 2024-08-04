@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.0
+## Created by: Qt User Interface Compiler version 6.7.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -16,12 +16,14 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
-    QGraphicsView, QGridLayout, QGroupBox, QLabel,
-    QLayout, QLineEdit, QMainWindow, QMenu,
-    QMenuBar, QProgressBar, QPushButton, QSizePolicy,
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QCheckBox, QComboBox,
+    QFrame, QGraphicsView, QGridLayout, QGroupBox,
+    QLabel, QLayout, QLineEdit, QListWidget,
+    QListWidgetItem, QMainWindow, QMenu, QMenuBar,
+    QPlainTextEdit, QProgressBar, QPushButton, QSizePolicy,
     QSlider, QSpacerItem, QSpinBox, QStatusBar,
-    QTabWidget, QTextEdit, QToolButton, QWidget)
+    QTabWidget, QTextEdit, QToolBox, QToolButton,
+    QWidget)
 import resources_rc
 
 class Ui_ImageNexus(object):
@@ -29,9 +31,9 @@ class Ui_ImageNexus(object):
         if not ImageNexus.objectName():
             ImageNexus.setObjectName(u"ImageNexus")
         ImageNexus.resize(872, 602)
-        ImageNexus.setMinimumSize(QSize(650, 475))
+        ImageNexus.setMinimumSize(QSize(872, 602))
         icon = QIcon()
-        icon.addFile(u":/images/resources/icon.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u":/images/resources/icon.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         ImageNexus.setWindowIcon(icon)
         self.actionHelp = QAction(ImageNexus)
         self.actionHelp.setObjectName(u"actionHelp")
@@ -43,11 +45,11 @@ class Ui_ImageNexus(object):
         self.actionExit.setObjectName(u"actionExit")
         self.actionReloadTemplates = QAction(ImageNexus)
         self.actionReloadTemplates.setObjectName(u"actionReloadTemplates")
-        icon1 = QIcon(QIcon.fromTheme(u"QIcon::ThemeIcon::ViewRefresh"))
+        icon1 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.ViewRefresh))
         self.actionReloadTemplates.setIcon(icon1)
         self.actionQRTemplateEditor = QAction(ImageNexus)
         self.actionQRTemplateEditor.setObjectName(u"actionQRTemplateEditor")
-        icon2 = QIcon(QIcon.fromTheme(u"QIcon::ThemeIcon::InputKeyboard"))
+        icon2 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.InputKeyboard))
         self.actionQRTemplateEditor.setIcon(icon2)
         self.centralwidget = QWidget(ImageNexus)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -480,11 +482,10 @@ class Ui_ImageNexus(object):
         sizePolicy2.setHeightForWidth(self.qrPlaceholderEditor.sizePolicy().hasHeightForWidth())
         self.qrPlaceholderEditor.setSizePolicy(sizePolicy2)
         icon3 = QIcon()
-        iconThemeName = u"QIcon::ThemeIcon::DocumentProperties"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon3 = QIcon.fromTheme(iconThemeName)
+        if QIcon.hasThemeIcon(QIcon.ThemeIcon.DocumentProperties):
+            icon3 = QIcon.fromTheme(QIcon.ThemeIcon.DocumentProperties)
         else:
-            icon3.addFile(u":/images/resources/wrench32px.ico", QSize(), QIcon.Normal, QIcon.Off)
+            icon3.addFile(u":/images/resources/wrench32px.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
 
         self.qrPlaceholderEditor.setIcon(icon3)
 
@@ -636,8 +637,196 @@ class Ui_ImageNexus(object):
         self.gridLayout_17.addWidget(self.pxOutput, 0, 2, 1, 1)
 
         self.tabWidget.addTab(self.pixelTab, "")
+        self.ascii = QWidget()
+        self.ascii.setObjectName(u"ascii")
+        self.gridLayout_19 = QGridLayout(self.ascii)
+        self.gridLayout_19.setObjectName(u"gridLayout_19")
+        self.toolBox = QToolBox(self.ascii)
+        self.toolBox.setObjectName(u"toolBox")
+        self.toolBox.setFrameShape(QFrame.Shape.StyledPanel)
+        self.img2ascii = QWidget()
+        self.img2ascii.setObjectName(u"img2ascii")
+        self.img2ascii.setGeometry(QRect(0, 0, 830, 431))
+        self.gridLayout_24 = QGridLayout(self.img2ascii)
+        self.gridLayout_24.setObjectName(u"gridLayout_24")
+        self.i2aInputFrame = QFrame(self.img2ascii)
+        self.i2aInputFrame.setObjectName(u"i2aInputFrame")
+        self.i2aInputFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.i2aInputFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.gridLayout_23 = QGridLayout(self.i2aInputFrame)
+        self.gridLayout_23.setObjectName(u"gridLayout_23")
+        self.i2aInputGridLayout = QGridLayout()
+        self.i2aInputGridLayout.setObjectName(u"i2aInputGridLayout")
+        self.i2aInputGridLayout.setHorizontalSpacing(6)
+        self.i2aLoadImageBtn = QPushButton(self.i2aInputFrame)
+        self.i2aLoadImageBtn.setObjectName(u"i2aLoadImageBtn")
+        sizePolicy.setHeightForWidth(self.i2aLoadImageBtn.sizePolicy().hasHeightForWidth())
+        self.i2aLoadImageBtn.setSizePolicy(sizePolicy)
 
-        self.gridLayout_12.addWidget(self.tabWidget, 1, 0, 1, 1)
+        self.i2aInputGridLayout.addWidget(self.i2aLoadImageBtn, 0, 0, 1, 2)
+
+        self.i2aFontSizeLbl = QLabel(self.i2aInputFrame)
+        self.i2aFontSizeLbl.setObjectName(u"i2aFontSizeLbl")
+
+        self.i2aInputGridLayout.addWidget(self.i2aFontSizeLbl, 1, 0, 1, 1)
+
+        self.i2aFontSize = QSpinBox(self.i2aInputFrame)
+        self.i2aFontSize.setObjectName(u"i2aFontSize")
+        self.i2aFontSize.setMinimumSize(QSize(71, 0))
+        self.i2aFontSize.setMaximum(64)
+        self.i2aFontSize.setSingleStep(2)
+        self.i2aFontSize.setValue(12)
+
+        self.i2aInputGridLayout.addWidget(self.i2aFontSize, 1, 1, 1, 1)
+
+        self.i2aCharSizeLbl = QLabel(self.i2aInputFrame)
+        self.i2aCharSizeLbl.setObjectName(u"i2aCharSizeLbl")
+
+        self.i2aInputGridLayout.addWidget(self.i2aCharSizeLbl, 2, 0, 1, 1)
+
+        self.i2aCharSize = QSpinBox(self.i2aInputFrame)
+        self.i2aCharSize.setObjectName(u"i2aCharSize")
+        self.i2aCharSize.setMinimumSize(QSize(71, 0))
+        self.i2aCharSize.setMaximum(64)
+        self.i2aCharSize.setSingleStep(2)
+        self.i2aCharSize.setValue(12)
+
+        self.i2aInputGridLayout.addWidget(self.i2aCharSize, 2, 1, 1, 1)
+
+
+        self.gridLayout_23.addLayout(self.i2aInputGridLayout, 2, 0, 1, 1)
+
+        self.i2aInputSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.gridLayout_23.addItem(self.i2aInputSpacer, 5, 0, 1, 1)
+
+        self.i2aConvertBtn = QPushButton(self.i2aInputFrame)
+        self.i2aConvertBtn.setObjectName(u"i2aConvertBtn")
+
+        self.gridLayout_23.addWidget(self.i2aConvertBtn, 2, 1, 1, 1)
+
+        self.i2aSaveBtn = QPushButton(self.i2aInputFrame)
+        self.i2aSaveBtn.setObjectName(u"i2aSaveBtn")
+
+        self.gridLayout_23.addWidget(self.i2aSaveBtn, 3, 1, 1, 1)
+
+
+        self.gridLayout_24.addWidget(self.i2aInputFrame, 0, 0, 1, 1)
+
+        self.line = QFrame(self.img2ascii)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShape(QFrame.Shape.VLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.gridLayout_24.addWidget(self.line, 0, 1, 1, 1)
+
+        self.i2aOutputFrame = QFrame(self.img2ascii)
+        self.i2aOutputFrame.setObjectName(u"i2aOutputFrame")
+        sizePolicy4.setHeightForWidth(self.i2aOutputFrame.sizePolicy().hasHeightForWidth())
+        self.i2aOutputFrame.setSizePolicy(sizePolicy4)
+        self.i2aOutputFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.i2aOutputFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.gridLayout_22 = QGridLayout(self.i2aOutputFrame)
+        self.gridLayout_22.setObjectName(u"gridLayout_22")
+        self.i2aOutputGroup = QGroupBox(self.i2aOutputFrame)
+        self.i2aOutputGroup.setObjectName(u"i2aOutputGroup")
+        self.gridLayout_18 = QGridLayout(self.i2aOutputGroup)
+        self.gridLayout_18.setObjectName(u"gridLayout_18")
+        self.i2aGraphicsView = QGraphicsView(self.i2aOutputGroup)
+        self.i2aGraphicsView.setObjectName(u"i2aGraphicsView")
+
+        self.gridLayout_18.addWidget(self.i2aGraphicsView, 0, 0, 1, 1)
+
+
+        self.gridLayout_22.addWidget(self.i2aOutputGroup, 0, 0, 1, 1)
+
+
+        self.gridLayout_24.addWidget(self.i2aOutputFrame, 0, 2, 1, 1)
+
+        self.toolBox.addItem(self.img2ascii, u"IMG2ASCII")
+        self.txt2ascii = QWidget()
+        self.txt2ascii.setObjectName(u"txt2ascii")
+        self.txt2ascii.setGeometry(QRect(0, 0, 830, 431))
+        self.gridLayout_27 = QGridLayout(self.txt2ascii)
+        self.gridLayout_27.setObjectName(u"gridLayout_27")
+        self.t2aInputFrame = QFrame(self.txt2ascii)
+        self.t2aInputFrame.setObjectName(u"t2aInputFrame")
+        sizePolicy.setHeightForWidth(self.t2aInputFrame.sizePolicy().hasHeightForWidth())
+        self.t2aInputFrame.setSizePolicy(sizePolicy)
+        self.t2aInputFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.t2aInputFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.gridLayout_28 = QGridLayout(self.t2aInputFrame)
+        self.gridLayout_28.setObjectName(u"gridLayout_28")
+        self.t2aFontGridLayout = QGridLayout()
+        self.t2aFontGridLayout.setObjectName(u"t2aFontGridLayout")
+        self.t2aFontsLbl = QLabel(self.t2aInputFrame)
+        self.t2aFontsLbl.setObjectName(u"t2aFontsLbl")
+
+        self.t2aFontGridLayout.addWidget(self.t2aFontsLbl, 0, 0, 1, 1)
+
+        self.t2aFontList = QListWidget(self.t2aInputFrame)
+        self.t2aFontList.setObjectName(u"t2aFontList")
+        self.t2aFontList.setMinimumSize(QSize(284, 171))
+        self.t2aFontList.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+
+        self.t2aFontGridLayout.addWidget(self.t2aFontList, 1, 0, 1, 1)
+
+
+        self.gridLayout_28.addLayout(self.t2aFontGridLayout, 0, 0, 1, 1)
+
+        self.t2aInputGridLayout = QGridLayout()
+        self.t2aInputGridLayout.setObjectName(u"t2aInputGridLayout")
+        self.t2aInputGridLayout.setVerticalSpacing(31)
+        self.t2aInputGridLayout.setContentsMargins(5, 10, 8, 30)
+        self.t2aTextInput = QLineEdit(self.t2aInputFrame)
+        self.t2aTextInput.setObjectName(u"t2aTextInput")
+        self.t2aTextInput.setMinimumSize(QSize(401, 41))
+
+        self.t2aInputGridLayout.addWidget(self.t2aTextInput, 0, 0, 1, 1)
+
+        self.t2aFontSize = QComboBox(self.t2aInputFrame)
+        self.t2aFontSize.setObjectName(u"t2aFontSize")
+        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
+        sizePolicy6.setHorizontalStretch(0)
+        sizePolicy6.setVerticalStretch(0)
+        sizePolicy6.setHeightForWidth(self.t2aFontSize.sizePolicy().hasHeightForWidth())
+        self.t2aFontSize.setSizePolicy(sizePolicy6)
+        self.t2aFontSize.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToContents)
+
+        self.t2aInputGridLayout.addWidget(self.t2aFontSize, 1, 0, 1, 1)
+
+        self.t2aConvertBtn = QPushButton(self.t2aInputFrame)
+        self.t2aConvertBtn.setObjectName(u"t2aConvertBtn")
+
+        self.t2aInputGridLayout.addWidget(self.t2aConvertBtn, 1, 1, 1, 1)
+
+
+        self.gridLayout_28.addLayout(self.t2aInputGridLayout, 0, 1, 1, 1)
+
+
+        self.gridLayout_27.addWidget(self.t2aInputFrame, 0, 0, 1, 1)
+
+        self.t2aOutputFrame = QFrame(self.txt2ascii)
+        self.t2aOutputFrame.setObjectName(u"t2aOutputFrame")
+        self.t2aOutputFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.t2aOutputFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.gridLayout_29 = QGridLayout(self.t2aOutputFrame)
+        self.gridLayout_29.setObjectName(u"gridLayout_29")
+        self.t2aTextOutput = QPlainTextEdit(self.t2aOutputFrame)
+        self.t2aTextOutput.setObjectName(u"t2aTextOutput")
+
+        self.gridLayout_29.addWidget(self.t2aTextOutput, 0, 0, 1, 1)
+
+
+        self.gridLayout_27.addWidget(self.t2aOutputFrame, 1, 0, 1, 1)
+
+        self.toolBox.addItem(self.txt2ascii, u"TXT2ASCII")
+
+        self.gridLayout_19.addWidget(self.toolBox, 1, 0, 1, 1)
+
+        self.tabWidget.addTab(self.ascii, "")
+
+        self.gridLayout_12.addWidget(self.tabWidget, 0, 0, 1, 1)
 
         ImageNexus.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(ImageNexus)
@@ -668,8 +857,9 @@ class Ui_ImageNexus(object):
         self.pxSizeSlider.sliderMoved.connect(self.pxSpinBox.setValue)
         self.pxSpinBox.valueChanged.connect(self.pxSizeSlider.setValue)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(5)
         self.qrGenButton.setDefault(False)
+        self.toolBox.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(ImageNexus)
@@ -800,6 +990,22 @@ class Ui_ImageNexus(object):
         self.pxPixelateBtn.setText(QCoreApplication.translate("ImageNexus", u"Pixelate", None))
         self.pxFileTypeLbl.setText(QCoreApplication.translate("ImageNexus", u"FIle Type", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.pixelTab), QCoreApplication.translate("ImageNexus", u"Quick Pixelator", None))
+        self.i2aLoadImageBtn.setText(QCoreApplication.translate("ImageNexus", u"Load Image", None))
+        self.i2aFontSizeLbl.setText(QCoreApplication.translate("ImageNexus", u"Font Size", None))
+        self.i2aCharSizeLbl.setText(QCoreApplication.translate("ImageNexus", u"Char Size", None))
+        self.i2aConvertBtn.setText(QCoreApplication.translate("ImageNexus", u"Convert", None))
+        self.i2aSaveBtn.setText(QCoreApplication.translate("ImageNexus", u"Save Image", None))
+        self.i2aOutputGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Output", None))
+        self.toolBox.setItemText(self.toolBox.indexOf(self.img2ascii), QCoreApplication.translate("ImageNexus", u"IMG2ASCII", None))
+        self.t2aFontsLbl.setText(QCoreApplication.translate("ImageNexus", u"Fonts:", None))
+        self.t2aTextInput.setPlaceholderText(QCoreApplication.translate("ImageNexus", u"Enter some text...", None))
+        self.t2aFontSize.setPlaceholderText(QCoreApplication.translate("ImageNexus", u"Choose Size", None))
+        self.t2aConvertBtn.setText(QCoreApplication.translate("ImageNexus", u"Convert", None))
+#if QT_CONFIG(shortcut)
+        self.t2aConvertBtn.setShortcut(QCoreApplication.translate("ImageNexus", u"Return", None))
+#endif // QT_CONFIG(shortcut)
+        self.toolBox.setItemText(self.toolBox.indexOf(self.txt2ascii), QCoreApplication.translate("ImageNexus", u"TXT2ASCII", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.ascii), QCoreApplication.translate("ImageNexus", u"ASCII", None))
         self.menuFile.setTitle(QCoreApplication.translate("ImageNexus", u"File", None))
         self.menuTools.setTitle(QCoreApplication.translate("ImageNexus", u"Tools", None))
         self.menuHelp.setTitle(QCoreApplication.translate("ImageNexus", u"Help", None))
