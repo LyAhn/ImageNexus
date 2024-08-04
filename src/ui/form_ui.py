@@ -738,6 +738,12 @@ class Ui_ImageNexus(object):
 
         self.gridLayout_23.addWidget(self.i2aSaveBtn, 3, 1, 1, 1)
 
+        self.i2aAddBgCheck = QCheckBox(self.i2aInputFrame)
+        self.i2aAddBgCheck.setObjectName(u"i2aAddBgCheck")
+        self.i2aAddBgCheck.setChecked(False)
+
+        self.gridLayout_23.addWidget(self.i2aAddBgCheck, 3, 0, 1, 1)
+
 
         self.gridLayout_24.addWidget(self.i2aInputFrame, 0, 0, 1, 1)
 
@@ -847,6 +853,11 @@ class Ui_ImageNexus(object):
         self.gridLayout_29.setObjectName(u"gridLayout_29")
         self.t2aTextOutput = QPlainTextEdit(self.t2aOutputFrame)
         self.t2aTextOutput.setObjectName(u"t2aTextOutput")
+        font = QFont()
+        font.setPointSize(12)
+        self.t2aTextOutput.setFont(font)
+        self.t2aTextOutput.setReadOnly(True)
+        self.t2aTextOutput.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByKeyboard|Qt.TextInteractionFlag.TextSelectableByMouse)
 
         self.gridLayout_29.addWidget(self.t2aTextOutput, 0, 0, 1, 1)
 
@@ -1028,6 +1039,7 @@ class Ui_ImageNexus(object):
         self.i2aCharSizeLbl.setText(QCoreApplication.translate("ImageNexus", u"Char Size", None))
         self.i2aConvertBtn.setText(QCoreApplication.translate("ImageNexus", u"Convert", None))
         self.i2aSaveBtn.setText(QCoreApplication.translate("ImageNexus", u"Save Image", None))
+        self.i2aAddBgCheck.setText(QCoreApplication.translate("ImageNexus", u"Add Background", None))
         self.i2aOutputGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Output", None))
         self.toolBox.setItemText(self.toolBox.indexOf(self.img2ascii), QCoreApplication.translate("ImageNexus", u"IMG2ASCII", None))
         self.t2aFontsLbl.setText(QCoreApplication.translate("ImageNexus", u"Fonts:", None))

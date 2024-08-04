@@ -25,19 +25,22 @@ class AsciiArt:
         self.pixmap_item = None
         self.original_pixmap = None
 
-    def apply_ascii_art_effect(self, image_path, char_size, font_size):
-        img = cv2.imread(image_path)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        result = self.ascii_art_effect(img, char_size, font_size)
+    def apply_ascii_art_effect(self, image_path, char_size, font_size, add_background=False):
+        img = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
+        if img.shape[2] == 3:  # If the image is RGB, add an alpha channel
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2BGRA)
+        else:
+            img = cv2.cvtColor(img, cv2.COLOR_BGRA2RGBA)
+
+        result = self.ascii_art_effect(img, char_size, font_size, add_background)
 
         height, width, channel = result.shape
-        bytes_per_line = 3 * width
-        qimage = QImage(result.data, width, height, bytes_per_line, QImage.Format_RGB888)
+        bytes_per_line = 4 * width
+        qimage = QImage(result.data, width, height, bytes_per_line, QImage.Format_RGBA8888)
         self.original_pixmap = QPixmap.fromImage(qimage)
         self.update_display()
 
-
-    def ascii_art_effect(self, image, char_size, font_size):
+    def ascii_art_effect(self, image, char_size, font_size, add_background=False):
         chars = " .'`^\",:;I1!i><-+_-?][}{1)(|\/tfjrxnuvczXYUCLQ0OZmwqpbdkhao*#MW&8%B@$"
         height, width = image.shape[:2]
         small_image = cv2.resize(image, (width // char_size, height // char_size), interpolation=cv2.INTER_NEAREST)
@@ -45,18 +48,34 @@ class AsciiArt:
         def get_char(value):
             return chars[int(value * len(chars) / 256)]
 
-        ascii_image = np.zeros((height, width, 3), dtype=np.uint8)
+        ascii_image = np.zeros((height, width, 4), dtype=np.uint8)
 
         for i in range(small_image.shape[0]):
             for j in range(small_image.shape[1]):
-                r, g, b = small_image[i, j]
+                r, g, b, a = small_image[i, j]
+                if a == 0:  # Fully transparent pixel
+                    continue  # Skip this pixel
                 k = (int(r) + int(g) + int(b)) // 3
-                cv2.putText(ascii_image, get_char(k),
-                            (j * char_size, i * char_size + font_size),
-                            cv2.FONT_HERSHEY_SIMPLEX, font_size / 30,
-                            (int(r), int(g), int(b)), 1, cv2.LINE_AA)
+                if k > 10:  # Only draw characters for non-black areas
+                    cv2.putText(ascii_image, get_char(k),
+                                (j * char_size, i * char_size + font_size),
+                                cv2.FONT_HERSHEY_SIMPLEX, font_size / 30,
+                                (int(r), int(g), int(b), int(a)), 1, cv2.LINE_AA)
 
-        return ascii_image
+        if add_background:
+            # Create a black background
+            background = np.zeros((height, width, 4), dtype=np.uint8)
+            background[:, :, 3] = 255  # Set alpha to fully opaque
+
+            # Blend the ASCII art with the background
+            alpha = ascii_image[:, :, 3:4] / 255.0
+            ascii_image = alpha * ascii_image[:, :, :3] + (1 - alpha) * background[:, :, :3]
+            ascii_image = np.concatenate([ascii_image, np.full((height, width, 1), 255, dtype=np.uint8)], axis=2)
+        else:
+            # Keep the original transparency
+            pass
+
+        return ascii_image.astype(np.uint8)
 
     def text_to_ascii(self, text, font, size=""):
         return text2art(text, font=font, chr_ignore=True) if size == "" else text2art(text, font=font, chr_ignore=True, size=size)

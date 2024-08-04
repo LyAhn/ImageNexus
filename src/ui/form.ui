@@ -1156,6 +1156,16 @@ QToolBox::pane {
                  </property>
                 </widget>
                </item>
+               <item row="3" column="0">
+                <widget class="QCheckBox" name="i2aAddBgCheck">
+                 <property name="text">
+                  <string>Add Background</string>
+                 </property>
+                 <property name="checked">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>
@@ -1331,7 +1341,19 @@ QToolBox::pane {
               </property>
               <layout class="QGridLayout" name="gridLayout_29">
                <item row="0" column="0">
-                <widget class="QPlainTextEdit" name="t2aTextOutput"/>
+                <widget class="QPlainTextEdit" name="t2aTextOutput">
+                 <property name="font">
+                  <font>
+                   <pointsize>12</pointsize>
+                  </font>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+                 </property>
+                </widget>
                </item>
               </layout>
              </widget>

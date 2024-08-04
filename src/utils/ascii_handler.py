@@ -27,6 +27,7 @@ class AsciiHandler:
         self.ui.i2aLoadImageBtn.clicked.connect(self.load_image)
         self.ui.i2aConvertBtn.clicked.connect(self.convert_image)
         self.ui.i2aSaveBtn.clicked.connect(self.save_image)
+        self.ui.i2aAddBgCheck.stateChanged.connect(self.convert_image)
         self.ui.t2aConvertBtn.clicked.connect(self.convert_text)
         self.ui.t2aFontList.itemSelectionChanged.connect(self.update_font_size)
         self.ui.t2aDiscordCheck.stateChanged.connect(self.convert_text)
@@ -54,7 +55,7 @@ class AsciiHandler:
             QMessageBox.warning(self.ui.centralwidget, "Error", "Please select a font.")
             return
 
-        font_size = self.ui.t2aFontSize.currentText()
+        #font_size = self.ui.t2aFontSize.currentText()
 
         try:
             ascii_art = text2art(text, font=selected_font, chr_ignore=True)
@@ -62,7 +63,7 @@ class AsciiHandler:
             # Check if Discord formatting is enabled
             if self.ui.t2aDiscordCheck.isChecked():
                 ascii_art = self.format_for_discord(ascii_art)
-            
+
             self.ui.t2aTextOutput.setPlainText(ascii_art)
             # Adjust the text edit size to fit the content
             document_height = self.ui.t2aTextOutput.document().size().height()
@@ -91,13 +92,13 @@ class AsciiHandler:
         font = QFont("Courier")
         font.setStyleHint(QFont.Monospace)
         font.setFixedPitch(True)
-        font.setPointSize(10)
+        font.setPointSize(12)
         self.ui.t2aTextOutput.setFont(font)
         self.ui.t2aTextOutput.setLineWrapMode(QPlainTextEdit.NoWrap)
 
     def load_image(self):
         file_dialog = QFileDialog()
-        image_path, _ = file_dialog.getOpenFileName(self.ui.centralwidget, "Select Image", "", "Image Files (*.png *.jpg *.bmp)")
+        image_path, _ = file_dialog.getOpenFileName(self.ui.centralwidget, "Select Image", "", "Image Files (*.png *.jpg *.bmp *.tiff *.gif)")
         if image_path:
             self.image_path = image_path
             self.ascii_art.apply_ascii_art_effect(image_path, self.ui.i2aCharSize.value(), self.ui.i2aFontSize.value())
@@ -106,15 +107,15 @@ class AsciiHandler:
         if hasattr(self, 'image_path'):
             char_size = self.ui.i2aCharSize.value()
             font_size = self.ui.i2aFontSize.value()
-            self.ascii_art.apply_ascii_art_effect(self.image_path, char_size, font_size)
+            add_background = self.ui.i2aAddBgCheck.isChecked()
+            self.ascii_art.apply_ascii_art_effect(self.image_path, char_size, font_size, add_background)
 
     def save_image(self):
         if self.ascii_art.original_pixmap:
             file_dialog = QFileDialog()
-            file_path, _ = file_dialog.getSaveFileName(self.ui.centralwidget, "Save ASCII Art", "", "PNG Files (*.png);;JPEG Files (*.jpg *.jpeg);;All Files (*)")
-
+            file_path, _ = file_dialog.getSaveFileName(self.ui.centralwidget, "Save ASCII Art", "", "PNG Files (*.png)")
             if file_path:
-                if self.ascii_art.original_pixmap.save(file_path):
+                if self.ascii_art.original_pixmap.save(file_path, "PNG"):  # Specify PNG format
                     QMessageBox.information(self.ui.centralwidget, "Success", "ASCII art saved successfully!")
                 else:
                     QMessageBox.warning(self.ui.centralwidget, "Error", "Failed to save ASCII art.")
