@@ -643,7 +643,22 @@ class Ui_ImageNexus(object):
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.toolBox = QToolBox(self.ascii)
         self.toolBox.setObjectName(u"toolBox")
+        self.toolBox.setStyleSheet(u"QToolBox::tab {\n"
+"    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                stop: 0 #4a4a4a, stop: 1.0 #2b2b2b);\n"
+"    color: #ffffff;\n"
+"    border-radius: 5px;\n"
+"    padding: 5px;\n"
+"    margin: 2px;\n"
+"}\n"
+"\n"
+"QToolBox::tab:selected {\n"
+"    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                stop: 0 #6a6a6a, stop: 1.0 #4b4b4b);\n"
+"    font-weight: bold;\n"
+"}")
         self.toolBox.setFrameShape(QFrame.Shape.StyledPanel)
+        self.toolBox.setFrameShadow(QFrame.Shadow.Plain)
         self.img2ascii = QWidget()
         self.img2ascii.setObjectName(u"img2ascii")
         self.img2ascii.setGeometry(QRect(0, 0, 830, 431))

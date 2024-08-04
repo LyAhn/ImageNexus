@@ -17,12 +17,13 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QGraphicsView, QLabel,
     QSizePolicy, QTextEdit, QWidget)
+import rc_resources
 
 class Ui_aboutWindow(object):
     def setupUi(self, aboutWindow):
         if not aboutWindow.objectName():
             aboutWindow.setObjectName(u"aboutWindow")
-        aboutWindow.setWindowModality(Qt.ApplicationModal)
+        aboutWindow.setWindowModality(Qt.WindowModality.ApplicationModal)
         aboutWindow.resize(472, 516)
         aboutWindow.setMinimumSize(QSize(472, 516))
         aboutWindow.setMaximumSize(QSize(472, 516))
@@ -65,9 +66,9 @@ class Ui_aboutWindow(object):
         font1.setFamilies([u"Roboto"])
         self.aboutText.setFont(font1)
         self.aboutText.setMouseTracking(False)
-        self.aboutText.setFocusPolicy(Qt.NoFocus)
-        self.aboutText.setAutoFormatting(QTextEdit.AutoAll)
-        self.aboutText.setTextInteractionFlags(Qt.LinksAccessibleByMouse)
+        self.aboutText.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.aboutText.setAutoFormatting(QTextEdit.AutoFormattingFlag.AutoAll)
+        self.aboutText.setTextInteractionFlags(Qt.TextInteractionFlag.LinksAccessibleByMouse)
         self.ghLink = QLabel(aboutWindow)
         self.ghLink.setObjectName(u"ghLink")
         self.ghLink.setGeometry(QRect(40, 480, 111, 16))

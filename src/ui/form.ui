@@ -997,8 +997,27 @@
        <layout class="QGridLayout" name="gridLayout_19">
         <item row="1" column="0">
          <widget class="QToolBox" name="toolBox">
+          <property name="styleSheet">
+           <string notr="true">QToolBox::tab {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #4a4a4a, stop: 1.0 #2b2b2b);
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 2px;
+}
+
+QToolBox::tab:selected {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #6a6a6a, stop: 1.0 #4b4b4b);
+    font-weight: bold;
+}</string>
+          </property>
           <property name="frameShape">
            <enum>QFrame::Shape::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Plain</enum>
           </property>
           <property name="currentIndex">
            <number>0</number>

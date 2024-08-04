@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>LyAhn</author>
  <class>aboutWindow</class>
  <widget class="QWidget" name="aboutWindow">
   <property name="windowModality">
-   <enum>Qt::ApplicationModal</enum>
+   <enum>Qt::WindowModality::ApplicationModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -29,7 +30,7 @@
    <string>About</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="../../resources.qrc">
     <normaloff>:/images/resources/icon.ico</normaloff>:/images/resources/icon.ico</iconset>
   </property>
   <widget class="QLabel" name="appTextLabel">
@@ -67,7 +68,7 @@
     </sizepolicy>
    </property>
    <property name="orientation">
-    <enum>Qt::Horizontal</enum>
+    <enum>Qt::Orientation::Horizontal</enum>
    </property>
   </widget>
   <widget class="QLabel" name="versionLabel">
@@ -137,10 +138,10 @@
     <bool>false</bool>
    </property>
    <property name="focusPolicy">
-    <enum>Qt::NoFocus</enum>
+    <enum>Qt::FocusPolicy::NoFocus</enum>
    </property>
    <property name="autoFormatting">
-    <set>QTextEdit::AutoAll</set>
+    <set>QTextEdit::AutoFormattingFlag::AutoAll</set>
    </property>
    <property name="html">
     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -161,7 +162,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This software is licenced under the GNU General Public Licence v3.0 (GPL-3.0)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="textInteractionFlags">
-    <set>Qt::LinksAccessibleByMouse</set>
+    <set>Qt::TextInteractionFlag::LinksAccessibleByMouse</set>
    </property>
   </widget>
   <widget class="QLabel" name="ghLink">
@@ -178,6 +179,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
