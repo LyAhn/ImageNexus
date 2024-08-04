@@ -998,19 +998,32 @@
         <item row="1" column="0">
          <widget class="QToolBox" name="toolBox">
           <property name="styleSheet">
-           <string notr="true">QToolBox::tab {
-    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                stop: 0 #4a4a4a, stop: 1.0 #2b2b2b);
-    color: #ffffff;
+           <string notr="true">QToolBox {
+    border: none;
+}
+
+QToolBox::tab {
+    background: palette(base);
+    color: palette(text);
     border-radius: 5px;
     padding: 5px;
     margin: 2px;
 }
 
 QToolBox::tab:selected {
-    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                stop: 0 #6a6a6a, stop: 1.0 #4b4b4b);
+    background: palette(highlight);
+    color: palette(highlighted-text);
     font-weight: bold;
+}
+
+QToolBox::tab:hover {
+    background: palette(alternate-base);
+}
+
+QToolBox::pane {
+    border: 1px solid palette(mid);
+    background: palette(window);
+    border-radius: 5px;
 }</string>
           </property>
           <property name="frameShape">
@@ -1027,8 +1040,8 @@ QToolBox::tab:selected {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>830</width>
-             <height>431</height>
+             <width>832</width>
+             <height>433</height>
             </rect>
            </property>
            <attribute name="label">
@@ -1190,8 +1203,8 @@ QToolBox::tab:selected {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>830</width>
-             <height>431</height>
+             <width>832</width>
+             <height>433</height>
             </rect>
            </property>
            <attribute name="label">

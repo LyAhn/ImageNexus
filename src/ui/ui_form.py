@@ -643,25 +643,38 @@ class Ui_ImageNexus(object):
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.toolBox = QToolBox(self.ascii)
         self.toolBox.setObjectName(u"toolBox")
-        self.toolBox.setStyleSheet(u"QToolBox::tab {\n"
-"    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
-"                                stop: 0 #4a4a4a, stop: 1.0 #2b2b2b);\n"
-"    color: #ffffff;\n"
+        self.toolBox.setStyleSheet(u"QToolBox {\n"
+"    border: none;\n"
+"}\n"
+"\n"
+"QToolBox::tab {\n"
+"    background: palette(base);\n"
+"    color: palette(text);\n"
 "    border-radius: 5px;\n"
 "    padding: 5px;\n"
 "    margin: 2px;\n"
 "}\n"
 "\n"
 "QToolBox::tab:selected {\n"
-"    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
-"                                stop: 0 #6a6a6a, stop: 1.0 #4b4b4b);\n"
+"    background: palette(highlight);\n"
+"    color: palette(highlighted-text);\n"
 "    font-weight: bold;\n"
+"}\n"
+"\n"
+"QToolBox::tab:hover {\n"
+"    background: palette(alternate-base);\n"
+"}\n"
+"\n"
+"QToolBox::pane {\n"
+"    border: 1px solid palette(mid);\n"
+"    background: palette(window);\n"
+"    border-radius: 5px;\n"
 "}")
         self.toolBox.setFrameShape(QFrame.Shape.StyledPanel)
         self.toolBox.setFrameShadow(QFrame.Shadow.Plain)
         self.img2ascii = QWidget()
         self.img2ascii.setObjectName(u"img2ascii")
-        self.img2ascii.setGeometry(QRect(0, 0, 830, 431))
+        self.img2ascii.setGeometry(QRect(0, 0, 832, 433))
         self.gridLayout_24 = QGridLayout(self.img2ascii)
         self.gridLayout_24.setObjectName(u"gridLayout_24")
         self.i2aInputFrame = QFrame(self.img2ascii)
@@ -761,7 +774,7 @@ class Ui_ImageNexus(object):
         self.toolBox.addItem(self.img2ascii, u"IMG2ASCII")
         self.txt2ascii = QWidget()
         self.txt2ascii.setObjectName(u"txt2ascii")
-        self.txt2ascii.setGeometry(QRect(0, 0, 830, 431))
+        self.txt2ascii.setGeometry(QRect(0, 0, 832, 433))
         self.gridLayout_27 = QGridLayout(self.txt2ascii)
         self.gridLayout_27.setObjectName(u"gridLayout_27")
         self.t2aInputFrame = QFrame(self.txt2ascii)
