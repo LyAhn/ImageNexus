@@ -22,6 +22,7 @@ class AsciiHandler:
         self.setup_connections()
         self.populate_fonts()
         self.setup_text_output()
+        self.setup_search()
 
     def setup_connections(self):
         self.ui.i2aLoadImageBtn.clicked.connect(self.load_image)
@@ -31,10 +32,27 @@ class AsciiHandler:
         self.ui.t2aConvertBtn.clicked.connect(self.convert_text)
         self.ui.t2aFontList.itemSelectionChanged.connect(self.update_font_size)
         self.ui.t2aDiscordCheck.stateChanged.connect(self.convert_text)
+        self.ui.t2aFontSearch.textChanged.connect(self.filter_fonts)
+
+    def setup_search(self):
+        # Connect the textChanged event of the search field to the filter_fonts method
+        self.ui.t2aFontSearch.textChanged.connect(self.filter_fonts)
+
+        # Grab the font names from the FONT_NAMES list
+        self.all_fonts = FONT_NAMES
 
     def populate_fonts(self):
         self.ui.t2aFontList.clear()
         self.ui.t2aFontList.addItems(FONT_NAMES)
+
+    def filter_fonts(self):
+        search_text = self.ui.t2aFontSearch.text().lower()
+        for i in range(self.ui.t2aFontList.count()):
+            item = self.ui.t2aFontList.item(i)
+            if search_text in item.text().lower():
+                item.setHidden(False)
+            else:
+                item.setHidden(True)
 
     def update_font_size(self):
         selected_font = self.ui.t2aFontList.currentItem().text()

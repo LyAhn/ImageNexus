@@ -46,21 +46,25 @@ class AsciiArt:
         small_image = cv2.resize(image, (width // char_size, height // char_size), interpolation=cv2.INTER_NEAREST)
 
         def get_char(value):
-            return chars[int(value * len(chars) / 256)]
+            return chars[int(value * (len(chars) - 1) / 255)]
 
         ascii_image = np.zeros((height, width, 4), dtype=np.uint8)
 
         for i in range(small_image.shape[0]):
             for j in range(small_image.shape[1]):
                 r, g, b, a = small_image[i, j]
-                if a == 0:  # Fully transparent pixel
-                    continue  # Skip this pixel
+
+                # Only skip if the pixel is fully transparent
+                if a == 0:
+                    continue
+
                 k = (int(r) + int(g) + int(b)) // 3
-                if k > 10:  # Only draw characters for non-black areas
-                    cv2.putText(ascii_image, get_char(k),
-                                (j * char_size, i * char_size + font_size),
-                                cv2.FONT_HERSHEY_SIMPLEX, font_size / 30,
-                                (int(r), int(g), int(b), int(a)), 1, cv2.LINE_AA)
+
+                # Draw characters for all non-transparent pixels, including black
+                cv2.putText(ascii_image, get_char(k),
+                            (j * char_size, i * char_size + font_size),
+                            cv2.FONT_HERSHEY_SIMPLEX, font_size / 30,
+                            (int(r), int(g), int(b), int(a)), 1, cv2.LINE_AA)
 
         if add_background:
             # Create a black background
@@ -71,15 +75,11 @@ class AsciiArt:
             alpha = ascii_image[:, :, 3:4] / 255.0
             ascii_image = alpha * ascii_image[:, :, :3] + (1 - alpha) * background[:, :, :3]
             ascii_image = np.concatenate([ascii_image, np.full((height, width, 1), 255, dtype=np.uint8)], axis=2)
-        else:
-            # Keep the original transparency
-            pass
 
         return ascii_image.astype(np.uint8)
 
     def text_to_ascii(self, text, font, size=""):
         return text2art(text, font=font, chr_ignore=True) if size == "" else text2art(text, font=font, chr_ignore=True, size=size)
-
 
     def update_display(self):
         if self.original_pixmap:

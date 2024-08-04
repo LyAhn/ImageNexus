@@ -1238,14 +1238,7 @@ QToolBox::pane {
               <layout class="QGridLayout" name="gridLayout_28">
                <item row="0" column="0">
                 <layout class="QGridLayout" name="t2aFontGridLayout">
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="t2aFontsLbl">
-                   <property name="text">
-                    <string>Fonts:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
+                 <item row="2" column="0">
                   <widget class="QListWidget" name="t2aFontList">
                    <property name="minimumSize">
                     <size>
@@ -1255,6 +1248,20 @@ QToolBox::pane {
                    </property>
                    <property name="editTriggers">
                     <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="t2aFontsLbl">
+                   <property name="text">
+                    <string>Fonts:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QLineEdit" name="t2aFontSearch">
+                   <property name="placeholderText">
+                    <string>Search...</string>
                    </property>
                   </widget>
                  </item>

@@ -793,17 +793,22 @@ class Ui_ImageNexus(object):
         self.gridLayout_28.setObjectName(u"gridLayout_28")
         self.t2aFontGridLayout = QGridLayout()
         self.t2aFontGridLayout.setObjectName(u"t2aFontGridLayout")
-        self.t2aFontsLbl = QLabel(self.t2aInputFrame)
-        self.t2aFontsLbl.setObjectName(u"t2aFontsLbl")
-
-        self.t2aFontGridLayout.addWidget(self.t2aFontsLbl, 0, 0, 1, 1)
-
         self.t2aFontList = QListWidget(self.t2aInputFrame)
         self.t2aFontList.setObjectName(u"t2aFontList")
         self.t2aFontList.setMinimumSize(QSize(284, 171))
         self.t2aFontList.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 
-        self.t2aFontGridLayout.addWidget(self.t2aFontList, 1, 0, 1, 1)
+        self.t2aFontGridLayout.addWidget(self.t2aFontList, 2, 0, 1, 1)
+
+        self.t2aFontsLbl = QLabel(self.t2aInputFrame)
+        self.t2aFontsLbl.setObjectName(u"t2aFontsLbl")
+
+        self.t2aFontGridLayout.addWidget(self.t2aFontsLbl, 1, 0, 1, 1)
+
+        self.t2aFontSearch = QLineEdit(self.t2aInputFrame)
+        self.t2aFontSearch.setObjectName(u"t2aFontSearch")
+
+        self.t2aFontGridLayout.addWidget(self.t2aFontSearch, 0, 0, 1, 1)
 
 
         self.gridLayout_28.addLayout(self.t2aFontGridLayout, 0, 0, 1, 1)
@@ -1043,6 +1048,7 @@ class Ui_ImageNexus(object):
         self.i2aOutputGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Output", None))
         self.toolBox.setItemText(self.toolBox.indexOf(self.img2ascii), QCoreApplication.translate("ImageNexus", u"IMG2ASCII", None))
         self.t2aFontsLbl.setText(QCoreApplication.translate("ImageNexus", u"Fonts:", None))
+        self.t2aFontSearch.setPlaceholderText(QCoreApplication.translate("ImageNexus", u"Search...", None))
         self.t2aTextInput.setPlaceholderText(QCoreApplication.translate("ImageNexus", u"Enter some text...", None))
         self.t2aFontSize.setPlaceholderText(QCoreApplication.translate("ImageNexus", u"Choose Size", None))
         self.t2aConvertBtn.setText(QCoreApplication.translate("ImageNexus", u"Convert", None))
