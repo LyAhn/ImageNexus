@@ -27,7 +27,7 @@ class ImageNexus(QMainWindow):
         super().__init__(parent)
         self.ui = Ui_ImageNexus()
         self.ui.setupUi(self)
-        self.setWindowTitle(f"ImageNexus v{version}")
+        self.setWindowTitle("ImageNexus")
         self.frame_extractor = FrameExtractor(self.ui)
         self.img_converter = ImgConverter(self.ui)
         self.batch_converter = BatchConvert(self.ui)
