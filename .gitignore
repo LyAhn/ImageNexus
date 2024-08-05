@@ -137,6 +137,7 @@ dmypy.json
 splash.png
 qt/
 .docs/
+version_info.txt
 
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------

@@ -4,6 +4,19 @@
         "src/ui/form.ui",
         "resources.qrc",
         "src/ui/about.ui",
-        "src/utils/aboutDialog.py"
+        "src/utils/aboutDialog.py",
+        "src/utils/ascii_handler.py",
+        "src/utils/templateEditor.py",
+        "src/utils/version.py",
+        "src/core/ascii.py",
+        "src/core/batch_converter.py",
+        "src/core/frame_extractor.py",
+        "src/core/img_converter.py",
+        "src/core/pixelate.py",
+        "src/core/qr_generator.py",
+        "resources/icon.ico",
+        "resources/logo_256.png",
+        "resources/qr_templates.json",
+        "resources/wrench32px.ico"
     ]
 }
