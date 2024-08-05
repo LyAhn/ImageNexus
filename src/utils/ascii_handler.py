@@ -11,6 +11,7 @@ This code is licensed under the GPL-3.0 license (see LICENSE.txt for details)
 """
 
 import sys
+import os
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QPlainTextEdit, QApplication, QStatusBar
 from PySide6.QtGui import QFont
 from src.core.ascii import AsciiArt
@@ -117,10 +118,15 @@ class AsciiHandler:
 
     def load_image(self):
         file_dialog = QFileDialog()
-        image_path, _ = file_dialog.getOpenFileName(self.ui.centralwidget, "Select Image", "", "Image Files (*.png *.jpg *.bmp *.tiff *.gif)")
+        image_path, _ = file_dialog.getOpenFileName(self.ui.centralwidget, "Select Image", "", "Image Files (*.png *.jpg *.bmp *.tiff)")
         if image_path:
-            self.image_path = image_path
-            self.ascii_art.apply_ascii_art_effect(image_path, self.ui.i2aCharSize.value(), self.ui.i2aFontSize.value())
+            file_extension = os.path.splitext(image_path)[1].lower()
+            if file_extension in ['.png', '.jpg', '.bmp', '.tiff']:
+                self.image_path = image_path
+                self.ascii_art.apply_ascii_art_effect(image_path, self.ui.i2aCharSize.value(), self.ui.i2aFontSize.value())
+            else:
+                QMessageBox.warning(self.ui.centralwidget, "Error", "Unsupported file format. Please select a PNG, JPG, BMP, or TIFF file.")
+                self.load_image()
 
     def convert_image(self):
         if hasattr(self, 'image_path'):
