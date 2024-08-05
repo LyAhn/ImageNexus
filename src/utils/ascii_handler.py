@@ -10,7 +10,8 @@ Copyright (c) 2024, LyAhn
 This code is licensed under the GPL-3.0 license (see LICENSE.txt for details)
 """
 
-from PySide6.QtWidgets import QFileDialog, QMessageBox, QPlainTextEdit
+import sys
+from PySide6.QtWidgets import QFileDialog, QMessageBox, QPlainTextEdit, QApplication, QStatusBar
 from PySide6.QtGui import QFont
 from src.core.ascii import AsciiArt
 from art import text2art, FONT_NAMES
@@ -33,12 +34,12 @@ class AsciiHandler:
         self.ui.t2aFontList.itemSelectionChanged.connect(self.update_font_size)
         self.ui.t2aDiscordCheck.stateChanged.connect(self.convert_text)
         self.ui.t2aFontSearch.textChanged.connect(self.filter_fonts)
+        self.ui.t2aCopyBtn.clicked.connect(self.copy_to_clipboard)
 
     def setup_search(self):
         # Connect the textChanged event of the search field to the filter_fonts method
         self.ui.t2aFontSearch.textChanged.connect(self.filter_fonts)
-
-        # Grab the font names from the FONT_NAMES list
+        # Grab the font names from the art FONT_NAMES list
         self.all_fonts = FONT_NAMES
 
     def populate_fonts(self):
@@ -139,6 +140,27 @@ class AsciiHandler:
                     QMessageBox.warning(self.ui.centralwidget, "Error", "Failed to save ASCII art.")
         else:
             QMessageBox.warning(self.ui.centralwidget, "Error", "No ASCII art to save. Please convert an image first.")
+
+    def copy_to_clipboard(self):
+        text = self.ui.t2aTextOutput.toPlainText()
+        if not text.strip():
+            QStatusBar.showMessage(self.ui.statusbar, "There's nothing to copy!")
+            return
+        try:
+            clipboard = QApplication.clipboard()
+            clipboard.setText(text)
+            # Attempt to print the text, handling potential encoding errors
+            try:
+                print("Text copied to clipboard:")
+                print(text)
+            except UnicodeEncodeError:
+                print("Text contains characters that cannot be displayed in the console.")
+            #QMessageBox.information(self.ui.centralwidget, "Success", "Text copied to clipboard!")
+            QStatusBar.showMessage(self.ui.statusbar, "Text copied to clipboard!")
+        except Exception as e:
+            error_message = f"An error occurred while copying to clipboard: {str(e)}"
+            print(error_message, file=sys.stderr)
+            QMessageBox.warning(self.ui.centralwidget, "Error", error_message)
 
     def resize_event(self):
         self.ascii_art.resize_event()
