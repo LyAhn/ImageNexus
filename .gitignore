@@ -138,6 +138,7 @@ splash.png
 qt/
 .docs/
 version_info.txt
+temp_artistic_qr.png
 
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
