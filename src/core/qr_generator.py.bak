@@ -388,6 +388,7 @@ class QRGenerator:
                 for key, input_field in inputs.items():
                     placeholder = f"{{{key}}}"
                     format_with_placeholders = format_with_placeholders.replace(placeholder, input_field.text())
+
                 self.ui.qrTextInput.setPlainText(format_with_placeholders)
                 self.preview_qr_code()
 

@@ -3,7 +3,8 @@ import sys
 from src.core.frame_extractor import FrameExtractor
 from src.core.img_converter import ImgConverter
 from src.core.batch_converter import BatchConvert
-from src.core.qr_generator import QRGenerator
+#from src.core.qr_generator import QRGenerator
+from src.core.qrnew import QRGenerator
 from src.core.pixelate import Pixelate
 from src.ui.ui_form import Ui_ImageNexus
 from src.utils.aboutDialog import aboutDialog
