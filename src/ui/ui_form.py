@@ -360,6 +360,7 @@ class Ui_ImageNexus(object):
 
         self.qrTextInput = QTextEdit(self.widget_4)
         self.qrTextInput.setObjectName(u"qrTextInput")
+        self.qrTextInput.setInputMethodHints(Qt.InputMethodHint.ImhNone)
         self.qrTextInput.setFrameShape(QFrame.Shape.Panel)
         self.qrTextInput.setFrameShadow(QFrame.Shadow.Sunken)
 

@@ -522,6 +522,9 @@
            </item>
            <item row="0" column="1" colspan="5">
             <widget class="QTextEdit" name="qrTextInput">
+             <property name="inputMethodHints">
+              <set>Qt::InputMethodHint::ImhNone</set>
+             </property>
              <property name="frameShape">
               <enum>QFrame::Shape::Panel</enum>
              </property>

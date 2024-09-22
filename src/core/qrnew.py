@@ -25,7 +25,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QImage, QPixmap, QKeySequence, QShortcut, QIcon
 from PySide6.QtWidgets import QGraphicsScene, QPushButton, QSizePolicy, QScrollArea, QWidget
 from src.utils.templateEditor import JSONEditorDialog
-from PySide6.QtCore import QThreadPool, QRunnable, Slot, Signal, QObject
+from PySide6.QtCore import QThreadPool, QRunnable, Slot, Signal, QObject, QTimer
 
 
 class WorkerSignals(QObject):
@@ -60,6 +60,9 @@ class QRGenerator:
         self.create_shortcut()
         self.editor = JSONEditorDialog
         self.threadpool = QThreadPool()
+        self.debounce_timer = QTimer()
+        self.debounce_timer.setSingleShot(True)
+        self.debounce_timer.timeout.connect(self.generate_qr_code_debounced)
 
     def setup_connections(self):
         self.ui.qrGenButton.clicked.connect(self.preview_qr_code)
@@ -74,7 +77,8 @@ class QRGenerator:
         self.ui.qrPlaceholderEditor.clicked.connect(self.fill_placeholders)
         self.ui.qrOutputView.mousePressEvent = self.on_preview_clicked
 
-        self.ui.qrTextInput.textChanged.connect(self.preview_qr_code) # remove this comment if you want live QR code preview while typing - Not advised
+        #self.ui.qrTextInput.textChanged.connect(self.preview_qr_code) # remove this comment if you want live QR code preview while typing - Not advised
+        self.ui.qrTextInput.textChanged.connect(self.debounce_preview_qr_code)
         self.ui.qrCodeSize.valueChanged.connect(self.preview_qr_code)
         self.ui.qrBorderSize.valueChanged.connect(self.preview_qr_code)
         self.ui.qrErrorCorrectList.currentIndexChanged.connect(self.preview_qr_code)
@@ -85,6 +89,19 @@ class QRGenerator:
         self.ui.qrUseArtisticCheck.stateChanged.connect(self.preview_qr_code)
         self.ui.qrColorizedCheck.stateChanged.connect(self.preview_qr_code)
         #self.ui.qrBgImageInput.textChanged.connect(self.preview_qr_code)
+
+    # Testing
+
+    def debounce_preview_qr_code(self):
+        self.debounce_timer.start(150)  # 300 ms debounce time default
+
+    def generate_qr_code_debounced(self):
+        worker = QRGeneratorWorker(self.generate_qr_code)
+        worker.signals.finished.connect(self.display_qr_code)
+        worker.signals.error.connect(self.handle_error)
+        self.threadpool.start(worker)
+
+    # End Testing
 
 
     async def generate_qr_async(self):
@@ -104,11 +121,14 @@ class QRGenerator:
         if event.button() == Qt.LeftButton:
             self.show_preview_window()
 
+    # def preview_qr_code(self):
+    #     worker = QRGeneratorWorker(self.generate_qr_code)
+    #     worker.signals.finished.connect(self.display_qr_code)
+    #     worker.signals.error.connect(self.handle_error)
+    #     self.threadpool.start(worker)
+
     def preview_qr_code(self):
-        worker = QRGeneratorWorker(self.generate_qr_code)
-        worker.signals.finished.connect(self.display_qr_code)
-        worker.signals.error.connect(self.handle_error)
-        self.threadpool.start(worker)
+        self.generate_qr_code_debounced()
 
     def handle_error(self, error):
         QMessageBox.critical(None, "Error", f"An error occured: {error[0]}")
@@ -547,25 +567,67 @@ class QRGenerator:
         else:
             QMessageBox.warning(None, "Warning", "No QR code has been generated yet.")
 
-    def generate_artistic_qr(self, qr_data):
+    # def generate_artistic_qr(self, qr_data):
         
+    #     version = self.ui.qrCodeSize.value()
+    #     error_correction = self.get_error_correction_level()
+    #     picture = self.ui.qrLogoInput.text()
+    #     #picture = self.ui.qrBgImageInput.text()
+    #     colorized = self.ui.qrColorizedCheck.isChecked()
+        
+    #     save_name = "temp_artistic_qr.png"
+    #     version, level, qr_name = myqr.run(
+    #         qr_data,
+    #         version=version,
+    #         level=error_correction,
+    #         picture=picture,
+    #         colorized=colorized,
+    #         save_name=save_name
+    #     )
+        
+    #     return Image.open(save_name)
+
+    def generate_artistic_qr(self, qr_data):
         version = self.ui.qrCodeSize.value()
         error_correction = self.get_error_correction_level()
         picture = self.ui.qrLogoInput.text()
-        #picture = self.ui.qrBgImageInput.text()
         colorized = self.ui.qrColorizedCheck.isChecked()
-        
-        save_name = "temp_artistic_qr.png"
-        version, level, qr_name = myqr.run(
-            qr_data,
-            version=version,
-            level=error_correction,
-            picture=picture,
-            colorized=colorized,
-            save_name=save_name
-        )
-        
-        return Image.open(save_name)
+        border_size = self.ui.qrBorderSize.value()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            save_name = os.path.join(temp_dir, "temp_artistic_qr.png")
+            try:
+                version, level, qr_name = myqr.run(
+                    qr_data,
+                    version=version,
+                    level=error_correction,
+                    picture=picture,
+                    colorized=colorized,
+                    save_name=save_name
+                )
+
+                # Open the generated QR code
+                qr_image = Image.open(save_name)
+
+                # Crop the white border
+                bbox = qr_image.getbbox()
+                cropped_qr = qr_image.crop(bbox)
+
+                # Create a new image with desired border
+                qr_size = cropped_qr.size[0]
+                new_size = qr_size + 2 * border_size
+                bg_color = self.get_color_tuple(self.ui.qrBgColourInput.text(), (255, 255, 255))
+                new_image = Image.new('RGB', (new_size, new_size), bg_color)
+
+                # Paste the cropped QR code onto the new image
+                new_image.paste(cropped_qr, (border_size, border_size))
+
+                return new_image
+
+            except Exception as e:
+                print(f"Error in generate_artistic_qr: {str(e)}")
+                # Return a default QR code or None
+                return self.generate_standard_qr(qr_data)
 
     def get_error_correction_level(self):
         error_correction = self.ui.qrErrorCorrectList.currentText()
