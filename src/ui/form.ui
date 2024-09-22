@@ -387,115 +387,7 @@
         <item row="0" column="0">
          <widget class="QWidget" name="widget_4" native="true">
           <layout class="QGridLayout" name="gridLayout_7">
-           <item row="8" column="0" colspan="3">
-            <widget class="QGroupBox" name="bgColourGroup">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="title">
-              <string>Background Colour</string>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_8">
-              <item row="0" column="0">
-               <widget class="QLineEdit" name="qrBgColourInput">
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="placeholderText">
-                 <string>255, 255, 255</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QToolButton" name="qrBgColourBtn">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="0" column="9" rowspan="9">
-            <widget class="QGroupBox" name="qrOutputGroup">
-             <property name="title">
-              <string>Generated QR</string>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_11">
-              <item row="0" column="0">
-               <widget class="QGraphicsView" name="qrOutputView">
-                <property name="baseSize">
-                 <size>
-                  <width>0</width>
-                  <height>0</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="5" column="1" colspan="5">
-            <widget class="QLineEdit" name="qrLogoInput">
-             <property name="text">
-              <string/>
-             </property>
-             <property name="placeholderText">
-              <string>Insert a logo... (Optional)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="0">
-            <widget class="QLabel" name="qrErrorCorrectLbl">
-             <property name="text">
-              <string>Error Correction:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="11" column="2">
-            <widget class="QComboBox" name="qrFormatOptions">
-             <item>
-              <property name="text">
-               <string>BMP</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>JPG</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>PNG</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>TIFF</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>WEBP</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="11" column="3" colspan="2">
-            <widget class="QLabel" name="qrSizeLabel">
-             <property name="text">
-              <string>QR Size:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="12" column="3">
-            <widget class="QPushButton" name="qrBrowseOutput">
-             <property name="text">
-              <string>Browse</string>
-             </property>
-            </widget>
-           </item>
-           <item row="11" column="9">
+           <item row="14" column="9">
             <widget class="QPushButton" name="qrGenButton">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -520,46 +412,7 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="7">
-            <widget class="QComboBox" name="qrTemplates">
-             <item>
-              <property name="text">
-               <string>Select a template</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="5" column="7">
-            <widget class="QPushButton" name="qrBrowseLogo">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Browse</string>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="2">
-            <widget class="QCheckBox" name="qrAddBGCheck">
-             <property name="statusTip">
-              <string>Add a background to a transparent logo</string>
-             </property>
-             <property name="text">
-              <string>Add background?</string>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="3" colspan="2">
-            <widget class="QLabel" name="qrBorderSizeLbl">
-             <property name="text">
-              <string>Border Size:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="11" column="5" colspan="3">
+           <item row="14" column="5" colspan="3">
             <widget class="QSpinBox" name="qrCodeSize">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -584,61 +437,42 @@
              </property>
             </widget>
            </item>
-           <item row="12" column="2">
-            <widget class="QLineEdit" name="qrOutputFolder"/>
-           </item>
-           <item row="0" column="1" colspan="5">
-            <widget class="QTextEdit" name="qrTextInput">
-             <property name="frameShape">
-              <enum>QFrame::Shape::Panel</enum>
-             </property>
-             <property name="frameShadow">
-              <enum>QFrame::Shadow::Sunken</enum>
-             </property>
-             <property name="placeholderText">
-              <string>Please enter some text to generate a QR code... See the QR Guidelines in the resources folder on QR Formats.</string>
-             </property>
-            </widget>
-           </item>
            <item row="9" column="2">
-            <widget class="QComboBox" name="qrErrorCorrectList">
-             <item>
-              <property name="text">
-               <string>Low</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Medium</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Quartile</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>High</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="11" column="0" colspan="2">
-            <widget class="QLabel" name="qrFormatOptionsLbl">
+            <widget class="QCheckBox" name="qrAddBGCheck">
+             <property name="statusTip">
+              <string>Add a background to a transparent logo</string>
+             </property>
              <property name="text">
-              <string>Save As:</string>
+              <string>Add background?</string>
              </property>
             </widget>
            </item>
-           <item row="12" column="0">
-            <widget class="QLabel" name="qrOutputFolderLbl">
-             <property name="text">
-              <string>Output Folder:</string>
+           <item row="12" column="5" colspan="5">
+            <widget class="QSpinBox" name="qrBorderSize">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>80</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="statusTip">
+              <string>Value between 0-10</string>
+             </property>
+             <property name="maximum">
+              <number>10</number>
+             </property>
+             <property name="value">
+              <number>1</number>
              </property>
             </widget>
            </item>
-           <item row="7" column="3">
+           <item row="9" column="3">
             <widget class="QCheckBox" name="qrAspectRatioCheck">
              <property name="statusTip">
               <string>Keeps the aspect ratio of the embeded image</string>
@@ -648,28 +482,16 @@
              </property>
             </widget>
            </item>
-           <item row="5" column="0">
-            <widget class="QLabel" name="qrLogoInputLbl">
-             <property name="text">
-              <string>Logo Image:</string>
-             </property>
+           <item row="0" column="7">
+            <widget class="QComboBox" name="qrTemplates">
+             <item>
+              <property name="text">
+               <string>Select a template</string>
+              </property>
+             </item>
             </widget>
            </item>
-           <item row="12" column="9">
-            <widget class="QPushButton" name="qrSaveQRBtn">
-             <property name="text">
-              <string>Save QR Code</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="qrTextInputLabel">
-             <property name="text">
-              <string>QR Data:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="3" colspan="5">
+           <item row="11" column="3" colspan="5">
             <widget class="QGroupBox" name="codeColourGroup">
              <property name="enabled">
               <bool>true</bool>
@@ -698,29 +520,171 @@
              </layout>
             </widget>
            </item>
-           <item row="9" column="5" colspan="5">
-            <widget class="QSpinBox" name="qrBorderSize">
+           <item row="0" column="1" colspan="5">
+            <widget class="QTextEdit" name="qrTextInput">
+             <property name="inputMethodHints">
+              <set>Qt::InputMethodHint::ImhNone</set>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Shape::Panel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Shadow::Sunken</enum>
+             </property>
+             <property name="placeholderText">
+              <string>Please enter some text to generate a QR code... See the QR Guidelines in the resources folder on QR Formats.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="7">
+            <widget class="QPushButton" name="qrBrowseLogo">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="maximumSize">
-              <size>
-               <width>80</width>
-               <height>16777215</height>
-              </size>
+             <property name="text">
+              <string>Browse</string>
              </property>
-             <property name="statusTip">
-              <string>Value between 0-10</string>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="qrLogoInputLbl">
+             <property name="text">
+              <string>Logo Image:</string>
              </property>
-             <property name="maximum">
-              <number>10</number>
+            </widget>
+           </item>
+           <item row="15" column="3">
+            <widget class="QPushButton" name="qrBrowseOutput">
+             <property name="text">
+              <string>Browse</string>
              </property>
-             <property name="value">
-              <number>1</number>
+            </widget>
+           </item>
+           <item row="14" column="0" colspan="2">
+            <widget class="QLabel" name="qrFormatOptionsLbl">
+             <property name="text">
+              <string>Save As:</string>
              </property>
+            </widget>
+           </item>
+           <item row="15" column="0">
+            <widget class="QLabel" name="qrOutputFolderLbl">
+             <property name="text">
+              <string>Output Folder:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="2">
+            <widget class="QCheckBox" name="qrUseArtisticCheck">
+             <property name="text">
+              <string>Artistic QR</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="9" rowspan="12">
+            <widget class="QGroupBox" name="qrOutputGroup">
+             <property name="title">
+              <string>Generated QR</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_11">
+              <item row="0" column="0">
+               <widget class="QGraphicsView" name="qrOutputView">
+                <property name="baseSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="12" column="0">
+            <widget class="QLabel" name="qrErrorCorrectLbl">
+             <property name="text">
+              <string>Error Correction:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="14" column="2">
+            <widget class="QComboBox" name="qrFormatOptions">
+             <item>
+              <property name="text">
+               <string>BMP</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>JPG</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>GIF</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>PNG</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>TIFF</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WEBP</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="12" column="3" colspan="2">
+            <widget class="QLabel" name="qrBorderSizeLbl">
+             <property name="text">
+              <string>Border Size:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="15" column="9">
+            <widget class="QPushButton" name="qrSaveQRBtn">
+             <property name="text">
+              <string>Save QR Code</string>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="0" colspan="3">
+            <widget class="QGroupBox" name="bgColourGroup">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="title">
+              <string>Background Colour</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_8">
+              <item row="0" column="0">
+               <widget class="QLineEdit" name="qrBgColourInput">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="placeholderText">
+                 <string>255, 255, 255</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QToolButton" name="qrBgColourBtn">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
            <item row="0" column="8">
@@ -741,6 +705,64 @@
               <iconset theme="QIcon::ThemeIcon::DocumentProperties" resource="../../resources.qrc">
                <normaloff>:/images/resources/wrench32px.ico</normaloff>:/images/resources/wrench32px.ico</iconset>
              </property>
+            </widget>
+           </item>
+           <item row="14" column="3" colspan="2">
+            <widget class="QLabel" name="qrSizeLabel">
+             <property name="text">
+              <string>QR Size:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1" colspan="5">
+            <widget class="QLineEdit" name="qrLogoInput">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="placeholderText">
+              <string>Insert a logo... (Optional)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="15" column="2">
+            <widget class="QLineEdit" name="qrOutputFolder"/>
+           </item>
+           <item row="10" column="3">
+            <widget class="QCheckBox" name="qrColorizedCheck">
+             <property name="text">
+              <string>Colourised?</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="qrTextInputLabel">
+             <property name="text">
+              <string>QR Data:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="2">
+            <widget class="QComboBox" name="qrErrorCorrectList">
+             <item>
+              <property name="text">
+               <string>Low</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Medium</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Quartile</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>High</string>
+              </property>
+             </item>
             </widget>
            </item>
           </layout>
@@ -1213,8 +1235,8 @@ QToolBox::pane {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>898</width>
-             <height>512</height>
+             <width>830</width>
+             <height>380</height>
             </rect>
            </property>
            <attribute name="label">
@@ -1515,6 +1537,22 @@ QToolBox::pane {
     <hint type="destinationlabel">
      <x>110</x>
      <y>175</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>qrUseArtisticCheck</sender>
+   <signal>checkStateChanged(Qt::CheckState)</signal>
+   <receiver>qrColorizedCheck</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>221</x>
+     <y>453</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>384</x>
+     <y>453</y>
     </hint>
    </hints>
   </connection>
