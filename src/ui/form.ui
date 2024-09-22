@@ -1540,5 +1540,21 @@ QToolBox::pane {
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>qrUseArtisticCheck</sender>
+   <signal>checkStateChanged(Qt::CheckState)</signal>
+   <receiver>qrColorizedCheck</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>221</x>
+     <y>453</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>384</x>
+     <y>453</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>

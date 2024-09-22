@@ -928,6 +928,7 @@ class Ui_ImageNexus(object):
         self.actionExit.triggered.connect(ImageNexus.close)
         self.pxSizeSlider.sliderMoved.connect(self.pxSpinBox.setValue)
         self.pxSpinBox.valueChanged.connect(self.pxSizeSlider.setValue)
+        self.qrUseArtisticCheck.checkStateChanged.connect(self.qrColorizedCheck.toggle)
 
         self.tabWidget.setCurrentIndex(0)
         self.qrGenButton.setDefault(False)
