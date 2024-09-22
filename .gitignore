@@ -139,6 +139,7 @@ qt/
 .docs/
 version_info.txt
 temp_artistic_qr.png
+*.bak
 
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
