@@ -77,3 +77,18 @@ If you'd like to contribute to the project, please follow these steps:
 ## License
 
 This project is licensed under the GNU GPL v3 license.
+
+## Third-Party Licenses
+
+This project uses third-party libraries or other resources that may be
+distributed under licenses different from the ImageNexus license.
+
+In the event that we accidentally failed to list a required notice, please
+bring it to our attention by opening an issue or pull request.
+
+The attached notices are provided for information only.
+
+For any licenses that require disclosure of source, sources are available at
+https://github.com/LyAhn/ImageNexus.
+
+See `THIRD_PARTY_LICENSES.txt` for details.

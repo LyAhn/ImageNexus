@@ -5,6 +5,7 @@ from src.core.img_converter import ImgConverter
 from src.core.batch_converter import BatchConvert
 from src.core.qr_generator import QRGenerator
 from src.core.pixelate import Pixelate
+from src.core.facecensor import FaceCensor
 from src.ui.ui_form import Ui_ImageNexus
 from src.utils.aboutDialog import aboutDialog
 from src.utils.ascii_handler import AsciiHandler
@@ -18,26 +19,33 @@ version = appVersion
 
 class ImageNexus(QMainWindow):
     def __init__(self, parent=None):
-        ascii_version = text2art(f"ImageNexus v{version}", font="doom", chr_ignore=True)
-        print(ascii_version)
-        print("Copyright (c) 2024, LyAhn")
-        print("This code is licensed under the GPL-3.0 license (see LICENSE.txt for details)")
-        print("----------------------------------------------------------")
-        print("Welcome to ImageNexus!")
         super().__init__(parent)
         self.ui = Ui_ImageNexus()
         self.ui.setupUi(self)
         self.setWindowTitle("ImageNexus")
+        self.print_welcome()
+        self.initialize_modules()
+        self.setup_connections()
+
+    def print_welcome(self):
+        ascii_version = text2art(f"ImageNexus v{version}", font="doom", chr_ignore=True)
+        print(ascii_version)
+        print("Copyright (c) 2024, LyAhn")
+        print("This code is licensed under the GPL-3.0 license (see LICENSE.txt for details)")
+        print("For third party licenses please see THIRD_PARTY_LICENSES.txt for details")
+        print("----------------------------------------------------------")
+        print("Welcome to ImageNexus!")
+    
+    def initialize_modules(self):
         self.frame_extractor = FrameExtractor(self.ui)
         self.img_converter = ImgConverter(self.ui)
         self.batch_converter = BatchConvert(self.ui)
         self.qr_generator = QRGenerator(self.ui)
         self.pixelizer = Pixelate(self.ui)
         self.ascii_handler = AsciiHandler(self.ui)
+        self.censor_faces = FaceCensor(self.ui)
 
-        self.setup_connections()
         self.qr_generator.load_qr_templates()
-
 
     def setup_connections(self):
 
