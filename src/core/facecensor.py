@@ -49,14 +49,18 @@ class FaceCensor:
         self.ui.fcPixelate.toggled.connect(self.censor_faces)
         self.ui.fcBlackBar.toggled.connect(self.censor_faces)
 
+        self.ui.fcFaceList.itemSelectionChanged.connect(self.update_selected_faces)
+
+    def update_selected_faces(self):
+        selected_indices = [self.ui.fcFaceList.row(item) for item in self.ui.fcFaceList.selectedItems()]
+        self.selected_faces = [self.faces[i] for i in selected_indices]
+
     def detect_faces(self, image):
         (h, w) = image.shape[:2]
         blob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)), 1.0,
-                                     (300, 300), (104.0, 177.0, 123.0))
-        
+                                    (300, 300), (104.0, 177.0, 123.0))
         self.face_net.setInput(blob)
         detections = self.face_net.forward()
-        
         faces = []
         for i in range(0, detections.shape[2]):
             confidence = detections[0, 0, i, 2]
@@ -64,7 +68,12 @@ class FaceCensor:
                 box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
                 (startX, startY, endX, endY) = box.astype("int")
                 faces.append((startX, startY, endX - startX, endY - startY))
-                cv2.rectangle(image, (startX, startY), (endX, endY), (0, 255, 0), 2)
+        
+        # Draw bounding boxes and add face IDs
+        for i, (x, y, w, h) in enumerate(faces):
+            cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            # Add face ID to the top-left corner of the bounding box
+            cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
         
         return image, faces
 
@@ -89,16 +98,19 @@ class FaceCensor:
             except Exception as e:
                 print(f"Error loading image: {e}")
 
+    def resizeEvent(self, event):
+        if hasattr(self, 'original_image'):
+            self.display_image(self.original_image.copy())
+        super().resizeEvent(event)
+
     def display_image(self, image):
         height, width, channel = image.shape
         bytes_per_line = 3 * width
         q_image = QImage(image.data, width, height, bytes_per_line, QImage.Format.Format_RGB888).rgbSwapped()
         pixmap = QPixmap.fromImage(q_image)
-        
         scene = QGraphicsScene()
         pixmap_item = QGraphicsPixmapItem(pixmap)
         scene.addItem(pixmap_item)
-        
         self.ui.fcImageView.setScene(scene)
         self.ui.fcImageView.fitInView(scene.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
 
@@ -108,7 +120,7 @@ class FaceCensor:
             self.ui.fcFaceList.addItem(f"Face {i+1}: ({x}, {y}, {w}, {h})")
 
     def censor_faces(self):
-        if not hasattr(self, 'original_image'):
+        if not hasattr(self, 'original_image') or not hasattr(self, 'selected_faces'):
             return
 
         # Determine which radio button is checked
@@ -125,11 +137,9 @@ class FaceCensor:
             return
 
         image = self.original_image.copy()
+        self.censored_image = image
 
-        self.censored_image = image # Initialize censored_image
-        self.display_image(image)
-
-        for (x, y, w, h) in self.faces:
+        for (x, y, w, h) in self.selected_faces:
             face_roi = image[y:y+h, x:x+w]
             if censoring_method == "Blur":
                 face_roi = cv2.GaussianBlur(face_roi, (99, 99), 30)
