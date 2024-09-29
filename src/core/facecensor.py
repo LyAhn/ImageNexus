@@ -44,11 +44,10 @@ class FaceCensor:
         self.ui.fcCensorBtn.clicked.connect(self.censor_faces)
         self.ui.fcSaveBtn.clicked.connect(self.save_image)
         self.ui.fcResetBtn.clicked.connect(self.reset_image)
-
-        # Radio buttons
         self.ui.fcBlur.toggled.connect(self.censor_faces)
         self.ui.fcBox.toggled.connect(self.censor_faces)
         self.ui.fcPixelate.toggled.connect(self.censor_faces)
+        self.ui.fcBlackBar.toggled.connect(self.censor_faces)
 
     def detect_faces(self, image):
         (h, w) = image.shape[:2]
@@ -86,6 +85,7 @@ class FaceCensor:
                 image_with_faces, self.faces = self.detect_faces(self.original_image.copy())
                 self.display_image(image_with_faces)
                 self.update_face_list(self.faces)
+                self.ui.fcInputImage.setText(file_path)
             except Exception as e:
                 print(f"Error loading image: {e}")
 
@@ -118,6 +118,8 @@ class FaceCensor:
             censoring_method = "Black Box"
         elif self.ui.fcPixelate.isChecked():
             censoring_method = "Pixelate"
+        elif self.ui.fcBlackBar.isChecked():
+            censoring_method = "Eye Bars"
         else:
             print("No censoring method selected")
             return
@@ -135,9 +137,25 @@ class FaceCensor:
                 face_roi = self.pixelate(face_roi)
             elif censoring_method == "Black Box":
                 face_roi[:] = (0, 0, 0)
+            elif censoring_method == "Eye Bars":
+                self.draw_eye_bars(image, x, y, w, h)
             image[y:y+h, x:x+w] = face_roi
 
         self.display_image(image)
+
+    def draw_eye_bars(self, image, x, y, w, h):
+        # Estimate eye positions (this is a rough estimation)
+        eye_y = y + int(h * 0.3)  # Eyes are typically in the upper third of the face
+        eye_h = int(h * 0.16)  # Eye height is roughly 15% of face height
+        
+        # Calculate the width of the bar to cover both eyes
+        bar_w = int(w * 1.0)  # Extend the bar to cover approximately 100% of face width
+        
+        # Calculate the x-position of the bar (centered on the face)
+        bar_x = x + int(w * 0.00)  # Start at 15% of face width
+        
+        # Draw a single black bar across both eyes
+        cv2.rectangle(image, (bar_x, eye_y), (bar_x + bar_w, eye_y + eye_h), (0, 0, 0), -1)
 
     def pixelate(self, image, blocks=10):
         (h, w) = image.shape[:2]
@@ -175,7 +193,7 @@ class FaceCensor:
             except Exception as e:
                 print(f"Error saving censored image: {e}")
 
-# Todo: Implement the classic black bar over eyes censor
 # Todo: Implement selecting specific faces 
 # Todo: fix transparency issue
+
 
