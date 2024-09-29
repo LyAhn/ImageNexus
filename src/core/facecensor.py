@@ -112,27 +112,35 @@ class FaceCensor:
 
     def apply_censoring(self, image, draw_boxes=False):
         censoring_method = self.get_censoring_method()
-        if not censoring_method:
-            return image
-
-        for i, (x, y, w, h) in enumerate(self.selected_faces):
-            face_roi = image[y:y+h, x:x+w]
-            if censoring_method == "Blur":
-                face_roi = cv2.GaussianBlur(face_roi, (99, 99), 30)
-            elif censoring_method == "Black Box":
-                face_roi[:] = (0, 0, 0)
-            elif censoring_method == "Pixelate":
-                face_roi = self.pixelate(face_roi)
-            elif censoring_method == "Eye Bars":
-                self.draw_eye_bars(image, x, y, w, h)
-            
-            image[y:y+h, x:x+w] = face_roi
-
-            if draw_boxes:
+        
+        # First, draw bounding boxes for all detected faces
+        if draw_boxes:
+            for i, (x, y, w, h) in enumerate(self.faces):
                 cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
-                cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
-
+                cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2)
+        
+        # Then, apply censoring only to selected faces
+        if censoring_method:
+            for x, y, w, h in self.selected_faces:
+                face_roi = image[y:y+h, x:x+w]
+                if censoring_method == "Blur":
+                    face_roi = cv2.GaussianBlur(face_roi, (99, 99), 30)
+                elif censoring_method == "Black Box":
+                    face_roi[:] = (0, 0, 0)
+                elif censoring_method == "Pixelate":
+                    face_roi = self.pixelate(face_roi)
+                elif censoring_method == "Eye Bars":
+                    self.draw_eye_bars(image, x, y, w, h)
+                image[y:y+h, x:x+w] = face_roi
+        
         return image
+
+    def apply_censoring_without_boxes(self):
+        if not hasattr(self, 'original_image') or not hasattr(self, 'selected_faces'):
+            return None
+
+        image = self.original_image.copy()
+        return self.apply_censoring(image, draw_boxes=False)
 
     def resizeEvent(self, event):
         if hasattr(self, 'original_image'):
@@ -197,12 +205,6 @@ class FaceCensor:
             image_with_faces, self.faces = self.detect_faces(self.original_image.copy())
             self.display_image(image_with_faces)
             self.update_face_list(self.faces)
-    def apply_censoring_without_boxes(self):
-        if not hasattr(self, 'original_image') or not hasattr(self, 'selected_faces'):
-            return None
-
-        image = self.original_image.copy()
-        return self.apply_censoring(image, draw_boxes=False)
 
     def save_image(self):
         censored_image = self.apply_censoring_without_boxes()
@@ -224,7 +226,7 @@ class FaceCensor:
             except Exception as e:
                 print(f"Error saving censored image: {e}")
 
-# Todo: Implement selecting specific faces 
+# Todo: Implement selecting specific faces via preview
 # Todo: fix transparency issue
 
 
