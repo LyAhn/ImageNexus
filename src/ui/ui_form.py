@@ -53,8 +53,8 @@ class Ui_ImageNexus(object):
         self.actionQRTemplateEditor.setIcon(icon2)
         self.centralwidget = QWidget(ImageNexus)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.gridLayout_12 = QGridLayout(self.centralwidget)
-        self.gridLayout_12.setObjectName(u"gridLayout_12")
+        self.gridLayout_31 = QGridLayout(self.centralwidget)
+        self.gridLayout_31.setObjectName(u"gridLayout_31")
         self.tabWidget = QTabWidget(self.centralwidget)
         self.tabWidget.setObjectName(u"tabWidget")
         self.tabWidget.setEnabled(True)
@@ -652,59 +652,111 @@ class Ui_ImageNexus(object):
         self.tabWidget.addTab(self.pixelTab, "")
         self.faceCensor = QWidget()
         self.faceCensor.setObjectName(u"faceCensor")
+        self.gridLayout_12 = QGridLayout(self.faceCensor)
+        self.gridLayout_12.setObjectName(u"gridLayout_12")
         self.fcOutputWidget = QWidget(self.faceCensor)
         self.fcOutputWidget.setObjectName(u"fcOutputWidget")
-        self.fcOutputWidget.setGeometry(QRect(330, 10, 581, 571))
-        self.fcImageView = QGraphicsView(self.fcOutputWidget)
-        self.fcImageView.setObjectName(u"fcImageView")
-        self.fcImageView.setGeometry(QRect(10, 10, 561, 351))
+        self.gridLayout_26 = QGridLayout(self.fcOutputWidget)
+        self.gridLayout_26.setObjectName(u"gridLayout_26")
         self.fcCensorBtn = QPushButton(self.fcOutputWidget)
         self.fcCensorBtn.setObjectName(u"fcCensorBtn")
-        self.fcCensorBtn.setGeometry(QRect(380, 530, 80, 24))
-        self.fcSaveBtn = QPushButton(self.fcOutputWidget)
-        self.fcSaveBtn.setObjectName(u"fcSaveBtn")
-        self.fcSaveBtn.setGeometry(QRect(480, 530, 80, 24))
-        self.fcFoundFacesGroup = QGroupBox(self.fcOutputWidget)
-        self.fcFoundFacesGroup.setObjectName(u"fcFoundFacesGroup")
-        self.fcFoundFacesGroup.setGeometry(QRect(10, 370, 311, 191))
-        self.fcFaceList = QListWidget(self.fcFoundFacesGroup)
-        self.fcFaceList.setObjectName(u"fcFaceList")
-        self.fcFaceList.setGeometry(QRect(10, 30, 291, 151))
-        self.fcFaceList.setAlternatingRowColors(True)
-        self.fcFaceList.setSelectionMode(QAbstractItemView.SelectionMode.MultiSelection)
+
+        self.gridLayout_26.addWidget(self.fcCensorBtn, 2, 2, 1, 1)
+
         self.fcResetBtn = QPushButton(self.fcOutputWidget)
         self.fcResetBtn.setObjectName(u"fcResetBtn")
-        self.fcResetBtn.setGeometry(QRect(380, 490, 80, 24))
+
+        self.gridLayout_26.addWidget(self.fcResetBtn, 1, 2, 1, 1)
+
+        self.fcFoundFacesGroup = QGroupBox(self.fcOutputWidget)
+        self.fcFoundFacesGroup.setObjectName(u"fcFoundFacesGroup")
+        self.gridLayout_30 = QGridLayout(self.fcFoundFacesGroup)
+        self.gridLayout_30.setObjectName(u"gridLayout_30")
+        self.fcFaceList = QListWidget(self.fcFoundFacesGroup)
+        self.fcFaceList.setObjectName(u"fcFaceList")
+        self.fcFaceList.setAlternatingRowColors(True)
+        self.fcFaceList.setSelectionMode(QAbstractItemView.SelectionMode.MultiSelection)
+
+        self.gridLayout_30.addWidget(self.fcFaceList, 0, 0, 1, 1)
+
+
+        self.gridLayout_26.addWidget(self.fcFoundFacesGroup, 1, 1, 2, 1)
+
+        self.fcImageView = QGraphicsView(self.fcOutputWidget)
+        self.fcImageView.setObjectName(u"fcImageView")
+
+        self.gridLayout_26.addWidget(self.fcImageView, 0, 1, 1, 3)
+
+        self.fcSaveBtn = QPushButton(self.fcOutputWidget)
+        self.fcSaveBtn.setObjectName(u"fcSaveBtn")
+
+        self.gridLayout_26.addWidget(self.fcSaveBtn, 2, 3, 1, 1)
+
+
+        self.gridLayout_12.addWidget(self.fcOutputWidget, 0, 2, 1, 1)
+
         self.fcOptionsWidget = QWidget(self.faceCensor)
         self.fcOptionsWidget.setObjectName(u"fcOptionsWidget")
-        self.fcOptionsWidget.setGeometry(QRect(10, 10, 311, 291))
-        self.fcOptionsGroup = QGroupBox(self.fcOptionsWidget)
-        self.fcOptionsGroup.setObjectName(u"fcOptionsGroup")
-        self.fcOptionsGroup.setGeometry(QRect(10, 100, 141, 151))
-        self.fcBox = QRadioButton(self.fcOptionsGroup)
-        self.fcBox.setObjectName(u"fcBox")
-        self.fcBox.setGeometry(QRect(10, 90, 91, 22))
-        self.fcBlur = QRadioButton(self.fcOptionsGroup)
-        self.fcBlur.setObjectName(u"fcBlur")
-        self.fcBlur.setGeometry(QRect(10, 30, 91, 22))
-        self.fcPixelate = QRadioButton(self.fcOptionsGroup)
-        self.fcPixelate.setObjectName(u"fcPixelate")
-        self.fcPixelate.setGeometry(QRect(10, 60, 91, 22))
-        self.fcBlackBar = QRadioButton(self.fcOptionsGroup)
-        self.fcBlackBar.setObjectName(u"fcBlackBar")
-        self.fcBlackBar.setGeometry(QRect(10, 120, 91, 22))
+        self.gridLayout_20 = QGridLayout(self.fcOptionsWidget)
+        self.gridLayout_20.setObjectName(u"gridLayout_20")
         self.fcLoadGroup = QGroupBox(self.fcOptionsWidget)
         self.fcLoadGroup.setObjectName(u"fcLoadGroup")
-        self.fcLoadGroup.setGeometry(QRect(10, 10, 301, 80))
         self.fcLoadGroup.setFlat(True)
-        self.fcBrowseBtn = QPushButton(self.fcLoadGroup)
-        self.fcBrowseBtn.setObjectName(u"fcBrowseBtn")
-        self.fcBrowseBtn.setGeometry(QRect(210, 30, 80, 24))
+        self.gridLayout_21 = QGridLayout(self.fcLoadGroup)
+        self.gridLayout_21.setObjectName(u"gridLayout_21")
         self.fcInputImage = QLineEdit(self.fcLoadGroup)
         self.fcInputImage.setObjectName(u"fcInputImage")
-        self.fcInputImage.setGeometry(QRect(10, 30, 191, 24))
         self.fcInputImage.setFrame(True)
         self.fcInputImage.setClearButtonEnabled(True)
+
+        self.gridLayout_21.addWidget(self.fcInputImage, 0, 0, 1, 1)
+
+        self.fcBrowseBtn = QPushButton(self.fcLoadGroup)
+        self.fcBrowseBtn.setObjectName(u"fcBrowseBtn")
+
+        self.gridLayout_21.addWidget(self.fcBrowseBtn, 0, 1, 1, 1)
+
+
+        self.gridLayout_20.addWidget(self.fcLoadGroup, 0, 0, 1, 1)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.gridLayout_20.addItem(self.verticalSpacer_2, 1, 0, 1, 1)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_20.addItem(self.horizontalSpacer, 1, 1, 1, 1)
+
+        self.fcOptionsGroup = QGroupBox(self.fcOptionsWidget)
+        self.fcOptionsGroup.setObjectName(u"fcOptionsGroup")
+        self.gridLayout_25 = QGridLayout(self.fcOptionsGroup)
+        self.gridLayout_25.setObjectName(u"gridLayout_25")
+        self.fcBlur = QRadioButton(self.fcOptionsGroup)
+        self.fcBlur.setObjectName(u"fcBlur")
+
+        self.gridLayout_25.addWidget(self.fcBlur, 0, 0, 1, 1)
+
+        self.fcPixelate = QRadioButton(self.fcOptionsGroup)
+        self.fcPixelate.setObjectName(u"fcPixelate")
+
+        self.gridLayout_25.addWidget(self.fcPixelate, 1, 0, 1, 1)
+
+        self.fcBox = QRadioButton(self.fcOptionsGroup)
+        self.fcBox.setObjectName(u"fcBox")
+
+        self.gridLayout_25.addWidget(self.fcBox, 2, 0, 1, 1)
+
+        self.fcBlackBar = QRadioButton(self.fcOptionsGroup)
+        self.fcBlackBar.setObjectName(u"fcBlackBar")
+
+        self.gridLayout_25.addWidget(self.fcBlackBar, 3, 0, 1, 1)
+
+
+        self.gridLayout_20.addWidget(self.fcOptionsGroup, 2, 0, 1, 2)
+
+
+        self.gridLayout_12.addWidget(self.fcOptionsWidget, 0, 0, 1, 1)
+
         self.tabWidget.addTab(self.faceCensor, "")
         self.ascii = QWidget()
         self.ascii.setObjectName(u"ascii")
@@ -849,7 +901,7 @@ class Ui_ImageNexus(object):
         self.toolBox.addItem(self.img2ascii, u"IMG2ASCII")
         self.txt2ascii = QWidget()
         self.txt2ascii.setObjectName(u"txt2ascii")
-        self.txt2ascii.setGeometry(QRect(0, 0, 830, 380))
+        self.txt2ascii.setGeometry(QRect(0, 0, 898, 512))
         self.gridLayout_27 = QGridLayout(self.txt2ascii)
         self.gridLayout_27.setObjectName(u"gridLayout_27")
         self.t2aInputFrame = QFrame(self.txt2ascii)
@@ -955,7 +1007,7 @@ class Ui_ImageNexus(object):
 
         self.tabWidget.addTab(self.ascii, "")
 
-        self.gridLayout_12.addWidget(self.tabWidget, 0, 0, 1, 1)
+        self.gridLayout_31.addWidget(self.tabWidget, 0, 0, 1, 1)
 
         ImageNexus.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(ImageNexus)
@@ -1124,16 +1176,16 @@ class Ui_ImageNexus(object):
         self.pxFileTypeLbl.setText(QCoreApplication.translate("ImageNexus", u"FIle Type", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.pixelTab), QCoreApplication.translate("ImageNexus", u"Quick Pixelator", None))
         self.fcCensorBtn.setText(QCoreApplication.translate("ImageNexus", u"Censor", None))
-        self.fcSaveBtn.setText(QCoreApplication.translate("ImageNexus", u"Save", None))
-        self.fcFoundFacesGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Found Faces", None))
         self.fcResetBtn.setText(QCoreApplication.translate("ImageNexus", u"Reset Image", None))
-        self.fcOptionsGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Censor Options", None))
-        self.fcBox.setText(QCoreApplication.translate("ImageNexus", u"Box", None))
-        self.fcBlur.setText(QCoreApplication.translate("ImageNexus", u"Blur", None))
-        self.fcPixelate.setText(QCoreApplication.translate("ImageNexus", u"Pixelate", None))
-        self.fcBlackBar.setText(QCoreApplication.translate("ImageNexus", u"Eye Bars", None))
+        self.fcFoundFacesGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Found Faces", None))
+        self.fcSaveBtn.setText(QCoreApplication.translate("ImageNexus", u"Save", None))
         self.fcLoadGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Load Image", None))
         self.fcBrowseBtn.setText(QCoreApplication.translate("ImageNexus", u"Browse", None))
+        self.fcOptionsGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Censor Options", None))
+        self.fcBlur.setText(QCoreApplication.translate("ImageNexus", u"Blur", None))
+        self.fcPixelate.setText(QCoreApplication.translate("ImageNexus", u"Pixelate", None))
+        self.fcBox.setText(QCoreApplication.translate("ImageNexus", u"Box", None))
+        self.fcBlackBar.setText(QCoreApplication.translate("ImageNexus", u"Eye Bars", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.faceCensor), QCoreApplication.translate("ImageNexus", u"Face Censor", None))
         self.i2aLoadImageBtn.setText(QCoreApplication.translate("ImageNexus", u"Load Image", None))
         self.i2aFontSizeLbl.setText(QCoreApplication.translate("ImageNexus", u"Font Size", None))

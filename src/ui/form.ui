@@ -25,7 +25,7 @@
     <normaloff>:/images/resources/icon.ico</normaloff>:/images/resources/icon.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_12">
+   <layout class="QGridLayout" name="gridLayout_31">
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="enabled">
@@ -1019,214 +1019,155 @@
        <attribute name="title">
         <string>Face Censor</string>
        </attribute>
-       <widget class="QWidget" name="fcOutputWidget" native="true">
-        <property name="geometry">
-         <rect>
-          <x>330</x>
-          <y>10</y>
-          <width>581</width>
-          <height>571</height>
-         </rect>
-        </property>
-        <widget class="QGraphicsView" name="fcImageView">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>10</y>
-           <width>561</width>
-           <height>351</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="fcCensorBtn">
-         <property name="geometry">
-          <rect>
-           <x>380</x>
-           <y>530</y>
-           <width>80</width>
-           <height>24</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Censor</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="fcSaveBtn">
-         <property name="geometry">
-          <rect>
-           <x>480</x>
-           <y>530</y>
-           <width>80</width>
-           <height>24</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Save</string>
-         </property>
-        </widget>
-        <widget class="QGroupBox" name="fcFoundFacesGroup">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>370</y>
-           <width>311</width>
-           <height>191</height>
-          </rect>
-         </property>
-         <property name="title">
-          <string>Found Faces</string>
-         </property>
-         <widget class="QListWidget" name="fcFaceList">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>30</y>
-            <width>291</width>
-            <height>151</height>
-           </rect>
-          </property>
-          <property name="alternatingRowColors">
-           <bool>true</bool>
-          </property>
-          <property name="selectionMode">
-           <enum>QAbstractItemView::SelectionMode::MultiSelection</enum>
-          </property>
+       <layout class="QGridLayout" name="gridLayout_12">
+        <item row="0" column="2">
+         <widget class="QWidget" name="fcOutputWidget" native="true">
+          <layout class="QGridLayout" name="gridLayout_26">
+           <item row="2" column="2">
+            <widget class="QPushButton" name="fcCensorBtn">
+             <property name="text">
+              <string>Censor</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QPushButton" name="fcResetBtn">
+             <property name="text">
+              <string>Reset Image</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1" rowspan="2">
+            <widget class="QGroupBox" name="fcFoundFacesGroup">
+             <property name="title">
+              <string>Found Faces</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_30">
+              <item row="0" column="0">
+               <widget class="QListWidget" name="fcFaceList">
+                <property name="alternatingRowColors">
+                 <bool>true</bool>
+                </property>
+                <property name="selectionMode">
+                 <enum>QAbstractItemView::SelectionMode::MultiSelection</enum>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="1" colspan="3">
+            <widget class="QGraphicsView" name="fcImageView"/>
+           </item>
+           <item row="2" column="3">
+            <widget class="QPushButton" name="fcSaveBtn">
+             <property name="text">
+              <string>Save</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
-        </widget>
-        <widget class="QPushButton" name="fcResetBtn">
-         <property name="geometry">
-          <rect>
-           <x>380</x>
-           <y>490</y>
-           <width>80</width>
-           <height>24</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Reset Image</string>
-         </property>
-        </widget>
-       </widget>
-       <widget class="QWidget" name="fcOptionsWidget" native="true">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>10</y>
-          <width>311</width>
-          <height>291</height>
-         </rect>
-        </property>
-        <widget class="QGroupBox" name="fcOptionsGroup">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>100</y>
-           <width>141</width>
-           <height>151</height>
-          </rect>
-         </property>
-         <property name="title">
-          <string>Censor Options</string>
-         </property>
-         <widget class="QRadioButton" name="fcBox">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>90</y>
-            <width>91</width>
-            <height>22</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Box</string>
-          </property>
+        </item>
+        <item row="0" column="0">
+         <widget class="QWidget" name="fcOptionsWidget" native="true">
+          <layout class="QGridLayout" name="gridLayout_20">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="fcLoadGroup">
+             <property name="title">
+              <string>Load Image</string>
+             </property>
+             <property name="flat">
+              <bool>true</bool>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_21">
+              <item row="0" column="0">
+               <widget class="QLineEdit" name="fcInputImage">
+                <property name="frame">
+                 <bool>true</bool>
+                </property>
+                <property name="clearButtonEnabled">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QPushButton" name="fcBrowseBtn">
+                <property name="text">
+                 <string>Browse</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Orientation::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="1">
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="0" colspan="2">
+            <widget class="QGroupBox" name="fcOptionsGroup">
+             <property name="title">
+              <string>Censor Options</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_25">
+              <item row="0" column="0">
+               <widget class="QRadioButton" name="fcBlur">
+                <property name="text">
+                 <string>Blur</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QRadioButton" name="fcPixelate">
+                <property name="text">
+                 <string>Pixelate</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QRadioButton" name="fcBox">
+                <property name="text">
+                 <string>Box</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QRadioButton" name="fcBlackBar">
+                <property name="text">
+                 <string>Eye Bars</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
          </widget>
-         <widget class="QRadioButton" name="fcBlur">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>30</y>
-            <width>91</width>
-            <height>22</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Blur</string>
-          </property>
-         </widget>
-         <widget class="QRadioButton" name="fcPixelate">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>60</y>
-            <width>91</width>
-            <height>22</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Pixelate</string>
-          </property>
-         </widget>
-         <widget class="QRadioButton" name="fcBlackBar">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>120</y>
-            <width>91</width>
-            <height>22</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Eye Bars</string>
-          </property>
-         </widget>
-        </widget>
-        <widget class="QGroupBox" name="fcLoadGroup">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>10</y>
-           <width>301</width>
-           <height>80</height>
-          </rect>
-         </property>
-         <property name="title">
-          <string>Load Image</string>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-         <widget class="QPushButton" name="fcBrowseBtn">
-          <property name="geometry">
-           <rect>
-            <x>210</x>
-            <y>30</y>
-            <width>80</width>
-            <height>24</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Browse</string>
-          </property>
-         </widget>
-         <widget class="QLineEdit" name="fcInputImage">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>30</y>
-            <width>191</width>
-            <height>24</height>
-           </rect>
-          </property>
-          <property name="frame">
-           <bool>true</bool>
-          </property>
-          <property name="clearButtonEnabled">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </widget>
-       </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="ascii">
        <attribute name="title">
@@ -1451,8 +1392,8 @@ QToolBox::pane {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>830</width>
-             <height>380</height>
+             <width>898</width>
+             <height>512</height>
             </rect>
            </property>
            <attribute name="label">
