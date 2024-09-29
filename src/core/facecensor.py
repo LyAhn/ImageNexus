@@ -57,29 +57,31 @@ class FaceCensor:
 
     def detect_faces(self, image):
         (h, w) = image.shape[:2]
-        blob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)), 1.0,
+        # Convert BGRA to BGR for face detection
+        bgr_image = cv2.cvtColor(image, cv2.COLOR_BGRA2BGR)
+        blob = cv2.dnn.blobFromImage(cv2.resize(bgr_image, (300, 300)), 1.0,
                                     (300, 300), (104.0, 177.0, 123.0))
         self.face_net.setInput(blob)
         detections = self.face_net.forward()
+
         faces = []
         for i in range(0, detections.shape[2]):
             confidence = detections[0, 0, i, 2]
-            if confidence > 0.5:  # Adjust this threshold as needed
+            if confidence > 0.5:
                 box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
                 (startX, startY, endX, endY) = box.astype("int")
                 faces.append((startX, startY, endX - startX, endY - startY))
-        
-        # Draw bounding boxes and add face IDs
+
+        # Draw bounding boxes and add face IDs on the BGRA image
         for i, (x, y, w, h) in enumerate(faces):
-            cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
-            # Add face ID to the top-left corner of the bounding box
-            cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2)
-        
+            cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0, 255), 2)
+            cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0, 255), 2)
+
         return image, faces
 
     def load_and_detect_faces(self):
         file_path, _ = QFileDialog.getOpenFileName(
-            parent=None, 
+            parent=None,
             caption="Open Image",
             dir="",
             filter="Image Files (*.png *.jpg *.bmp *.tiff *.webp)"
@@ -87,10 +89,15 @@ class FaceCensor:
 
         if file_path:
             try:
-                self.original_image = cv2.imread(file_path)
+                # Load image with alpha channel preserved
+                self.original_image = cv2.imread(file_path, cv2.IMREAD_UNCHANGED)
                 if self.original_image is None:
                     raise ValueError("Failed to load image")
-                
+
+                # Ensure the image has an alpha channel
+                if self.original_image.shape[2] == 3:
+                    self.original_image = cv2.cvtColor(self.original_image, cv2.COLOR_BGR2BGRA)
+
                 image_with_faces, self.faces = self.detect_faces(self.original_image.copy())
                 self.display_image(image_with_faces)
                 self.update_face_list(self.faces)
@@ -112,27 +119,30 @@ class FaceCensor:
 
     def apply_censoring(self, image, draw_boxes=False):
         censoring_method = self.get_censoring_method()
-        
-        # First, draw bounding boxes for all detected faces
+
         if draw_boxes:
             for i, (x, y, w, h) in enumerate(self.faces):
-                cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
-                cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2)
-        
-        # Then, apply censoring only to selected faces
+                cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0, 255), 2)
+                cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0, 255), 2)
+
         if censoring_method:
             for x, y, w, h in self.selected_faces:
                 face_roi = image[y:y+h, x:x+w]
+                
                 if censoring_method == "Blur":
-                    face_roi = cv2.GaussianBlur(face_roi, (99, 99), 30)
+                    blurred = cv2.GaussianBlur(face_roi, (99, 99), 30)
+                    alpha = face_roi[:,:,3]
+                    face_roi[:,:,:3] = blurred[:,:,:3]
+                    face_roi[:,:,3] = alpha
                 elif censoring_method == "Black Box":
-                    face_roi[:] = (0, 0, 0)
+                    face_roi[:,:,:3] = (0, 0, 0)
                 elif censoring_method == "Pixelate":
                     face_roi = self.pixelate(face_roi)
                 elif censoring_method == "Eye Bars":
                     self.draw_eye_bars(image, x, y, w, h)
+                
                 image[y:y+h, x:x+w] = face_roi
-        
+
         return image
 
     def apply_censoring_without_boxes(self):
@@ -148,22 +158,20 @@ class FaceCensor:
         super().resizeEvent(event)
 
     def display_image(self, image):
-        height, width, channel = image.shape
-        bytes_per_line = 3 * width
-        q_image = QImage(image.data, width, height, bytes_per_line, QImage.Format.Format_RGB888).rgbSwapped()
+        height, width = image.shape[:2]
+        bytes_per_line = 4 * width
+        q_image = QImage(image.data, width, height, bytes_per_line, QImage.Format_ARGB32)
         pixmap = QPixmap.fromImage(q_image)
         scene = QGraphicsScene()
         pixmap_item = QGraphicsPixmapItem(pixmap)
         scene.addItem(pixmap_item)
         self.ui.fcImageView.setScene(scene)
-        self.ui.fcImageView.fitInView(scene.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
+        self.ui.fcImageView.fitInView(scene.sceneRect(), Qt.KeepAspectRatio)
 
     def update_face_list(self, faces):
         self.ui.fcFaceList.clear()
         for i, (x, y, w, h) in enumerate(faces):
             self.ui.fcFaceList.addItem(f"Face {i+1}: ({x}, {y}, {w}, {h})")
-    
-    
 
     def censor_faces(self):
         if not hasattr(self, 'original_image') or not hasattr(self, 'selected_faces'):
@@ -196,8 +204,10 @@ class FaceCensor:
             for x in range(0, w, x_steps):
                 roi = image[y:y+y_steps, x:x+x_steps]
                 color = roi.mean(axis=(0,1)).astype(int)
-                image[y:y+y_steps, x:x+x_steps] = color
-    
+                image[y:y+y_steps, x:x+x_steps, :3] = color[:3]
+                # Preserve original alpha values
+                image[y:y+y_steps, x:x+x_steps, 3] = roi[:,:,3]
+        
         return image
     
     def reset_image(self):
@@ -216,17 +226,22 @@ class FaceCensor:
             None,
             "Save Censored Image",
             "",
-            "Image Files (*.png *.jpg *.bmp *.tiff *.webp)"
+            "PNG Images (*.png);;JPEG Images (*.jpg *.jpeg);;BMP Images (*.bmp);;WebP Images (*.webp);;TIFF Images (*.tif *.tiff);;All Files (*.*)"
         )
 
         if file_path:
             try:
+                # Ensure the image is in BGRA format
+                if censored_image.shape[2] == 3:
+                    censored_image = cv2.cvtColor(censored_image, cv2.COLOR_BGR2BGRA)
+                
+                # Save as PNG to preserve transparency
                 cv2.imwrite(file_path, censored_image)
                 print(f"Censored image saved successfully to {file_path}")
             except Exception as e:
                 print(f"Error saving censored image: {e}")
 
 # Todo: Implement selecting specific faces via preview
-# Todo: fix transparency issue
+# Fixme: fix transparency issue w/ png
 
 
