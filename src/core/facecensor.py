@@ -73,7 +73,7 @@ class FaceCensor:
         for i, (x, y, w, h) in enumerate(faces):
             cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
             # Add face ID to the top-left corner of the bounding box
-            cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+            cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2)
         
         return image, faces
 
@@ -98,6 +98,42 @@ class FaceCensor:
             except Exception as e:
                 print(f"Error loading image: {e}")
 
+    def get_censoring_method(self):
+        methods = {
+            self.ui.fcBlur: "Blur",
+            self.ui.fcBox: "Black Box",
+            self.ui.fcPixelate: "Pixelate",
+            self.ui.fcBlackBar: "Eye Bars"
+        }
+        for radio_button, method in methods.items():
+            if radio_button.isChecked():
+                return method
+        return None
+
+    def apply_censoring(self, image, draw_boxes=False):
+        censoring_method = self.get_censoring_method()
+        if not censoring_method:
+            return image
+
+        for i, (x, y, w, h) in enumerate(self.selected_faces):
+            face_roi = image[y:y+h, x:x+w]
+            if censoring_method == "Blur":
+                face_roi = cv2.GaussianBlur(face_roi, (99, 99), 30)
+            elif censoring_method == "Black Box":
+                face_roi[:] = (0, 0, 0)
+            elif censoring_method == "Pixelate":
+                face_roi = self.pixelate(face_roi)
+            elif censoring_method == "Eye Bars":
+                self.draw_eye_bars(image, x, y, w, h)
+            
+            image[y:y+h, x:x+w] = face_roi
+
+            if draw_boxes:
+                cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+
+        return image
+
     def resizeEvent(self, event):
         if hasattr(self, 'original_image'):
             self.display_image(self.original_image.copy())
@@ -118,40 +154,16 @@ class FaceCensor:
         self.ui.fcFaceList.clear()
         for i, (x, y, w, h) in enumerate(faces):
             self.ui.fcFaceList.addItem(f"Face {i+1}: ({x}, {y}, {w}, {h})")
+    
+    
 
     def censor_faces(self):
         if not hasattr(self, 'original_image') or not hasattr(self, 'selected_faces'):
             return
 
-        # Determine which radio button is checked
-        if self.ui.fcBlur.isChecked():
-            censoring_method = "Blur"
-        elif self.ui.fcBox.isChecked():
-            censoring_method = "Black Box"
-        elif self.ui.fcPixelate.isChecked():
-            censoring_method = "Pixelate"
-        elif self.ui.fcBlackBar.isChecked():
-            censoring_method = "Eye Bars"
-        else:
-            print("No censoring method selected")
-            return
-
         image = self.original_image.copy()
-        self.censored_image = image
-
-        for (x, y, w, h) in self.selected_faces:
-            face_roi = image[y:y+h, x:x+w]
-            if censoring_method == "Blur":
-                face_roi = cv2.GaussianBlur(face_roi, (99, 99), 30)
-            elif censoring_method == "Pixelate":
-                face_roi = self.pixelate(face_roi)
-            elif censoring_method == "Black Box":
-                face_roi[:] = (0, 0, 0)
-            elif censoring_method == "Eye Bars":
-                self.draw_eye_bars(image, x, y, w, h)
-            image[y:y+h, x:x+w] = face_roi
-
-        self.display_image(image)
+        censored_image = self.apply_censoring(image, draw_boxes=True)
+        self.display_image(censored_image)
 
     def draw_eye_bars(self, image, x, y, w, h):
         # Estimate eye positions (this is a rough estimation)
@@ -182,23 +194,32 @@ class FaceCensor:
     
     def reset_image(self):
         if hasattr(self, 'original_image'):
-            self.display_image(self.original_image.copy())
+            image_with_faces, self.faces = self.detect_faces(self.original_image.copy())
+            self.display_image(image_with_faces)
+            self.update_face_list(self.faces)
+    def apply_censoring_without_boxes(self):
+        if not hasattr(self, 'original_image') or not hasattr(self, 'selected_faces'):
+            return None
+
+        image = self.original_image.copy()
+        return self.apply_censoring(image, draw_boxes=False)
 
     def save_image(self):
-        if not hasattr(self, 'censored_image'):
+        censored_image = self.apply_censoring_without_boxes()
+        if censored_image is None:
             print("No censored image to save.")
             return
-        
+
         file_path, _ = QFileDialog.getSaveFileName(
-            None, 
+            None,
             "Save Censored Image",
             "",
             "Image Files (*.png *.jpg *.bmp *.tiff *.webp)"
         )
-        
+
         if file_path:
             try:
-                cv2.imwrite(file_path, self.censored_image)
+                cv2.imwrite(file_path, censored_image)
                 print(f"Censored image saved successfully to {file_path}")
             except Exception as e:
                 print(f"Error saving censored image: {e}")
