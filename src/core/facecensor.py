@@ -117,17 +117,15 @@ class FaceCensor:
         """
         Handle selection toggling from ClickableRectItem.
         """
-        face = self.faces[face_index]
         if is_selected:
-            if face not in self.selected_faces:
-                self.selected_faces.append(face)
+            if self.faces[face_index] not in self.selected_faces:
+                self.selected_faces.append(self.faces[face_index])
         else:
-            if face in self.selected_faces:
-                self.selected_faces.remove(face)
+            if self.faces[face_index] in self.selected_faces:
+                self.selected_faces.remove(self.faces[face_index])
         
         # Update GUI list selection
-        list_item = self.ui.fcFaceList.item(face_index)
-        list_item.setSelected(is_selected)
+        self.ui.fcFaceList.item(face_index).setSelected(is_selected)
         
         # Update rectangle appearance
         self.rect_items[face_index].update_appearance()
@@ -314,13 +312,19 @@ class FaceCensor:
     def censor_faces(self):
         """
         Apply the selected censoring method to the selected faces and update the display.
+        If no faces are selected, display the original image without censoring.
         """
-        if not hasattr(self, 'original_image') or not self.selected_faces:
-            QMessageBox.warning(self.ui, "Warning", "No faces selected for censoring.")
+        if not hasattr(self, 'original_image'):
             return
-        image = self.original_image.copy()
-        censored_image = self.apply_censoring(image, draw_boxes=True)
-        self.display_image(censored_image)
+
+        if not self.selected_faces:
+            # No faces selected, display the original image
+            self.display_image(self.original_image.copy())
+        else:
+            # Apply censoring to selected faces
+            image = self.original_image.copy()
+            censored_image = self.apply_censoring(image, draw_boxes=True)
+            self.display_image(censored_image)
 
     def draw_eye_bars(self, image, x, y, w, h):
         """
