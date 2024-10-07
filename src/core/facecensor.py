@@ -13,33 +13,94 @@ This code is licensed under the GPL-3.0 license (see LICENSE.txt for details)
 import cv2
 import numpy as np
 import os
-from PySide6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QFileDialog
-from PySide6.QtGui import QImage, QPixmap
-from PySide6.QtCore import Qt
+from PySide6.QtWidgets import (
+    QGraphicsScene,
+    QGraphicsPixmapItem,
+    QFileDialog,
+    QListWidgetItem,
+    QMessageBox,
+    QGraphicsRectItem
+)
+from PySide6.QtGui import QImage, QPixmap, QPen, QColor
+from PySide6.QtCore import Qt, QRectF, Signal, QObject
+
+
+class ClickableRectItem(QObject, QGraphicsRectItem):
+    """
+    A QGraphicsRectItem that emits a signal when clicked.
+    """
+    faceSelected = Signal(int, bool)  # Signal: face_index, is_selected
+
+    def __init__(self, rect, face_index, parent=None):
+        QObject.__init__(self)
+        QGraphicsRectItem.__init__(self, rect, parent)
+        self.face_index = face_index
+        self.selected = False
+        self.setPen(QPen(QColor(255, 0, 0), 2))
+        self.setBrush(Qt.NoBrush)
+        self.setFlag(QGraphicsRectItem.ItemIsSelectable, True)
+        self.setAcceptHoverEvents(True)
+
+    def mousePressEvent(self, event):
+        self.toggle_selection()
+        event.accept()
+
+    def toggle_selection(self):
+        self.selected = not self.selected
+        self.update_appearance()
+        self.faceSelected.emit(self.face_index, self.selected)
+
+    def update_appearance(self):
+        color = QColor(0, 255, 0) if self.selected else QColor(255, 0, 0)
+        self.setPen(QPen(color, 2))
+
+    def hoverEnterEvent(self, event):
+        self.setPen(QPen(QColor(0, 0, 255), 2))
+        super().hoverEnterEvent(event)
+
+    def hoverLeaveEvent(self, event):
+        self.update_appearance()
+        super().hoverLeaveEvent(event)
+
 
 class FaceCensor:
+    """
+    The main FaceCensor class that handles loading images, detecting faces,
+    displaying bounding boxes, and applying censoring methods.
+    """
+
     def __init__(self, ui):
         self.ui = ui
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        # Points application to app root directory
+        # Point application to app root directory
         root_dir = os.path.abspath(os.path.join(current_dir, '..', '..', '.'))
-        
-        prototxt_path = os.path.join(root_dir, 'resources', 'models', 'facedetection', 'deploy.prototxt')
-        model_path = os.path.join(root_dir, 'resources', 'models', 'facedetection', 'res10_300x300_ssd_iter_140000.caffemodel')
-        
+        prototxt_path = os.path.join(
+            root_dir, 'resources', 'models', 'facedetection', 'deploy.prototxt'
+        )
+        model_path = os.path.join(
+            root_dir, 'resources', 'models', 'facedetection', 'res10_300x300_ssd_iter_140000.caffemodel'
+        )
+
         print(f"Attempting to load prototxt from: {prototxt_path}")
         print(f"Attempting to load model from: {model_path}")
-        
+
         if not os.path.exists(prototxt_path):
             raise FileNotFoundError(f"Prototxt file not found at {prototxt_path}")
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"Model file not found at {model_path}")
-        
+
         self.face_net = cv2.dnn.readNetFromCaffe(prototxt_path, model_path)
         print("Face detection model loaded successfully.")
+
         self.setup_connections()
         self.pixmap_item = None
         self.ui.fcImageView.resizeEvent = self.resizeEvent
+        self.selected_faces = []
+        self.rect_items = []
+
+        # Initialize the Graphics Scene once
+        self.scene = QGraphicsScene()
+        self.ui.fcImageView.setScene(self.scene)
 
     def setup_connections(self):
         self.ui.fcBrowseBtn.clicked.connect(self.load_and_detect_faces)
@@ -50,69 +111,107 @@ class FaceCensor:
         self.ui.fcBox.toggled.connect(self.censor_faces)
         self.ui.fcPixelate.toggled.connect(self.censor_faces)
         self.ui.fcBlackBar.toggled.connect(self.censor_faces)
-
         self.ui.fcFaceList.itemSelectionChanged.connect(self.update_selected_faces)
 
-    def update_selected_faces(self):
-        selected_indices = [self.ui.fcFaceList.row(item) for item in self.ui.fcFaceList.selectedItems()]
-        self.selected_faces = [self.faces[i] for i in selected_indices]
-        self.update_image_view()
+    def handle_face_selection(self, face_index, is_selected):
+        """
+        Handle selection toggling from ClickableRectItem.
+        """
+        face = self.faces[face_index]
+        if is_selected:
+            if face not in self.selected_faces:
+                self.selected_faces.append(face)
+        else:
+            if face in self.selected_faces:
+                self.selected_faces.remove(face)
+        
+        # Update GUI list selection
+        list_item = self.ui.fcFaceList.item(face_index)
+        list_item.setSelected(is_selected)
+        
+        # Update rectangle appearance
+        self.rect_items[face_index].update_appearance()
+        
+        self.censor_faces()
 
-    def update_image_view(self):
-        if hasattr(self, 'original_image'):
-            image_with_faces = self.draw_faces_with_colors(self.original_image.copy())
-            self.display_image(image_with_faces)
+    def update_selected_faces(self):
+        """
+        Update the list of selected faces based on the GUI list selections.
+        """
+        selected_items = self.ui.fcFaceList.selectedItems()
+        selected_indices = [self.ui.fcFaceList.row(item) for item in selected_items]
+        self.selected_faces = [self.faces[i] for i in selected_indices]
+        
+        # Update rectangles' selection state
+        for idx, rect_item in enumerate(self.rect_items):
+            is_selected = self.faces[idx] in self.selected_faces
+            rect_item.selected = is_selected
+            rect_item.update_appearance()
+        
+        self.censor_faces()
 
     def detect_faces(self, image):
+        """
+        Detect faces in the given image using the pre-loaded face detection model.
+        Returns the image with drawn bounding boxes and a list of face coordinates.
+        """
         (h, w) = image.shape[:2]
         # Convert BGRA to BGR for face detection
         bgr_image = cv2.cvtColor(image, cv2.COLOR_BGRA2BGR)
-        blob = cv2.dnn.blobFromImage(cv2.resize(bgr_image, (300, 300)), 1.0,
-                                    (300, 300), (104.0, 177.0, 123.0))
+        blob = cv2.dnn.blobFromImage(
+            cv2.resize(bgr_image, (300, 300)),
+            1.0,
+            (300, 300),
+            (104.0, 177.0, 123.0),
+        )
         self.face_net.setInput(blob)
         detections = self.face_net.forward()
-
         faces = []
         for i in range(0, detections.shape[2]):
             confidence = detections[0, 0, i, 2]
             if confidence > 0.5:
                 box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
                 (startX, startY, endX, endY) = box.astype("int")
+                # Ensure bounding boxes are within image dimensions
+                startX = max(0, startX)
+                startY = max(0, startY)
+                endX = min(w - 1, endX)
+                endY = min(h - 1, endY)
                 faces.append((startX, startY, endX - startX, endY - startY))
-
-        # Draw bounding boxes and add face IDs on the BGRA image
-        for i, (x, y, w, h) in enumerate(faces):
-            cv2.rectangle(image, (x, y), (x+w, y+h), (0, 0, 255, 255), 2)
-            cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255, 255), 2)
-
         return image, faces
 
     def load_and_detect_faces(self):
+        """
+        Load an image file, detect faces, display the image with bounding boxes,
+        and populate the face list.
+        """
         file_path = QFileDialog.getOpenFileName(
             parent=None,
             caption="Open Image",
             dir="",
             filter="Image Files (*.png *.jpg *.bmp *.tiff *.webp)"
         )
-
-        if file_path:
+        if file_path[0]:
             try:
                 self.original_image = cv2.imread(file_path[0], cv2.IMREAD_UNCHANGED)
                 if self.original_image is None:
                     raise ValueError("Failed to load image")
-                
                 # Ensure the image has an alpha channel
                 if self.original_image.shape[2] == 3:
-                    self.original_image = cv2.cvtColor(self.original_image, cv2.COLOR_BGR2BGRA)
-                
+                    self.original_image = cv2.cvtColor(
+                        self.original_image, cv2.COLOR_BGR2BGRA
+                    )
                 image_with_faces, self.faces = self.detect_faces(self.original_image.copy())
                 self.display_image(image_with_faces)
                 self.update_face_list(self.faces)
                 self.ui.fcInputImage.setText(file_path[0])
             except Exception as e:
-                print(f"Error loading image: {e}")
+                QMessageBox.critical(self.ui, "Error", f"Error loading image: {e}")
 
     def get_censoring_method(self):
+        """
+        Retrieve the selected censoring method from the UI.
+        """
         methods = {
             self.ui.fcBlur: "Blur",
             self.ui.fcBox: "Black Box",
@@ -125,136 +224,171 @@ class FaceCensor:
         return None
 
     def apply_censoring(self, image, draw_boxes=False):
+        """
+        Apply the selected censoring method to the selected faces in the image.
+        """
         censoring_method = self.get_censoring_method()
         if draw_boxes:
-            image = self.draw_faces_with_colors(image)
-        
+            # Drawing is handled by ClickableRectItem
+            pass
         if censoring_method:
             for x, y, w, h in self.selected_faces:
-                face_roi = image[y:y+h, x:x+w]
-                
+                face_roi = image[y:y + h, x:x + w]
                 if censoring_method == "Blur":
                     blurred = cv2.GaussianBlur(face_roi, (99, 99), 30)
-                    alpha = face_roi[:,:,3]
-                    face_roi[:,:,:3] = blurred[:,:,:3]
-                    face_roi[:,:,3] = alpha
+                    alpha = face_roi[:, :, 3]
+                    face_roi[:, :, :3] = blurred[:, :, :3]
+                    face_roi[:, :, 3] = alpha
                 elif censoring_method == "Black Box":
-                    face_roi[:,:,:3] = (0, 0, 0)
+                    face_roi[:, :, :3] = (0, 0, 0)
                 elif censoring_method == "Pixelate":
                     face_roi = self.pixelate(face_roi)
                 elif censoring_method == "Eye Bars":
                     self.draw_eye_bars(image, x, y, w, h)
-                
-                image[y:y+h, x:x+w] = face_roi
-
+                image[y:y + h, x:x + w] = face_roi
         return image
 
     def apply_censoring_without_boxes(self):
+        """
+        Apply censoring without redrawing bounding boxes.
+        """
         if not hasattr(self, 'original_image') or not hasattr(self, 'selected_faces'):
             return None
-
         image = self.original_image.copy()
         return self.apply_censoring(image, draw_boxes=False)
 
     def resizeEvent(self, event):
+        """
+        Handle the resize event to adjust the image view.
+        """
         self.fit_image_in_view()
 
     def display_image(self, image):
+        """
+        Display the given image in the QGraphicsView, adding interactive bounding boxes.
+        """
+        # Clear the existing scene
+        self.scene.clear()
+
+        # Convert the image to QPixmap
         height, width = image.shape[:2]
         bytes_per_line = 4 * width
-        q_image = QImage(image.data, width, height, bytes_per_line, QImage.Format_ARGB32)
+        q_image = QImage(
+            image.data, width, height, bytes_per_line, QImage.Format_ARGB32
+        )
         pixmap = QPixmap.fromImage(q_image)
-        scene = QGraphicsScene()
         self.pixmap_item = QGraphicsPixmapItem(pixmap)
-        scene.addItem(self.pixmap_item)
-        self.ui.fcImageView.setScene(scene)
+        self.scene.addItem(self.pixmap_item)
+
+        # Add ClickableRectItems for each face
+        self.rect_items = []
+        for idx, (x, y, w, h) in enumerate(self.faces):
+            rect = QRectF(x, y, w, h)
+            rect_item = ClickableRectItem(rect, idx)
+            rect_item.faceSelected.connect(self.handle_face_selection)
+            self.scene.addItem(rect_item)
+            self.rect_items.append(rect_item)
+            
+            # Set initial selection state
+            is_selected = self.faces[idx] in self.selected_faces
+            rect_item.selected = is_selected
+            rect_item.update_appearance()
+
         self.fit_image_in_view()
 
     def fit_image_in_view(self):
+        """
+        Adjust the QGraphicsView to fit the image while maintaining aspect ratio.
+        """
         if self.pixmap_item:
             self.ui.fcImageView.fitInView(self.pixmap_item, Qt.KeepAspectRatio)
 
     def update_face_list(self, faces):
+        """
+        Populate the face list (fcFaceList) with detected faces.
+        """
         self.ui.fcFaceList.clear()
         for i, (x, y, w, h) in enumerate(faces):
             self.ui.fcFaceList.addItem(f"Face {i+1}: ({x}, {y}, {w}, {h})")
 
     def censor_faces(self):
-        if not hasattr(self, 'original_image') or not hasattr(self, 'selected_faces'):
+        """
+        Apply the selected censoring method to the selected faces and update the display.
+        """
+        if not hasattr(self, 'original_image') or not self.selected_faces:
+            QMessageBox.warning(self.ui, "Warning", "No faces selected for censoring.")
             return
-
         image = self.original_image.copy()
         censored_image = self.apply_censoring(image, draw_boxes=True)
         self.display_image(censored_image)
 
     def draw_eye_bars(self, image, x, y, w, h):
-        # Estimate eye positions (this is a rough estimation)
-        eye_y = y + int(h * 0.3)  # Eyes are typically in the upper third of the face
-        eye_h = int(h * 0.16)  # Eye height is roughly 15% of face height
-        
-        # Calculate the width of the bar to cover both eyes
-        bar_w = int(w * 1.0)  # Extend the bar to cover approximately 100% of face width
-        
-        # Calculate the x-position of the bar (centered on the face)
-        bar_x = x + int(w * 0.00)  # Start at 15% of face width
-        
-        # Draw a single black bar across both eyes
-        cv2.rectangle(image, (bar_x, eye_y), (bar_x + bar_w, eye_y + eye_h), (0, 0, 0), -1)
+        """
+        Draw horizontal black bars over the eyes region of the face.
+        """
+        # Estimate eye positions (rough estimation)
+        eye_y = y + int(h * 0.3)  # Eyes typically in the upper third
+        eye_h = int(h * 0.16)     # Eye height roughly 16% of face height
+        bar_w = int(w * 1.0)      # Bar width to cover 100% of face width
+        bar_x = x                  # Start at face's x position
+        cv2.rectangle(
+            image,
+            (bar_x, eye_y),
+            (bar_x + bar_w, eye_y + eye_h),
+            (0, 0, 0),
+            -1
+        )
 
     def pixelate(self, image, blocks=10):
+        """
+        Pixelate the given image region.
+        """
         (h, w) = image.shape[:2]
-        x_steps = w // blocks
-        y_steps = h // blocks
-        
+        x_steps = max(1, w // blocks)
+        y_steps = max(1, h // blocks)
+
         for y in range(0, h, y_steps):
             for x in range(0, w, x_steps):
-                roi = image[y:y+y_steps, x:x+x_steps]
-                color = roi.mean(axis=(0,1)).astype(int)
-                image[y:y+y_steps, x:x+x_steps, :3] = color[:3]
-                # Preserve original alpha values
-                image[y:y+y_steps, x:x+x_steps, 3] = roi[:,:,3]
-        
+                roi = image[y:y + y_steps, x:x + x_steps]
+                if roi.size == 0:
+                    continue
+                color = roi.mean(axis=(0, 1)).astype(int)
+                image[y:y + y_steps, x:x + x_steps, :3] = color[:3]
         return image
-    
+
     def reset_image(self):
+        """
+        Reset the image to its original state, removing all censoring.
+        """
         if hasattr(self, 'original_image'):
             image_with_faces, self.faces = self.detect_faces(self.original_image.copy())
             self.display_image(image_with_faces)
             self.update_face_list(self.faces)
+            self.selected_faces = []
+            # Deselect all items in the face list
+            self.ui.fcFaceList.clearSelection()
 
     def save_image(self):
+        """
+        Save the censored image to a file.
+        """
         censored_image = self.apply_censoring_without_boxes()
         if censored_image is None:
-            print("No censored image to save.")
+            QMessageBox.warning(self.ui, "Warning", "No censored image to save.")
             return
-
         file_path, _ = QFileDialog.getSaveFileName(
             None,
             "Save Censored Image",
             "",
             "PNG Images (*.png);;JPEG Images (*.jpg *.jpeg);;BMP Images (*.bmp);;WebP Images (*.webp);;TIFF Images (*.tif *.tiff);;All Files (*.*)"
         )
-
         if file_path:
             try:
                 # Ensure the image is in BGRA format
                 if censored_image.shape[2] == 3:
                     censored_image = cv2.cvtColor(censored_image, cv2.COLOR_BGR2BGRA)
-                
                 # Save as PNG to preserve transparency
                 cv2.imwrite(file_path, censored_image)
-                print(f"Censored image saved successfully to {file_path}")
+                QMessageBox.information(self.ui, "Success", f"Censored image saved successfully to {file_path}")
             except Exception as e:
-                print(f"Error saving censored image: {e}")
-
-    def draw_faces_with_colors(self, image):
-        for i, (x, y, w, h) in enumerate(self.faces):
-            color = (0, 255, 0, 255) if (x, y, w, h) in self.selected_faces else (0, 0, 255, 255)
-            cv2.rectangle(image, (x, y), (x+w, y+h), color, 2)
-            cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 2)
-        return image
-
-# Todo: Implement selecting specific faces via preview
-# Fixme: fix transparency issue w/ png
-
-
+                QMessageBox.critical(self.ui, "Error", f"Error saving censored image: {e}")
