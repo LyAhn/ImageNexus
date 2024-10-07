@@ -46,10 +46,10 @@ class FaceCensor:
         self.ui.fcCensorBtn.clicked.connect(self.censor_faces)
         self.ui.fcSaveBtn.clicked.connect(self.save_image)
         self.ui.fcResetBtn.clicked.connect(self.reset_image)
-        self.ui.fcBlur.toggled.connect(self.update_image_view)
-        self.ui.fcBox.toggled.connect(self.update_image_view)
-        self.ui.fcPixelate.toggled.connect(self.update_image_view)
-        self.ui.fcBlackBar.toggled.connect(self.update_image_view)
+        self.ui.fcBlur.toggled.connect(self.censor_faces)
+        self.ui.fcBox.toggled.connect(self.censor_faces)
+        self.ui.fcPixelate.toggled.connect(self.censor_faces)
+        self.ui.fcBlackBar.toggled.connect(self.censor_faces)
 
         self.ui.fcFaceList.itemSelectionChanged.connect(self.update_selected_faces)
 
