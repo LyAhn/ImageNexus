@@ -36,7 +36,7 @@ class ClickableRectItem(QObject, QGraphicsRectItem):
         QGraphicsRectItem.__init__(self, rect, parent)
         self.face_index = face_index
         self.selected = False
-        self.setPen(QPen(QColor(255, 0, 0), 2))
+        self.setPen(QPen(QColor(255, 0, 0), 4)) # Red border, width of 4
         self.setBrush(Qt.NoBrush)
         self.setFlag(QGraphicsRectItem.ItemIsSelectable, True)
         self.setAcceptHoverEvents(True)
@@ -51,11 +51,11 @@ class ClickableRectItem(QObject, QGraphicsRectItem):
         self.faceSelected.emit(self.face_index, self.selected)
 
     def update_appearance(self):
-        color = QColor(0, 255, 0) if self.selected else QColor(255, 0, 0)
-        self.setPen(QPen(color, 2))
+        color = QColor(0, 255, 0) if self.selected else QColor(255, 0, 0) # Green if selected, red if not
+        self.setPen(QPen(color, 4)) # keep the border width at 4
 
     def hoverEnterEvent(self, event):
-        self.setPen(QPen(QColor(0, 0, 255), 2))
+        self.setPen(QPen(QColor(0, 0, 255), 4)) # Blue border width of 4
         super().hoverEnterEvent(event)
 
     def hoverLeaveEvent(self, event):
@@ -378,14 +378,16 @@ class FaceCensor:
         """
         censored_image = self.apply_censoring_without_boxes()
         if censored_image is None:
-            QMessageBox.warning(self.ui, "Warning", "No censored image to save.")
+            QMessageBox.warning(self.ui.centralwidget, "Warning", "No censored image to save.")
             return
+
         file_path, _ = QFileDialog.getSaveFileName(
-            None,
+            self.ui.centralwidget,
             "Save Censored Image",
             "",
             "PNG Images (*.png);;JPEG Images (*.jpg *.jpeg);;BMP Images (*.bmp);;WebP Images (*.webp);;TIFF Images (*.tif *.tiff);;All Files (*.*)"
         )
+
         if file_path:
             try:
                 # Ensure the image is in BGRA format
@@ -393,6 +395,6 @@ class FaceCensor:
                     censored_image = cv2.cvtColor(censored_image, cv2.COLOR_BGR2BGRA)
                 # Save as PNG to preserve transparency
                 cv2.imwrite(file_path, censored_image)
-                QMessageBox.information(self.ui, "Success", f"Censored image saved successfully to {file_path}")
+                QMessageBox.information(self.ui.centralwidget, "Success", f"Censored image saved successfully to {file_path}")
             except Exception as e:
-                QMessageBox.critical(self.ui, "Error", f"Error saving censored image: {e}")
+                QMessageBox.critical(self.ui.centralwidget, "Error", f"Error saving censored image: {str(e)}")
