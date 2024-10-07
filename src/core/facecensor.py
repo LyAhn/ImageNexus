@@ -38,6 +38,8 @@ class FaceCensor:
         self.face_net = cv2.dnn.readNetFromCaffe(prototxt_path, model_path)
         print("Face detection model loaded successfully.")
         self.setup_connections()
+        self.pixmap_item = None
+        self.ui.fcImageView.resizeEvent = self.resizeEvent
 
     def setup_connections(self):
         self.ui.fcBrowseBtn.clicked.connect(self.load_and_detect_faces)
@@ -95,7 +97,6 @@ class FaceCensor:
 
         if file_path:
             try:
-                # Load image with alpha channel preserved
                 self.original_image = cv2.imread(file_path[0], cv2.IMREAD_UNCHANGED)
                 if self.original_image is None:
                     raise ValueError("Failed to load image")
@@ -156,9 +157,7 @@ class FaceCensor:
         return self.apply_censoring(image, draw_boxes=False)
 
     def resizeEvent(self, event):
-        if hasattr(self, 'original_image'):
-            self.display_image(self.original_image.copy())
-        super().resizeEvent(event)
+        self.fit_image_in_view()
 
     def display_image(self, image):
         height, width = image.shape[:2]
@@ -166,10 +165,14 @@ class FaceCensor:
         q_image = QImage(image.data, width, height, bytes_per_line, QImage.Format_ARGB32)
         pixmap = QPixmap.fromImage(q_image)
         scene = QGraphicsScene()
-        pixmap_item = QGraphicsPixmapItem(pixmap)
-        scene.addItem(pixmap_item)
+        self.pixmap_item = QGraphicsPixmapItem(pixmap)
+        scene.addItem(self.pixmap_item)
         self.ui.fcImageView.setScene(scene)
-        self.ui.fcImageView.fitInView(scene.sceneRect(), Qt.KeepAspectRatio)
+        self.fit_image_in_view()
+
+    def fit_image_in_view(self):
+        if self.pixmap_item:
+            self.ui.fcImageView.fitInView(self.pixmap_item, Qt.KeepAspectRatio)
 
     def update_face_list(self, faces):
         self.ui.fcFaceList.clear()
