@@ -1023,28 +1023,49 @@
         <item row="0" column="2">
          <widget class="QWidget" name="fcOutputWidget" native="true">
           <layout class="QGridLayout" name="gridLayout_26">
-           <item row="2" column="2">
+           <item row="0" column="1" colspan="3">
+            <widget class="QGraphicsView" name="fcImageView">
+             <property name="sizeAdjustPolicy">
+              <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContentsOnFirstShow</enum>
+             </property>
+             <property name="viewportUpdateMode">
+              <enum>QGraphicsView::ViewportUpdateMode::BoundingRectViewportUpdate</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
             <widget class="QPushButton" name="fcCensorBtn">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>Censor</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="2">
-            <widget class="QPushButton" name="fcResetBtn">
-             <property name="text">
-              <string>Reset Image</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1" rowspan="2">
+           <item row="1" column="1" rowspan="3">
             <widget class="QGroupBox" name="fcFoundFacesGroup">
+             <property name="maximumSize">
+              <size>
+               <width>404</width>
+               <height>16777215</height>
+              </size>
+             </property>
              <property name="title">
               <string>Found Faces</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_30">
               <item row="0" column="0">
                <widget class="QListWidget" name="fcFaceList">
+                <property name="maximumSize">
+                 <size>
+                  <width>348</width>
+                  <height>140</height>
+                 </size>
+                </property>
                 <property name="alternatingRowColors">
                  <bool>true</bool>
                 </property>
@@ -1056,13 +1077,38 @@
              </layout>
             </widget>
            </item>
-           <item row="0" column="1" colspan="3">
-            <widget class="QGraphicsView" name="fcImageView"/>
-           </item>
-           <item row="2" column="3">
+           <item row="3" column="3">
             <widget class="QPushButton" name="fcSaveBtn">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>Save</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QPushButton" name="fcResetBtn">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Reset Image</string>
+             </property>
+             <property name="icon">
+              <iconset theme="QIcon::ThemeIcon::DocumentRevert"/>
              </property>
             </widget>
            </item>
@@ -1072,8 +1118,20 @@
         <item row="0" column="0">
          <widget class="QWidget" name="fcOptionsWidget" native="true">
           <layout class="QGridLayout" name="gridLayout_20">
-           <item row="0" column="0">
+           <item row="0" column="0" colspan="2">
             <widget class="QGroupBox" name="fcLoadGroup">
+             <property name="minimumSize">
+              <size>
+               <width>300</width>
+               <height>67</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>404</width>
+               <height>67</height>
+              </size>
+             </property>
              <property name="title">
               <string>Load Image</string>
              </property>
@@ -1114,20 +1172,7 @@
              </property>
             </spacer>
            </item>
-           <item row="1" column="1">
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Orientation::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="2" column="0" colspan="2">
+           <item row="2" column="0">
             <widget class="QGroupBox" name="fcOptionsGroup">
              <property name="title">
               <string>Censor Options</string>
@@ -1392,8 +1437,8 @@ QToolBox::pane {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>898</width>
-             <height>512</height>
+             <width>830</width>
+             <height>380</height>
             </rect>
            </property>
            <attribute name="label">

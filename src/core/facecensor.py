@@ -44,16 +44,22 @@ class FaceCensor:
         self.ui.fcCensorBtn.clicked.connect(self.censor_faces)
         self.ui.fcSaveBtn.clicked.connect(self.save_image)
         self.ui.fcResetBtn.clicked.connect(self.reset_image)
-        self.ui.fcBlur.toggled.connect(self.censor_faces)
-        self.ui.fcBox.toggled.connect(self.censor_faces)
-        self.ui.fcPixelate.toggled.connect(self.censor_faces)
-        self.ui.fcBlackBar.toggled.connect(self.censor_faces)
+        self.ui.fcBlur.toggled.connect(self.update_image_view)
+        self.ui.fcBox.toggled.connect(self.update_image_view)
+        self.ui.fcPixelate.toggled.connect(self.update_image_view)
+        self.ui.fcBlackBar.toggled.connect(self.update_image_view)
 
         self.ui.fcFaceList.itemSelectionChanged.connect(self.update_selected_faces)
 
     def update_selected_faces(self):
         selected_indices = [self.ui.fcFaceList.row(item) for item in self.ui.fcFaceList.selectedItems()]
         self.selected_faces = [self.faces[i] for i in selected_indices]
+        self.update_image_view()
+
+    def update_image_view(self):
+        if hasattr(self, 'original_image'):
+            image_with_faces = self.draw_faces_with_colors(self.original_image.copy())
+            self.display_image(image_with_faces)
 
     def detect_faces(self, image):
         (h, w) = image.shape[:2]
@@ -74,13 +80,13 @@ class FaceCensor:
 
         # Draw bounding boxes and add face IDs on the BGRA image
         for i, (x, y, w, h) in enumerate(faces):
-            cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0, 255), 2)
-            cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0, 255), 2)
+            cv2.rectangle(image, (x, y), (x+w, y+h), (0, 0, 255, 255), 2)
+            cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255, 255), 2)
 
         return image, faces
 
     def load_and_detect_faces(self):
-        file_path, _ = QFileDialog.getOpenFileName(
+        file_path = QFileDialog.getOpenFileName(
             parent=None,
             caption="Open Image",
             dir="",
@@ -90,18 +96,18 @@ class FaceCensor:
         if file_path:
             try:
                 # Load image with alpha channel preserved
-                self.original_image = cv2.imread(file_path, cv2.IMREAD_UNCHANGED)
+                self.original_image = cv2.imread(file_path[0], cv2.IMREAD_UNCHANGED)
                 if self.original_image is None:
                     raise ValueError("Failed to load image")
-
+                
                 # Ensure the image has an alpha channel
                 if self.original_image.shape[2] == 3:
                     self.original_image = cv2.cvtColor(self.original_image, cv2.COLOR_BGR2BGRA)
-
+                
                 image_with_faces, self.faces = self.detect_faces(self.original_image.copy())
                 self.display_image(image_with_faces)
                 self.update_face_list(self.faces)
-                self.ui.fcInputImage.setText(file_path)
+                self.ui.fcInputImage.setText(file_path[0])
             except Exception as e:
                 print(f"Error loading image: {e}")
 
@@ -119,12 +125,9 @@ class FaceCensor:
 
     def apply_censoring(self, image, draw_boxes=False):
         censoring_method = self.get_censoring_method()
-
         if draw_boxes:
-            for i, (x, y, w, h) in enumerate(self.faces):
-                cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0, 255), 2)
-                cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0, 255), 2)
-
+            image = self.draw_faces_with_colors(image)
+        
         if censoring_method:
             for x, y, w, h in self.selected_faces:
                 face_roi = image[y:y+h, x:x+w]
@@ -240,6 +243,13 @@ class FaceCensor:
                 print(f"Censored image saved successfully to {file_path}")
             except Exception as e:
                 print(f"Error saving censored image: {e}")
+
+    def draw_faces_with_colors(self, image):
+        for i, (x, y, w, h) in enumerate(self.faces):
+            color = (0, 255, 0, 255) if (x, y, w, h) in self.selected_faces else (0, 0, 255, 255)
+            cv2.rectangle(image, (x, y), (x+w, y+h), color, 2)
+            cv2.putText(image, f"Face {i+1}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 2)
+        return image
 
 # Todo: Implement selecting specific faces via preview
 # Fixme: fix transparency issue w/ png
