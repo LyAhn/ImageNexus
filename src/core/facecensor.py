@@ -233,7 +233,7 @@ class FaceCensor:
             for x, y, w, h in self.selected_faces:
                 face_roi = image[y:y + h, x:x + w]
                 if censoring_method == "Blur":
-                    blurred = cv2.GaussianBlur(face_roi, (99, 99), 30)
+                    blurred = cv2.GaussianBlur(face_roi, (119, 119), 60) # Apply strong blur: 119x119 kernel, sigma=60
                     alpha = face_roi[:, :, 3]
                     face_roi[:, :, :3] = blurred[:, :, :3]
                     face_roi[:, :, 3] = alpha
@@ -364,21 +364,35 @@ class FaceCensor:
             -1
         )
 
-    def pixelate(self, image, blocks=10):
+    def pixelate(self, image, blocks=8): # blocks refers to pixels per block
         """
         Pixelate the given image region.
         """
+        # Get the height and width of the image
         (h, w) = image.shape[:2]
+        
+        # Calculate the step size for x and y directions
+        # Ensure at least 1 pixel per step to avoid division by zero
         x_steps = max(1, w // blocks)
         y_steps = max(1, h // blocks)
 
+        # Iterate over the image in blocks
         for y in range(0, h, y_steps):
             for x in range(0, w, x_steps):
+                # Extract the region of interest (ROI)
                 roi = image[y:y + y_steps, x:x + x_steps]
+                
+                # Skip empty ROIs
                 if roi.size == 0:
                     continue
+                
+                # Calculate the average color of the ROI
                 color = roi.mean(axis=(0, 1)).astype(int)
+                
+                # Apply the average color to the entire ROI
+                # Note: Only modifying the first 3 channels (RGB), preserving alpha if present
                 image[y:y + y_steps, x:x + x_steps, :3] = color[:3]
+        
         return image
 
     def reset_image(self):

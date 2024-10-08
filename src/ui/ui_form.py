@@ -669,6 +669,8 @@ class Ui_ImageNexus(object):
         self.fcCensorBtn.setObjectName(u"fcCensorBtn")
         sizePolicy.setHeightForWidth(self.fcCensorBtn.sizePolicy().hasHeightForWidth())
         self.fcCensorBtn.setSizePolicy(sizePolicy)
+        icon4 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.ApplicationExit))
+        self.fcCensorBtn.setIcon(icon4)
 
         self.gridLayout_26.addWidget(self.fcCensorBtn, 3, 2, 1, 1)
 
@@ -692,6 +694,8 @@ class Ui_ImageNexus(object):
         self.fcSaveBtn.setObjectName(u"fcSaveBtn")
         sizePolicy.setHeightForWidth(self.fcSaveBtn.sizePolicy().hasHeightForWidth())
         self.fcSaveBtn.setSizePolicy(sizePolicy)
+        icon5 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.DocumentSaveAs))
+        self.fcSaveBtn.setIcon(icon5)
 
         self.gridLayout_26.addWidget(self.fcSaveBtn, 3, 3, 1, 1)
 
@@ -700,8 +704,8 @@ class Ui_ImageNexus(object):
         sizePolicy.setHeightForWidth(self.fcResetBtn.sizePolicy().hasHeightForWidth())
         self.fcResetBtn.setSizePolicy(sizePolicy)
         self.fcResetBtn.setMaximumSize(QSize(16777215, 16777215))
-        icon4 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.DocumentRevert))
-        self.fcResetBtn.setIcon(icon4)
+        icon6 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.DocumentRevert))
+        self.fcResetBtn.setIcon(icon6)
 
         self.gridLayout_26.addWidget(self.fcResetBtn, 2, 2, 1, 1)
 
@@ -719,24 +723,28 @@ class Ui_ImageNexus(object):
         self.fcLoadGroup.setFlat(True)
         self.gridLayout_21 = QGridLayout(self.fcLoadGroup)
         self.gridLayout_21.setObjectName(u"gridLayout_21")
-        self.fcInputImage = QLineEdit(self.fcLoadGroup)
-        self.fcInputImage.setObjectName(u"fcInputImage")
-        self.fcInputImage.setFrame(True)
-        self.fcInputImage.setClearButtonEnabled(True)
-
-        self.gridLayout_21.addWidget(self.fcInputImage, 0, 0, 1, 1)
-
         self.fcBrowseBtn = QPushButton(self.fcLoadGroup)
         self.fcBrowseBtn.setObjectName(u"fcBrowseBtn")
+        icon7 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.DocumentOpen))
+        self.fcBrowseBtn.setIcon(icon7)
 
         self.gridLayout_21.addWidget(self.fcBrowseBtn, 0, 1, 1, 1)
+
+        self.fcInputImage = QLineEdit(self.fcLoadGroup)
+        self.fcInputImage.setObjectName(u"fcInputImage")
+        self.fcInputImage.setEnabled(True)
+        self.fcInputImage.setFrame(True)
+        self.fcInputImage.setReadOnly(True)
+        self.fcInputImage.setClearButtonEnabled(False)
+
+        self.gridLayout_21.addWidget(self.fcInputImage, 0, 0, 1, 1)
 
 
         self.gridLayout_20.addWidget(self.fcLoadGroup, 0, 0, 1, 2)
 
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.gridLayout_20.addItem(self.verticalSpacer_2, 1, 0, 1, 1)
+        self.gridLayout_20.addItem(self.verticalSpacer_2, 2, 0, 1, 1)
 
         self.fcOptionsGroup = QGroupBox(self.fcOptionsWidget)
         self.fcOptionsGroup.setObjectName(u"fcOptionsGroup")
@@ -763,7 +771,7 @@ class Ui_ImageNexus(object):
         self.gridLayout_25.addWidget(self.fcBlackBar, 3, 0, 1, 1)
 
 
-        self.gridLayout_20.addWidget(self.fcOptionsGroup, 2, 0, 1, 1)
+        self.gridLayout_20.addWidget(self.fcOptionsGroup, 1, 0, 1, 1)
 
 
         self.gridLayout_12.addWidget(self.fcOptionsWidget, 0, 0, 1, 1)
@@ -975,15 +983,15 @@ class Ui_ImageNexus(object):
 
         self.t2aConvertBtn = QPushButton(self.t2aInputFrame)
         self.t2aConvertBtn.setObjectName(u"t2aConvertBtn")
-        icon5 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.DocumentSend))
-        self.t2aConvertBtn.setIcon(icon5)
+        icon8 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.DocumentSend))
+        self.t2aConvertBtn.setIcon(icon8)
 
         self.t2aInputGridLayout.addWidget(self.t2aConvertBtn, 1, 1, 1, 1)
 
         self.t2aCopyBtn = QPushButton(self.t2aInputFrame)
         self.t2aCopyBtn.setObjectName(u"t2aCopyBtn")
-        icon6 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.EditCopy))
-        self.t2aCopyBtn.setIcon(icon6)
+        icon9 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.EditCopy))
+        self.t2aCopyBtn.setIcon(icon9)
 
         self.t2aInputGridLayout.addWidget(self.t2aCopyBtn, 2, 1, 1, 1)
 
@@ -1189,9 +1197,12 @@ class Ui_ImageNexus(object):
         self.fcCensorBtn.setText(QCoreApplication.translate("ImageNexus", u"Censor", None))
         self.fcFoundFacesGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Found Faces", None))
         self.fcSaveBtn.setText(QCoreApplication.translate("ImageNexus", u"Save", None))
-        self.fcResetBtn.setText(QCoreApplication.translate("ImageNexus", u"Reset Image", None))
+#if QT_CONFIG(statustip)
+        self.fcResetBtn.setStatusTip(QCoreApplication.translate("ImageNexus", u"Resets selection", None))
+#endif // QT_CONFIG(statustip)
+        self.fcResetBtn.setText(QCoreApplication.translate("ImageNexus", u"Reset", None))
         self.fcLoadGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Load Image", None))
-        self.fcBrowseBtn.setText(QCoreApplication.translate("ImageNexus", u"Browse", None))
+        self.fcBrowseBtn.setText(QCoreApplication.translate("ImageNexus", u"Load", None))
         self.fcOptionsGroup.setTitle(QCoreApplication.translate("ImageNexus", u"Censor Options", None))
         self.fcBlur.setText(QCoreApplication.translate("ImageNexus", u"Blur", None))
         self.fcPixelate.setText(QCoreApplication.translate("ImageNexus", u"Pixelate", None))
