@@ -296,10 +296,31 @@ class FaceCensor:
 
     def fit_image_in_view(self):
         """
-        Adjust the QGraphicsView to fit the image while maintaining aspect ratio.
+        Adjust the QGraphicsView to fit the image while maintaining aspect ratio,
+        and ensure proper scaling for transparent images.
         """
         if self.pixmap_item:
-            self.ui.fcImageView.fitInView(self.pixmap_item, Qt.KeepAspectRatio)
+            # Reset the view transformation
+            self.ui.fcImageView.resetTransform()
+            
+            # Get the size of the view and the pixmap
+            view_size = self.ui.fcImageView.viewport().size()
+            pixmap_size = self.pixmap_item.pixmap().size()
+            
+            # Calculate the scaling factors
+            scale_x = view_size.width() / pixmap_size.width()
+            scale_y = view_size.height() / pixmap_size.height()
+            scale = min(scale_x, scale_y)
+            
+            # Scale the view
+            self.ui.fcImageView.scale(scale, scale)
+            
+            # Center the image in the view
+            self.ui.fcImageView.centerOn(self.pixmap_item)
+            
+            # Disable scrollbars
+            self.ui.fcImageView.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+            self.ui.fcImageView.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
     def update_face_list(self, faces):
         """
