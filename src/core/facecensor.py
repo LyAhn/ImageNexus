@@ -13,6 +13,10 @@ This code is licensed under the GPL-3.0 license (see LICENSE.txt for details)
 import cv2
 import numpy as np
 import os
+from src.utils.censor_ops import pixelate, draw_eye_bars, apply_gaussian_blur
+from src.utils.file_ops import save_image as save_image_util
+from src.utils.model_ops import initialize_face_model
+from src.ui.custom_components import ClickableRectItem
 from PySide6.QtWidgets import (
     QGraphicsScene,
     QGraphicsPixmapItem,
@@ -25,43 +29,6 @@ from PySide6.QtGui import QImage, QPixmap, QPen, QColor
 from PySide6.QtCore import Qt, QRectF, Signal, QObject
 
 
-class ClickableRectItem(QObject, QGraphicsRectItem):
-    """
-    A QGraphicsRectItem that emits a signal when clicked.
-    """
-    faceSelected = Signal(int, bool)  # Signal: face_index, is_selected
-
-    def __init__(self, rect, face_index, parent=None):
-        QObject.__init__(self)
-        QGraphicsRectItem.__init__(self, rect, parent)
-        self.face_index = face_index
-        self.selected = False
-        self.setPen(QPen(QColor(255, 0, 0), 4)) # Red border, width of 4
-        self.setBrush(Qt.NoBrush)
-        self.setFlag(QGraphicsRectItem.ItemIsSelectable, True)
-        self.setAcceptHoverEvents(True)
-
-    def mousePressEvent(self, event):
-        self.toggle_selection()
-        event.accept()
-
-    def toggle_selection(self):
-        self.selected = not self.selected
-        self.update_appearance()
-        self.faceSelected.emit(self.face_index, self.selected)
-
-    def update_appearance(self):
-        color = QColor(0, 255, 0) if self.selected else QColor(255, 0, 0) # Green if selected, red if not
-        self.setPen(QPen(color, 4)) # keep the border width at 4
-
-    def hoverEnterEvent(self, event):
-        self.setPen(QPen(QColor(0, 0, 255), 4)) # Blue border width of 4
-        super().hoverEnterEvent(event)
-
-    def hoverLeaveEvent(self, event):
-        self.update_appearance()
-        super().hoverLeaveEvent(event)
-
 
 class FaceCensor:
     """
@@ -71,27 +38,7 @@ class FaceCensor:
 
     def __init__(self, ui):
         self.ui = ui
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        # Point application to app root directory
-        root_dir = os.path.abspath(os.path.join(current_dir, '..', '..', '.'))
-        prototxt_path = os.path.join(
-            root_dir, 'resources', 'models', 'facedetection', 'deploy.prototxt'
-        )
-        model_path = os.path.join(
-            root_dir, 'resources', 'models', 'facedetection', 'res10_300x300_ssd_iter_140000.caffemodel'
-        )
-
-        print(f"Attempting to load prototxt from: {prototxt_path}")
-        print(f"Attempting to load model from: {model_path}")
-
-        if not os.path.exists(prototxt_path):
-            raise FileNotFoundError(f"Prototxt file not found at {prototxt_path}")
-        if not os.path.exists(model_path):
-            raise FileNotFoundError(f"Model file not found at {model_path}")
-
-        self.face_net = cv2.dnn.readNetFromCaffe(prototxt_path, model_path)
-        print("Face detection model loaded successfully.")
-
+        self.face_net = initialize_face_model()
         self.setup_connections()
         self.pixmap_item = None
         self.ui.fcImageView.resizeEvent = self.resizeEvent
@@ -229,20 +176,20 @@ class FaceCensor:
         if draw_boxes:
             # Drawing is handled by ClickableRectItem
             pass
-        if censoring_method:
+        if censoring_method: 
             for x, y, w, h in self.selected_faces:
                 face_roi = image[y:y + h, x:x + w]
                 if censoring_method == "Blur":
-                    blurred = cv2.GaussianBlur(face_roi, (119, 119), 60) # Apply strong blur: 119x119 kernel, sigma=60
+                    blurred = apply_gaussian_blur(face_roi) # Apply Gaussian blur - src\utils\censor_ops.py
                     alpha = face_roi[:, :, 3]
                     face_roi[:, :, :3] = blurred[:, :, :3]
                     face_roi[:, :, 3] = alpha
-                elif censoring_method == "Black Box":
+                elif censoring_method == "Black Box": # Black Box - src\utils\censor_ops.py
                     face_roi[:, :, :3] = (0, 0, 0)
-                elif censoring_method == "Pixelate":
-                    face_roi = self.pixelate(face_roi)
-                elif censoring_method == "Eye Bars":
-                    self.draw_eye_bars(image, x, y, w, h)
+                elif censoring_method == "Pixelate": # Pixelate - src\utils\censor_ops.py
+                    face_roi = pixelate(face_roi) 
+                elif censoring_method == "Eye Bars": #  Eye Bars - src\utils\censor_ops.py
+                    draw_eye_bars(image, x, y, w, h)
                 image[y:y + h, x:x + w] = face_roi
         return image
 
@@ -347,54 +294,6 @@ class FaceCensor:
             censored_image = self.apply_censoring(image, draw_boxes=True)
             self.display_image(censored_image)
 
-    def draw_eye_bars(self, image, x, y, w, h):
-        """
-        Draw horizontal black bars over the eyes region of the face.
-        """
-        # Estimate eye positions (rough estimation)
-        eye_y = y + int(h * 0.3)  # Eyes typically in the upper third
-        eye_h = int(h * 0.16)     # Eye height roughly 16% of face height
-        bar_w = int(w * 1.0)      # Bar width to cover 100% of face width
-        bar_x = x                  # Start at face's x position
-        cv2.rectangle(
-            image,
-            (bar_x, eye_y),
-            (bar_x + bar_w, eye_y + eye_h),
-            (0, 0, 0),
-            -1
-        )
-
-    def pixelate(self, image, blocks=8): # blocks refers to pixels per block
-        """
-        Pixelate the given image region.
-        """
-        # Get the height and width of the image
-        (h, w) = image.shape[:2]
-        
-        # Calculate the step size for x and y directions
-        # Ensure at least 1 pixel per step to avoid division by zero
-        x_steps = max(1, w // blocks)
-        y_steps = max(1, h // blocks)
-
-        # Iterate over the image in blocks
-        for y in range(0, h, y_steps):
-            for x in range(0, w, x_steps):
-                # Extract the region of interest (ROI)
-                roi = image[y:y + y_steps, x:x + x_steps]
-                
-                # Skip empty ROIs
-                if roi.size == 0:
-                    continue
-                
-                # Calculate the average color of the ROI
-                color = roi.mean(axis=(0, 1)).astype(int)
-                
-                # Apply the average color to the entire ROI
-                # Note: Only modifying the first 3 channels (RGB), preserving alpha if present
-                image[y:y + y_steps, x:x + x_steps, :3] = color[:3]
-        
-        return image
-
     def reset_image(self):
         """
         Reset the image to its original state, removing all censoring.
@@ -409,7 +308,7 @@ class FaceCensor:
 
     def save_image(self):
         """
-        Save the censored image to a file.
+        Save the censored image to a file using the utility function.
         """
         censored_image = self.apply_censoring_without_boxes()
         if censored_image is None:
@@ -425,11 +324,12 @@ class FaceCensor:
 
         if file_path:
             try:
-                # Ensure the image is in BGRA format
-                if censored_image.shape[2] == 3:
-                    censored_image = cv2.cvtColor(censored_image, cv2.COLOR_BGR2BGRA)
-                # Save as PNG to preserve transparency
-                cv2.imwrite(file_path, censored_image)
-                QMessageBox.information(self.ui.centralwidget, "Success", f"Censored image saved successfully to {file_path}")
+                # Use the imported save_image_util function
+                success = save_image_util(censored_image, file_path)
+                
+                if success:
+                    QMessageBox.information(self.ui.centralwidget, "Success", f"Censored image saved successfully to {file_path}")
+                else:
+                    raise Exception("Failed to save image")
             except Exception as e:
                 QMessageBox.critical(self.ui.centralwidget, "Error", f"Error saving censored image: {str(e)}")
