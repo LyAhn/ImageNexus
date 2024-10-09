@@ -235,7 +235,7 @@ class QRGenerator:
                     version=version,
                     level=error_correction,
                     picture=picture,
-                    colorized=colorized,
+                    colorized=True,
                     save_name=save_name
                 )
                 
@@ -650,3 +650,7 @@ class QRGenerator:
             return 'Q'
         else:
             return 'H'
+        
+# TODO: crop into generated Artistic QR by 140px to attempt to match same output as standard QR
+# TODO: #22 Fix regression of sharpness in saved&previewed QR codes
+# TODO: Add filename save box w/ additional variables e.g (date, time, sequence count etc)

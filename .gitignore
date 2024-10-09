@@ -133,13 +133,14 @@ dmypy.json
 # vscode
 .vscode/
 
-# user
+# User added 
 splash.png
 qt/
 .docs/
 version_info.txt
 temp_artistic_qr.png
 *.bak
+TODO
 
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
