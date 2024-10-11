@@ -27,7 +27,6 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QImage, QPixmap, QPen, QColor
 from PySide6.QtCore import Qt, QRectF, Signal, QObject
-from mtcnn import MTCNN
 
 
 class FaceCensor:

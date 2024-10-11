@@ -166,13 +166,13 @@ class QRGenerator:
 
             bg_color = self.get_color_tuple(self.ui.qrBgColourInput.text(), (255, 255, 255))
             fg_color = self.get_color_tuple(self.ui.qrCodeColourInput.text(), (0, 0, 0))
-            qr_image = qr.make_image(fill_color=fg_color, back_color=bg_color)
-            qr_image = qr_image.convert('RGB')
+            qr_image = qr.make_image(fill_color=fg_color, back_color=bg_color).convert('RGB')
+            #qr_image = qr_image.convert('RGB')
 
             qr_array = np.array(qr_image)
             qr_cv = cv2.cvtColor(qr_array, cv2.COLOR_RGB2BGR)
             target_size = (1024, 1024)
-            qr_code_resized = cv2.resize(qr_cv, target_size, interpolation=cv2.INTER_LANCZOS4)
+            qr_code_resized = cv2.resize(qr_cv, target_size, interpolation=cv2.INTER_NEAREST_EXACT)
 
             logo_path = self.ui.qrLogoInput.text()
             if logo_path and os.path.isfile(logo_path):
@@ -180,44 +180,6 @@ class QRGenerator:
 
             return Image.fromarray(cv2.cvtColor(qr_code_resized, cv2.COLOR_BGR2RGB))
 
-    # def generate_artistic_qr(self, qr_data):
-    #     version = self.ui.qrCodeSize.value()
-    #     error_correction = self.get_error_correction_level()
-    #     picture = self.ui.qrLogoInput.text()
-    #     #picture = self.ui.qrBgImageInput.text()
-    #     colorized = self.ui.qrColorizedCheck.isChecked()
-    #     border_size = self.ui.qrBorderSize.value()
-        
-    #     save_name = "temp_artistic_qr.png"
-    #     version, level, qr_name = myqr.run(
-    #         qr_data,
-    #         version=version,
-    #         level=error_correction,
-    #         picture=picture,
-    #         colorized=colorized,
-    #         save_name=save_name
-    #     )
-        
-    #     # Open the generated QR code
-    #     qr_image = Image.open(save_name)
-        
-    #     # Crop the white border
-    #     bbox = qr_image.getbbox()
-    #     cropped_qr = qr_image.crop(bbox)
-        
-    #     # Create a new image with desired border
-    #     qr_size = cropped_qr.size[0]
-    #     new_size = qr_size + 2 * border_size
-    #     bg_color = self.get_color_tuple(self.ui.qrBgColourInput.text(), (255, 255, 255))
-    #     new_image = Image.new('RGB', (new_size, new_size), bg_color)
-        
-    #     # Paste the cropped QR code onto the new image
-    #     new_image.paste(cropped_qr, (border_size, border_size))
-        
-    #     # Remove the temporary file
-    #     os.remove(save_name)
-        
-    #     return new_image
     def generate_artistic_qr(self, qr_data):
         try:
             version = self.ui.qrCodeSize.value()
@@ -281,7 +243,7 @@ class QRGenerator:
         qr_array = np.array(qr_image)
         qr_cv = cv2.cvtColor(qr_array, cv2.COLOR_RGB2BGR)
         target_size = (1024, 1024)
-        qr_code_resized = cv2.resize(qr_cv, target_size, interpolation=cv2.INTER_LANCZOS4)
+        qr_code_resized = cv2.resize(qr_cv, target_size, interpolation=cv2.INTER_NEAREST_EXACT)
 
         logo_path = self.ui.qrLogoInput.text()
         if logo_path and os.path.isfile(logo_path):
@@ -527,68 +489,6 @@ class QRGenerator:
             preview_dialog.exec()
         else:
             QMessageBox.warning(None, "Warning", "No QR code has been generated yet.")
-
-    # def generate_artistic_qr(self, qr_data):
-        
-    #     version = self.ui.qrCodeSize.value()
-    #     error_correction = self.get_error_correction_level()
-    #     picture = self.ui.qrLogoInput.text()
-    #     #picture = self.ui.qrBgImageInput.text()
-    #     colorized = self.ui.qrColorizedCheck.isChecked()
-        
-    #     save_name = "temp_artistic_qr.png"
-    #     version, level, qr_name = myqr.run(
-    #         qr_data,
-    #         version=version,
-    #         level=error_correction,
-    #         picture=picture,
-    #         colorized=colorized,
-    #         save_name=save_name
-    #     )
-        
-    #     return Image.open(save_name)
-
-    # def generate_artistic_qr(self, qr_data):
-    #     version = self.ui.qrCodeSize.value()
-    #     error_correction = self.get_error_correction_level()
-    #     picture = self.ui.qrLogoInput.text()
-    #     colorized = self.ui.qrColorizedCheck.isChecked()
-    #     border_size = self.ui.qrBorderSize.value()
-
-    #     with tempfile.TemporaryDirectory() as temp_dir:
-    #         save_name = os.path.join(temp_dir, "temp_artistic_qr.png")
-    #         try:
-    #             version, level, qr_name = myqr.run(
-    #                 qr_data,
-    #                 version=version,
-    #                 level=error_correction,
-    #                 picture=picture,
-    #                 colorized=colorized,
-    #                 save_name=save_name
-    #             )
-
-    #             # Open the generated QR code
-    #             qr_image = Image.open(save_name)
-
-    #             # Crop the white border
-    #             bbox = qr_image.getbbox()
-    #             cropped_qr = qr_image.crop(bbox)
-
-    #             # Create a new image with desired border
-    #             qr_size = cropped_qr.size[0]
-    #             new_size = qr_size + 2 * border_size
-    #             bg_color = self.get_color_tuple(self.ui.qrBgColourInput.text(), (255, 255, 255))
-    #             new_image = Image.new('RGB', (new_size, new_size), bg_color)
-
-    #             # Paste the cropped QR code onto the new image
-    #             new_image.paste(cropped_qr, (border_size, border_size))
-
-    #             return new_image
-
-    #         except Exception as e:
-    #             print(f"Error in generate_artistic_qr: {str(e)}")
-    #             # Return a default QR code or None
-    #             return self.generate_standard_qr(qr_data)
 
     def generate_artistic_qr(self, qr_data):
         version = self.ui.qrCodeSize.value()
