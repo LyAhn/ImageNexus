@@ -27,7 +27,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QImage, QPixmap, QPen, QColor
 from PySide6.QtCore import Qt, QRectF, Signal, QObject
-
+from mtcnn import MTCNN
 
 
 class FaceCensor:
@@ -104,9 +104,9 @@ class FaceCensor:
         # Convert BGRA to BGR for face detection
         bgr_image = cv2.cvtColor(image, cv2.COLOR_BGRA2BGR)
         blob = cv2.dnn.blobFromImage(
-            cv2.resize(bgr_image, (300, 300)),
+            cv2.resize(bgr_image, (666, 666)),
             1.0,
-            (300, 300),
+            (666, 666),
             (104.0, 177.0, 123.0),
         )
         self.face_net.setInput(blob)

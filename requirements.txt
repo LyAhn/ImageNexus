@@ -2,4 +2,6 @@ PySide6
 Pillow
 qrcode
 opencv-python
+MyQR
 art
+mtcnn
