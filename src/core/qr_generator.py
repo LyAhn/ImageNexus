@@ -16,7 +16,7 @@ import json
 import cv2
 from MyQR import myqr
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
 import qrcode
 import asyncio
 import datetime
@@ -194,7 +194,7 @@ class QRGenerator:
 
             qr_array = np.array(qr_image)
             qr_cv = cv2.cvtColor(qr_array, cv2.COLOR_RGB2BGR)
-            target_size = (1024, 1024)
+            target_size = (512, 512)
             qr_code_resized = cv2.resize(qr_cv, target_size, interpolation=cv2.INTER_NEAREST_EXACT)
 
             logo_path = self.ui.qrLogoInput.text()
@@ -265,7 +265,7 @@ class QRGenerator:
 
         qr_array = np.array(qr_image)
         qr_cv = cv2.cvtColor(qr_array, cv2.COLOR_RGB2BGR)
-        target_size = (1024, 1024)
+        target_size = (512, 512)
         qr_code_resized = cv2.resize(qr_cv, target_size, interpolation=cv2.INTER_NEAREST_EXACT)
 
         logo_path = self.ui.qrLogoInput.text()
@@ -357,7 +357,7 @@ class QRGenerator:
         
         qr_image = self.generate_qr_code()
         if qr_image:
-            qr_image = qr_image.resize((1024, 1024), Image.BICUBIC)
+            qr_image = qr_image.resize((512, 512), Image.NEAREST)
             save_format = self.ui.qrFormatOptions.currentText().lower()
             
             filename_template = self.ui.qrFilenameTemplate.text()
