@@ -25,6 +25,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QImage, QPixmap, QKeySequence, QShortcut, QIcon
 from PySide6.QtWidgets import QGraphicsScene, QPushButton, QSizePolicy, QScrollArea, QWidget
 from src.utils.templateEditor import JSONEditorDialog
+from src.utils.path_utils import get_resource_path
 from PySide6.QtCore import QThreadPool, QRunnable, Slot, Signal, QObject, QTimer
 
 
@@ -55,7 +56,6 @@ class QRGenerator:
         self.ui = ui
         self.setup_connections()
         self.qr_templates = []
-        self.load_qr_templates()
         self.current_qr_image = None
         self.create_shortcut()
         self.editor = JSONEditorDialog
@@ -65,6 +65,8 @@ class QRGenerator:
         self.debounce_timer.setSingleShot(True)
         self.debounce_timer.timeout.connect(self.generate_qr_code_debounced)
 
+        self.templates_file = get_resource_path('resources/qr_templates.json')
+        self.load_qr_templates()
     def setup_connections(self):
         self.ui.qrGenButton.clicked.connect(self.preview_qr_code)
         self.ui.qrSaveQRBtn.clicked.connect(self.save_qr_code)
@@ -114,7 +116,7 @@ class QRGenerator:
         return await loop.run_in_executor(None, self.generate_qr_code)
         
     def open_json_editor(self):
-        editor = JSONEditorDialog('resources/qr_templates.json', self.ui)
+        editor = JSONEditorDialog(self.templates_file, self.ui)
         if editor.exec() == QDialog.Accepted:
             self.load_qr_templates()  # Reload templates after editing
 
@@ -377,12 +379,12 @@ class QRGenerator:
 
     def load_qr_templates(self):
         try:
-            with open('resources/qr_templates.json', 'r') as file:
+            with open(self.templates_file, 'r') as file:
                 data = json.load(file)
             self.qr_templates = data['qr_code_types']
             self.populate_qr_templates()
         except FileNotFoundError:
-            print("Error: 'resources/qr_templates.json' file not found.")
+            print("Error: '{self.templates_file}' file not found.")
             QMessageBox.warning(None, "Warning", "Error: 'resources/qr_templates.json' file not found.\nRedownload the template file and try again.")
             self.qr_templates = []
         except json.JSONDecodeError:

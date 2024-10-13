@@ -33,7 +33,7 @@ class Ui_ImageNexus(object):
         ImageNexus.resize(938, 681)
         ImageNexus.setMinimumSize(QSize(938, 681))
         icon = QIcon()
-        icon.addFile(u":/images/resources/icon.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addFile(u":/images/resources/ui/icon.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         ImageNexus.setWindowIcon(icon)
         self.actionHelp = QAction(ImageNexus)
         self.actionHelp.setObjectName(u"actionHelp")

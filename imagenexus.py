@@ -11,11 +11,15 @@ from src.utils.aboutDialog import aboutDialog
 from src.utils.ascii_handler import AsciiHandler
 from src.utils.version import appVersion
 from PySide6.QtWidgets import QApplication, QMainWindow
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from art import text2art
+
+from src.ui.splash_screen import SplashScreen
 
 
 version = appVersion
+
+main_window = None
 
 class ImageNexus(QMainWindow):
     def __init__(self, parent=None):
@@ -35,20 +39,22 @@ class ImageNexus(QMainWindow):
         print("For third party licenses please see THIRD_PARTY_LICENSES.txt for details")
         print("----------------------------------------------------------")
         print("Welcome to ImageNexus!")
-    
-    def initialize_modules(self):
-        self.frame_extractor = FrameExtractor(self.ui)
-        self.img_converter = ImgConverter(self.ui)
-        self.batch_converter = BatchConvert(self.ui)
-        self.qr_generator = QRGenerator(self.ui)
-        self.pixelizer = Pixelate(self.ui)
-        self.ascii_handler = AsciiHandler(self.ui)
-        self.censor_faces = FaceCensor(self.ui)
 
-        self.qr_generator.load_qr_templates()
+    def initialize_modules(self):
+        try:
+            self.frame_extractor = FrameExtractor(self.ui)
+            self.img_converter = ImgConverter(self.ui)
+            self.batch_converter = BatchConvert(self.ui)
+            self.qr_generator = QRGenerator(self.ui)
+            self.pixelizer = Pixelate(self.ui)
+            self.ascii_handler = AsciiHandler(self.ui)
+            self.censor_faces = FaceCensor(self.ui)
+            self.qr_generator.load_qr_templates()
+            print("All modules initialized successfully.")
+        except Exception as e:
+            print(f"Error initializing modules: {e}")
 
     def setup_connections(self):
-
         # Top Menu Bar
         self.ui.actionAbout.triggered.connect(self.show_about)
         self.ui.actionReloadTemplates.triggered.connect(self.qr_generator.load_qr_templates)
@@ -61,19 +67,32 @@ class ImageNexus(QMainWindow):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         if self.ui.qrOutputView.scene():
-
             self.ui.qrOutputView.fitInView(self.ui.qrOutputView.scene().sceneRect(), Qt.KeepAspectRatio)
-
         if hasattr(self, 'pixelizer'):
             self.pixelizer.resize_image()
-
         if hasattr(self.ascii_handler.ascii_art, 'resize_event'):
             self.ascii_handler.resize_event()
 
+def show_splash_and_init():
+    splash = SplashScreen()
+    splash.show()
 
+    # Simulate initialization process (replace with actual initialization in the future)
+    QTimer.singleShot(3500, lambda: init_main_window(splash))
+
+def init_main_window(splash):
+    global main_window
+    try:
+        print("Initializing main window...")
+        main_window = ImageNexus()
+        main_window.show()
+        print("Main window shown successfully.")
+        splash.close()
+        print("Splash screen closed.")
+    except Exception as e:
+        print(f"Error initializing main window: {e}")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    widget = ImageNexus()
-    widget.show()
+    show_splash_and_init()
     sys.exit(app.exec())

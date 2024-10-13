@@ -141,6 +141,8 @@ version_info.txt
 temp_artistic_qr.png
 *.bak
 TODO
+*.psd
+*.ai
 
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------

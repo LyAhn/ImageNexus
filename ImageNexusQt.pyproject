@@ -17,6 +17,8 @@
         "resources/icon.ico",
         "resources/logo_256.png",
         "resources/qr_templates.json",
-        "resources/wrench32px.ico"
+        "resources/wrench32px.ico",
+        "src/ui/splash_screen.ui",
+        "src/ui/splash_screen.py"
     ]
 }

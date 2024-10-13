@@ -11,13 +11,14 @@ This code is licensed under the GPL-3.0 license (see LICENSE.txt for details)
 """
 
 from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout,
-                                QPushButton, QMessageBox, QInputDialog, QApplication,
+                                QPushButton, QMessageBox, QInputDialog,
                                QListWidget, QLabel, QLineEdit, QDialogButtonBox, QTableWidget,
                                QTableWidgetItem, QSplitter, QWidget, QHeaderView, QUndoView)
-from PySide6.QtGui import QIcon, QFont, QShortcut, QUndoStack, QKeySequence
+from PySide6.QtGui import QIcon, QFont
 from PySide6.QtCore import Qt
+from src.utils.path_utils import get_resource_path
 import json
-import sys
+import os
 
 class JSONEditorDialog(QDialog):
     def __init__(self, json_file_path, parent=None):
@@ -103,9 +104,13 @@ class JSONEditorDialog(QDialog):
 
     def load_json(self):
         try:
+            if not os.path.exists(self.json_file_path):
+                raise FileNotFoundError(f"'{self.json_file_path}' does not exist.")
+
             with open(self.json_file_path, 'r') as file:
                 data = json.load(file)
-            self.populate_template_list(data)
+                self.populate_template_list(data)
+            print(f"QR Templates loaded in editor from: {self.json_file_path}")
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to load JSON file: {str(e)}")
 

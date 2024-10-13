@@ -3,6 +3,7 @@ from PySide6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QGraphicsView
 from PySide6.QtGui import QPixmap, QCursor
 from src.ui.ui_about import Ui_aboutWindow
 from src.utils.version import appVersion
+from src.utils.path_utils import get_resource_path
 
 class aboutDialog(QMainWindow):
 
@@ -19,7 +20,7 @@ class aboutDialog(QMainWindow):
         # Logo section
         self.scene = QGraphicsScene()
         self.scene.setBackgroundBrush(Qt.transparent)
-        logo = QPixmap("resources/logo_256.png")
+        logo = QPixmap(get_resource_path("resources/logo.png"))
         logo_item = QGraphicsPixmapItem(logo)
         self.scene.addItem(logo_item)
         self.scene.setSceneRect(self.scene.itemsBoundingRect())
