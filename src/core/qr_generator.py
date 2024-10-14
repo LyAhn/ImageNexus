@@ -63,6 +63,7 @@ class QRGenerator:
         self.create_shortcut()
         self.editor = JSONEditorDialog
         self.threadpool = QThreadPool()
+        self.threadpool.setMaxThreadCount(2)
         self.debounce_timer = QTimer()
         self.debounce_timer.setSingleShot(True)
         self.debounce_timer.timeout.connect(self.generate_qr_code_debounced)
