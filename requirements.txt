@@ -4,4 +4,3 @@ qrcode
 opencv-python
 MyQR
 art
-
