@@ -16,9 +16,12 @@ import json
 import cv2
 from MyQR import myqr
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
 import qrcode
 import asyncio
+import datetime
+import random
+import string
 from PySide6.QtWidgets import QMessageBox, QFileDialog, QColorDialog, QDialog, QLabel, QLineEdit, QDialogButtonBox, QVBoxLayout
 from PySide6.QtWidgets import QGridLayout
 from PySide6.QtCore import Qt
@@ -93,6 +96,26 @@ class QRGenerator:
         self.ui.qrUseArtisticCheck.stateChanged.connect(self.on_artistic_check_changed)
         self.ui.qrColorizedCheck.stateChanged.connect(self.preview_qr_code)
         #self.ui.qrBgImageInput.textChanged.connect(self.preview_qr_code)
+
+    def generate_filename(self, template):
+        now = datetime.datetime.now()
+        seq = self.get_next_sequence_number()
+        variables = {
+            'date': now.strftime('%Y-%m-%d'),
+            'time': now.strftime('%H-%M-%S'),
+            'seq': str(seq), # f"{seq:04d}",
+            'rand': ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
+        }
+        filename =  template
+        for key, value in variables.items():
+            filename = filename.replace(f"{{{key}}}", str(value))
+        return filename
+    
+    def get_next_sequence_number(self):
+        if not hasattr(self, '_sequence_number'):
+            self._sequence_number = 0
+        self._sequence_number += 1
+        return self._sequence_number
 
     # Debounce code
 
@@ -169,13 +192,13 @@ class QRGenerator:
 
             bg_color = self.get_color_tuple(self.ui.qrBgColourInput.text(), (255, 255, 255))
             fg_color = self.get_color_tuple(self.ui.qrCodeColourInput.text(), (0, 0, 0))
-            qr_image = qr.make_image(fill_color=fg_color, back_color=bg_color)
-            qr_image = qr_image.convert('RGB')
+            qr_image = qr.make_image(fill_color=fg_color, back_color=bg_color).convert('RGB')
+            #qr_image = qr_image.convert('RGB')
 
             qr_array = np.array(qr_image)
             qr_cv = cv2.cvtColor(qr_array, cv2.COLOR_RGB2BGR)
-            target_size = (1024, 1024)
-            qr_code_resized = cv2.resize(qr_cv, target_size, interpolation=cv2.INTER_LANCZOS4)
+            target_size = (512, 512)
+            qr_code_resized = cv2.resize(qr_cv, target_size, interpolation=cv2.INTER_NEAREST_EXACT)
 
             logo_path = self.ui.qrLogoInput.text()
             if logo_path and os.path.isfile(logo_path):
@@ -245,8 +268,8 @@ class QRGenerator:
 
         qr_array = np.array(qr_image)
         qr_cv = cv2.cvtColor(qr_array, cv2.COLOR_RGB2BGR)
-        target_size = (1024, 1024)
-        qr_code_resized = cv2.resize(qr_cv, target_size, interpolation=cv2.INTER_LANCZOS4)
+        target_size = (512, 512)
+        qr_code_resized = cv2.resize(qr_cv, target_size, interpolation=cv2.INTER_NEAREST_EXACT)
 
         logo_path = self.ui.qrLogoInput.text()
         if logo_path and os.path.isfile(logo_path):
@@ -327,27 +350,37 @@ class QRGenerator:
         if not qr_data:
             QMessageBox.warning(None, "Warning", "Please enter some data for the QR code.")
             return
-
+        
         output_folder = self.ui.qrOutputFolder.text()
         if not output_folder:
             output_folder = QFileDialog.getExistingDirectory(None, "Select Output Folder")
             if not output_folder:
-                return  # User cancelled folder selection
+                return
             self.ui.qrOutputFolder.setText(output_folder)
-
-        # Continue with the rest of the save_qr_code() method
+        
         qr_image = self.generate_qr_code()
         if qr_image:
-            qr_image = qr_image.resize((1024, 1024), Image.BICUBIC)
-
+            qr_image = qr_image.resize((512, 512), Image.NEAREST)
             save_format = self.ui.qrFormatOptions.currentText().lower()
-            file_name = f"qr_code.{save_format}"
+            
+            filename_template = self.ui.qrFilenameTemplate.text()
+            if not filename_template:
+                filename_template = "QR{seq}"
+            
+            filename = self.generate_filename(filename_template)
+            file_name = f"{filename}.{save_format}"
             file_path = os.path.join(output_folder, file_name)
-
-            # Convert to RGB if saving as JPEG
+            
+            # Ensure filename uniqueness
+            counter = 1
+            while os.path.exists(file_path):
+                file_name = f"{filename}_{counter}.{save_format}"
+                file_path = os.path.join(output_folder, file_name)
+                counter += 1
+            
             if save_format.lower() in ['jpg', 'jpeg']:
                 qr_image = qr_image.convert('RGB')
-
+            
             qr_image.save(file_path)
             QMessageBox.information(None, "Success", f"QR code saved as {file_path}")
 
