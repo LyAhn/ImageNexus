@@ -1,7 +1,15 @@
 <RCC>
     <qresource prefix="/images">
-        <file>resources/icon.ico</file>
         <file>resources/logo_256.png</file>
         <file>resources/wrench32px.ico</file>
+        <file>resources/logo.svg</file>
+        <file>resources/ui/icon.ico</file>
+    </qresource>
+    <qresource prefix="/images/splash">
+        <file>resources/splash/sp01.png</file>
+        <file>resources/splash/sp02.png</file>
+    </qresource>
+    <qresource prefix="/images/ui">
+        <file>resources/ui/loading.gif</file>
     </qresource>
 </RCC>
