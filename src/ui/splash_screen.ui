@@ -28,9 +28,6 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">background-image: url(:/images/splash/resources/splash/sp02.png);</string>
-  </property>
   <widget class="QWidget" name="mainUI">
    <widget class="QLabel" name="versionLabel">
     <property name="geometry">
@@ -96,10 +93,10 @@
    <widget class="QLabel" name="loadingLabel">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>340</y>
-      <width>100</width>
-      <height>100</height>
+      <x>50</x>
+      <y>300</y>
+      <width>151</width>
+      <height>151</height>
      </rect>
     </property>
     <property name="focusPolicy">
@@ -115,7 +112,7 @@
      <enum>Qt::TextFormat::RichText</enum>
     </property>
     <property name="scaledContents">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QLabel" name="logoView">
@@ -137,6 +134,35 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QLabel" name="bgLabel">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>688</width>
+      <height>500</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="../../resources.qrc">:/images/splash/resources/splash/sp01.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <zorder>bgLabel</zorder>
+   <zorder>versionLabel</zorder>
+   <zorder>appLabel</zorder>
+   <zorder>label_description</zorder>
+   <zorder>progressBar</zorder>
+   <zorder>loadingLabel</zorder>
+   <zorder>logoView</zorder>
   </widget>
  </widget>
  <resources>

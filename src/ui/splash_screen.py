@@ -21,6 +21,32 @@ class SplashScreen(QMainWindow):
         self.setWindowTitle("ImageNexus")
         self.ui.versionLabel.setText(f"v{version}")
 
+        # Load and set the animated GIF
+        gif_path = get_resource_path("resources/ui/loading.gif")
+        self.movie = QMovie(gif_path)
+
+        # Get the size of the loadingLabel
+        label_size = self.ui.loadingLabel.size()
+
+        # Get the original size of the GIF
+        original_size = self.movie.currentImage().size()
+
+        if original_size.width() > 0 and original_size.height() > 0:
+            # Calculate the scaling factor while maintaining aspect ratio
+            scale_factor = min(label_size.width() / original_size.width(), 
+                            label_size.height() / original_size.height())
+
+            # Calculate the new size
+            new_size = original_size * scale_factor
+
+            # Scale the movie to fit the label while maintaining aspect ratio
+            self.movie.setScaledSize(new_size.toSize())
+        else:
+            print("Warning: Invalid GIF dimensions. Using original size.")
+
+        # Set the movie to the label and start it
+        self.ui.loadingLabel.setMovie(self.movie)
+        self.movie.start()
 
         # QTimer Start
         self.timer = QTimer()
@@ -54,3 +80,7 @@ class SplashScreen(QMainWindow):
 
         # Increase counter
         self.counter += 1
+
+    def closeEvent(self, event):
+        self.movie.stop()
+        event.accept()
