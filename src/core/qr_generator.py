@@ -28,7 +28,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QImage, QPixmap, QKeySequence, QShortcut, QIcon
 from PySide6.QtWidgets import QGraphicsScene, QPushButton, QSizePolicy, QScrollArea, QWidget
 from src.utils.templateEditor import JSONEditorDialog
-from src.utils.path_utils import get_resource_path
+from src.utils.path_utils import get_project_root
 from PySide6.QtCore import QThreadPool, QRunnable, Slot, Signal, QObject, QTimer
 
 
@@ -68,7 +68,7 @@ class QRGenerator:
         self.debounce_timer.setSingleShot(True)
         self.debounce_timer.timeout.connect(self.generate_qr_code_debounced)
 
-        self.templates_file = get_resource_path('resources/qr_templates.json')
+        self.templates_file = get_project_root('resources/qr_templates.json')
         self.load_qr_templates()
     def setup_connections(self):
         self.ui.qrGenButton.clicked.connect(self.preview_qr_code)

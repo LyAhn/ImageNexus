@@ -3,7 +3,7 @@ from PySide6.QtCore import Qt, QTimer, QUuid
 from PySide6.QtGui import QPixmap, QMovie, QColor
 from PySide6.QtWidgets import QMainWindow, QGraphicsScene, QGraphicsPixmapItem, QGraphicsView, QLabel
 from src.ui.ui_splash_screen import Ui_SplashScreen
-from src.utils.path_utils import get_resource_path
+from src.utils.path_utils import get_project_root
 from src.utils.version import appVersion
 
 version = appVersion
@@ -22,7 +22,7 @@ class SplashScreen(QMainWindow):
         self.ui.versionLabel.setText(f"v{version}")
 
         # Load and set the animated GIF
-        gif_path = get_resource_path("resources/ui/loading.gif")
+        gif_path = get_project_root("resources/ui/loading.gif")
         self.movie = QMovie(gif_path)
 
         # Get the size of the loadingLabel

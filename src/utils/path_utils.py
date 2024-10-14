@@ -1,7 +1,7 @@
 import os
 import sys
 
-def get_resource_path(relative_path):
+def get_project_root(relative_path):
     if getattr(sys, 'frozen', False):
         # Running in a PyInstaller bundle
         base_path = sys._MEIPASS

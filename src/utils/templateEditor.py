@@ -16,7 +16,7 @@ from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout,
                                QTableWidgetItem, QSplitter, QWidget, QHeaderView, QUndoView)
 from PySide6.QtGui import QIcon, QFont
 from PySide6.QtCore import Qt
-from src.utils.path_utils import get_resource_path
+from src.utils.path_utils import get_project_root
 import json
 import os
 
