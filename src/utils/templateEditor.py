@@ -36,7 +36,7 @@ class JSONEditorDialog(QDialog):
         left_widget = QWidget()
         left_layout = QVBoxLayout(left_widget)
         self.template_list = QListWidget()
-        self.template_list.setFont(QFont("Arial", 12))
+        self.template_list.setFont(QFont("Arial", 10))
         left_layout.addWidget(QLabel("Templates"))
         left_layout.addWidget(self.template_list)
 

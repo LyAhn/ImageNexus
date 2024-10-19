@@ -13,6 +13,8 @@ class SplashScreen(QMainWindow):
         QMainWindow.__init__(self)
         self.ui = Ui_SplashScreen()
         self.ui.setupUi(self)
+        self.ui.progressBar.setRange(0, 100)
+        self.ui.progressBar.setValue(0)
         self.counter = 0
 
         # Remove title bar
@@ -28,22 +30,6 @@ class SplashScreen(QMainWindow):
         # Get the size of the loadingLabel
         label_size = self.ui.loadingLabel.size()
 
-        # Get the original size of the GIF
-        original_size = self.movie.currentImage().size()
-
-        if original_size.width() > 0 and original_size.height() > 0:
-            # Calculate the scaling factor while maintaining aspect ratio
-            scale_factor = min(label_size.width() / original_size.width(), 
-                            label_size.height() / original_size.height())
-
-            # Calculate the new size
-            new_size = original_size * scale_factor
-
-            # Scale the movie to fit the label while maintaining aspect ratio
-            self.movie.setScaledSize(new_size.toSize())
-        else:
-            print("Warning: Invalid GIF dimensions. Using original size.")
-
         # Set the movie to the label and start it
         self.ui.loadingLabel.setMovie(self.movie)
         self.movie.start()
@@ -52,7 +38,7 @@ class SplashScreen(QMainWindow):
         self.timer = QTimer()
         self.timer.timeout.connect(self.progress)
         # Timer in milliseconds
-        self.timer.start(340) # default time
+        self.timer.start(50) # default time
 
         # Change Description
         # Initial Text
@@ -69,6 +55,7 @@ class SplashScreen(QMainWindow):
     def progress(self):
         # Set Value to progress bar
         self.ui.progressBar.setValue(self.counter)
+        self.ui.progressBar.repaint()
 
         # Close splash screen and open app
         if self.counter > 100:
@@ -76,10 +63,10 @@ class SplashScreen(QMainWindow):
             self.timer.stop()
 
             # Close Splash Screen
-            self.close()
+            #self.closeEvent()
 
         # Increase counter
-        self.counter += 1
+        self.counter += 2
 
     def closeEvent(self, event):
         self.movie.stop()

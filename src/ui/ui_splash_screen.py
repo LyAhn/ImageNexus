@@ -44,12 +44,25 @@ class Ui_SplashScreen(object):
         self.label_description.setGeometry(QRect(30, 450, 201, 31))
         self.progressBar = QProgressBar(self.mainUI)
         self.progressBar.setObjectName(u"progressBar")
-        self.progressBar.setGeometry(QRect(70, 260, 118, 23))
+        self.progressBar.setGeometry(QRect(1, 497, 258, 3))
+        self.progressBar.setStyleSheet(u"QProgressBar {\n"
+"    border: none;\n"
+"    background-color: rgba(255, 255, 255, 0.1);\n"
+"    border-radius: 2px;\n"
+"    text-align: center;\n"
+"    color: transparent;\n"
+"    height: 4px;\n"
+"}\n"
+"\n"
+"QProgressBar::chunk {\n"
+"    background-color: white;\n"
+"    border-radius: 2px;\n"
+"}")
         self.progressBar.setValue(0)
         self.progressBar.setTextVisible(False)
         self.loadingLabel = QLabel(self.mainUI)
         self.loadingLabel.setObjectName(u"loadingLabel")
-        self.loadingLabel.setGeometry(QRect(50, 300, 151, 151))
+        self.loadingLabel.setGeometry(QRect(50, 300, 150, 150))
         self.loadingLabel.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.loadingLabel.setAutoFillBackground(False)
         self.loadingLabel.setTextFormat(Qt.TextFormat.RichText)
